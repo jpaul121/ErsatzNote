@@ -1,6 +1,4 @@
-from django.conf import settings
-
-MAX_SLUG_LENGTH = settings.MAX_SLUG_LENGTH
+from django.utils.crypto import get_random_string
 
 def generate_slug(obj, slug_length):
   """ A function to generate a slug with a given length and make sure it's unique. """
