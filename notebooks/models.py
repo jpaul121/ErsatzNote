@@ -39,7 +39,7 @@ class Notebook(models.Model):
     super(Notebook, self).save(*args, **kwargs)
 
   def __str__(self):
-    return self.title
+    return self.name
   
   class Meta:
     ordering = [ '-date_modified', '-date_created', 'name' ]
