@@ -12,4 +12,4 @@ class NotebookSerializer(serializers.ModelSerializer):
   
   class Meta:
     model = Notebook
-    fields = [ 'id', 'name', 'date_modified', 'date_created' ]
+    fields = [ 'id', 'name', 'notes', 'date_modified', 'date_created' ]
