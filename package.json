@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "proxy": "http://localhost:8000",
   "babel": {
     "presets": [
       "@babel/preset-env",
@@ -38,6 +39,7 @@
     "webpack-dev-server": "^3.11.1"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   }

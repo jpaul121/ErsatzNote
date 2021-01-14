@@ -1,9 +1,11 @@
+import NotesList from './components/NotesList'
 import React from 'react'
 
 function App() {
   return (
     <div>
-      Hello world!
+      <h1>ErsatzNote</h1>
+      <NotesList />
     </div>
   );
 }
