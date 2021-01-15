@@ -128,5 +128,9 @@ STATIC_URL = '/static/'
 MAX_SLUG_LENGTH = 15
 
 CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'http://localhost:8000',
+    'http://localhost:8080',
 ]
+
+REACT_APP_API_ENDPOINT = 'http://localhost:8000'

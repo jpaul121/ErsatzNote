@@ -4,7 +4,7 @@ from rest_framework import routers
 from notebooks import views
 
 router = routers.DefaultRouter()
-router.register(r'notes', views.NoteView, 'note')
+router.register(r'notes', views.NoteView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

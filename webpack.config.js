@@ -2,7 +2,10 @@ var path = require('path')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  entry: './src/index.js',
+  entry: [
+    './src/index.js',
+    'webpack-dev-server/client?http://localhost:8080/'
+  ],
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'index_bundle.js'

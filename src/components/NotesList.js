@@ -22,7 +22,7 @@ class NotesList extends Component {
   }
 
   renderNotes() {
-    const { notesList } = this.state.notes ? this.state.notes : [{title: 'Nothing here!', id: 'nope', date_created: 'nope', date_modified: 'nope'}]
+    const notesList = this.state.notes ? this.state.notes : [{title: 'Nothing here!', id: 'nope', date_created: 'nope', date_modified: 'nope'}]
     console.log(notesList)
     
     return notesList.map(item => (
