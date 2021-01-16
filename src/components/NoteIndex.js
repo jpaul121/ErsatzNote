@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import axios from 'axios'
 
-class NotesList extends Component {
+class NoteIndex extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -11,19 +11,18 @@ class NotesList extends Component {
   }
 
   componentDidMount() {
-    this.refreshList()
+    this.getNotes()
   }
 
-  refreshList() {
+  getNotes() {
     axios
       .get('/api/notes/')
       .then(res => this.setState({ notes: res.data }))
       .catch(err => console.log(err))
   }
 
-  renderNotes() {
-    const notesList = this.state.notes ? this.state.notes : [{title: 'Nothing here!', id: 'nope', date_created: 'nope', date_modified: 'nope'}]
-    console.log(notesList)
+  renderNoteItems() {
+    const notesList = this.state.notes
     
     return notesList.map(item => (
       <li key={item.id}>
@@ -41,10 +40,10 @@ class NotesList extends Component {
   render() {
     return (
         <ul>
-          {this.renderNotes()}
+          {this.renderNoteItems()}
         </ul>
     );
   }
 }
 
-export default NotesList
+export default NoteIndex

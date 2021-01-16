@@ -5,6 +5,7 @@ from notebooks import views
 
 router = routers.DefaultRouter()
 router.register(r'notes', views.NoteView)
+router.register(r'notebooks', views.NotebookView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
