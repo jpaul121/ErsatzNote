@@ -10,7 +10,7 @@ class Note(models.Model):
   id = models.SlugField(max_length=settings.MAX_SLUG_LENGTH, primary_key=True)
   title = models.CharField(max_length=256, default='')
   content = models.TextField(blank=True, default='')
-  notebook = models.ForeignKey('Notebook', on_delete=models.CASCADE, null=True, blank=True)
+  notebook = models.ForeignKey('Notebook', related_name='notes', on_delete=models.CASCADE, null=True, blank=True)
   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
   date_created = models.DateField(auto_now_add=True)
   date_modified = models.DateField(auto_now=True)
