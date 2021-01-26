@@ -7,14 +7,17 @@ module.exports = {
     'webpack-dev-server/client?http://localhost:8080/'
   ],
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'build'),
     filename: 'index_bundle.js'
   },
   module: {
     rules: [
       {
         test: /\.(js)$/,
-        use: 'babel-loader'
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        }
       },
       {
         test: /\.(css)$/,
