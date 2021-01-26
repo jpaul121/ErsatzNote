@@ -1,4 +1,4 @@
-import NotesList from './components/NoteIndex'
+import NoteIndex from './components/NoteIndex'
 import React from 'react'
 
 function App() {
