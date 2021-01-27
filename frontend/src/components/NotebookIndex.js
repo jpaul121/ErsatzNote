@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 
+import NotebookIndexItem from './NotebookIndexItem'
 import axios from 'axios'
 
 class NotebookIndex extends Component {
@@ -25,11 +26,12 @@ class NotebookIndex extends Component {
     const notebookList = this.state.notebooks
 
     return notebookList.map(item => (
-      <tr key={item.id}>
-        <th>{item.name}</th>
-        <th>{item.date_modified}</th>
-        <th>{item.date_created}</th>
-      </tr>
+      <NotebookIndexItem
+        key={item.id}
+        name={item.name}
+        date_modified={item.date_modified}
+        date_created={item.date_created}
+      />
     ));
   }
 
