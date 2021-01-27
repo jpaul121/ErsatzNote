@@ -1,11 +1,11 @@
-import NotebookIndex from './components/NotebookIndex'
+import NoteIndex from './components/NoteIndex'
 import React from 'react'
 
 function App() {
   return (
     <div>
       <h1>ErsatzNote</h1>
-      <NotebookIndex />
+      <NoteIndex />
     </div>
   );
 }

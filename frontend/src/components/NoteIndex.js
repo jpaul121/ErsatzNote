@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 
+import NoteIndexItem from './NoteIndexItem'
 import axios from 'axios'
 
 class NoteIndex extends Component {
@@ -25,15 +26,12 @@ class NoteIndex extends Component {
     const notesList = this.state.notes
     
     return notesList.map(item => (
-      <li key={item.id}>
-        <span>
-          {item.title}
-        </span>
-        <span>
-          {item.date_modified}
-          {item.date_created}
-        </span>
-      </li>
+      <NoteIndexItem 
+        key={item.id}
+        title={item.title}
+        date_modified={item.date_modified}
+        date_created={item.date_created}
+      />
     ));
   }
   
