@@ -8,6 +8,9 @@ router.register(r'notes', views.NoteView)
 router.register(r'notebooks', views.NotebookView)
 
 urlpatterns = [
+    # notebook
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    # frontend
+    path('', include('frontend.urls'))
 ]

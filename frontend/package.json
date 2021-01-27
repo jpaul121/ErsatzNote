@@ -13,7 +13,9 @@
   "scripts": {
     "start": "webpack serve",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "create": "webpack"
+    "create": "webpack",
+    "dev": "webpack --mode development --entry ./src/index.js --output-path ./static/frontend",
+    "build": "webpack --mode development --entry ./src/index.js --output-path ./static/frontend"
   },
   "repository": {
     "type": "git",
