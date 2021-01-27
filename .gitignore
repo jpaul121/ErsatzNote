@@ -7,7 +7,8 @@
 /coverage
 
 # Production
-/build
+/frontend/node_modules
+/frontend/static/frontend
 
 # Miscellaneous
 .DS_Store
