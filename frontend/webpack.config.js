@@ -7,8 +7,8 @@ module.exports = {
     'webpack-dev-server/client?http://localhost:8080/'
   ],
   output: {
-    path: path.resolve(__dirname, 'build'),
-    filename: 'index_bundle.js'
+    path: path.resolve(__dirname, 'static/frontend'),
+    filename: 'index.js'
   },
   module: {
     rules: [
@@ -28,7 +28,8 @@ module.exports = {
   mode: 'development',
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'src/index.html'
+      template: 'src/index.html',
+      favicon: 'src/favicon.ico'
     })
   ]
 }
