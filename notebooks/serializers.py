@@ -3,13 +3,16 @@ from rest_framework import serializers
 from .models import Note, Notebook
 
 class NoteSerializer(serializers.ModelSerializer):
+  note_id = serializers.SlugField(source='id')
+
   class Meta:
     model = Note
-    fields = [ 'id', 'title', 'content', 'date_modified', 'date_created' ]
+    fields = [ 'note_id', 'title', 'content', 'date_modified', 'date_created' ]
 
 class NotebookSerializer(serializers.ModelSerializer):
+  notebook_id = serializers.SlugField(source='id')
   notes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
   
   class Meta:
     model = Notebook
-    fields = [ 'id', 'name', 'notes', 'date_modified', 'date_created' ]
+    fields = [ 'notebook_id', 'name', 'notes', 'date_modified', 'date_created' ]

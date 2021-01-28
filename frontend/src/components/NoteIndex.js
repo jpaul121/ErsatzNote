@@ -27,7 +27,7 @@ class NoteIndex extends Component {
     
     return notesList.map(item => (
       <NoteIndexItem 
-        key={item.id}
+        key={item.note_id}
         title={item.title}
         date_modified={item.date_modified}
         date_created={item.date_created}
