@@ -28,6 +28,7 @@ class NotebookIndex extends Component {
     return notebookList.map(item => (
       <NotebookIndexItem
         key={item.notebook_id}
+        id={item.notebook_id}
         name={item.name}
         date_modified={item.date_modified}
         date_created={item.date_created}

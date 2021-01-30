@@ -1,4 +1,4 @@
-import React, { Componeont } from 'react'
+import React, { Component } from 'react'
 
 class Note extends Component {
   constructor(props) {

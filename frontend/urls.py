@@ -1,8 +1,7 @@
 from django.urls import path
 
-from . import views
+from .views import index
 
 urlpatterns = [
-  path('notebooks/', views.index),
-  path('', views.index),
+  path('', index),
 ]
