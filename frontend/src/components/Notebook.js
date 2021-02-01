@@ -1,3 +1,5 @@
+import 'regenerator-runtime/runtime.js'
+
 import React, { Component } from 'react'
 
 import Note from './Note'
@@ -9,43 +11,49 @@ class Notebook extends Component {
     super(props)
 
     this.state = {
-      notesList: [],
       notes: [],
     }
   }
 
-  componentDidMount() {
-    this.getNoteIDs()
-    this.getNotes()
+  async componentDidMount() {
+    const noteIDs = await this.getNoteIDs()
+    const notes = await this.getNotes(noteIDs)
+
+    console.log(notes)
+    
+    return this.setState({ notes: notes });
   }
 
-  getNoteIDs() {
+  async getNoteIDs() {
     const { match } = this.props
     const id = match.params.notebook_id
     
-    axios
-      .get(`/api/notebooks/${id}`)
-      .then(res => { this.setState({ notesList: res.data.notes }) })
-      .then(() => { console.log('response: ', this.state.notesList) })
-      .catch(err => console.log(err))
+    const response = await axios.get(`/api/notebooks/${id}`)
+
+    return response.data.notes;
   }
 
-  getNotes() {
-    // Need to make this call the API and populate something I can pass into Note components
-    this.state.notesList.map(item => {
-      return this.setState({ notes: [...this.state.notes, item] })
-    })
+  async getNotes(noteIDs) {
+    let notes = []
+    
+    for (let noteID of noteIDs) {
+      const response = await axios.get(`/api/notes/${noteID}`)
+
+      notes.push(response.data)
+    }
+
+    return notes;
   }
 
   renderNoteItems() {
-    const notesList = this.state.notes
+    const notesData = this.state.notes
 
-    notesList.map(item => {
+    return notesData.map(item => {
       <Note
-        title={item.note_id}
+        title={item.title}
         content={item.content}
       />
-    })
+    });
   }
 
   render() {

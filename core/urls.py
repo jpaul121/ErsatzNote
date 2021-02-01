@@ -6,6 +6,7 @@ from notebooks import views
 
 router = DefaultRouter()
 router.register(r'notebooks', views.NotebookViewSet)
+router.register(r'notes', views.NoteViewSet)
 
 urlpatterns = [
     # notebook
