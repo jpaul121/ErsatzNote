@@ -20,17 +20,20 @@ class Notebook extends Component {
   }
 
   getNoteIDs() {
-    const id = this.props.match.params.notebook_id
+    const { match } = this.props
+    const id = match.params.notebook_id
     
     axios
       .get(`/api/notebooks/${id}`)
       .then(res => { this.setState({ notesList: res.data.notes }) })
+      .then(() => { console.log('response: ', this.state.notesList) })
       .catch(err => console.log(err))
   }
 
   getNotes() {
+    // Need to make this call the API and populate something I can pass into Note components
     this.state.notesList.map(item => {
-      return this.setState({ notes: [...notes, item] })
+      return this.setState({ notes: [...this.state.notes, item] })
     })
   }
 
@@ -54,6 +57,6 @@ class Notebook extends Component {
   }
 }
 
-Notebook = withRouter(Notebook)
+const finishedNotebook = withRouter(Notebook)
 
-export default Notebook
+export default finishedNotebook
