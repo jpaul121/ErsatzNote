@@ -11,57 +11,53 @@ class Notebook extends Component {
     super(props)
 
     this.state = {
-      notes: [],
+      noteData: null,
+      notes: null,
     }
   }
 
   async componentDidMount() {
-    const noteIDs = await this.getNoteIDs()
-    const notes = await this.getNotes(noteIDs)
-
-    console.log(notes)
-    
-    return this.setState({ notes: notes });
+    await this.renderNotes()
   }
 
-  async getNoteIDs() {
+  async getNotes() {
     const { match } = this.props
-    const id = match.params.notebook_id
+    const notebook_id = match.params.notebook_id
     
-    const response = await axios.get(`/api/notebooks/${id}`)
-
-    return response.data.notes;
-  }
-
-  async getNotes(noteIDs) {
-    let notes = []
+    const response = await axios.get(`/api/notebooks/${notebook_id}`)
+    const noteIDs = response.data.notes
+    
+    let noteData = []
     
     for (let noteID of noteIDs) {
       const response = await axios.get(`/api/notes/${noteID}`)
 
-      notes.push(response.data)
+      noteData.push(response.data)
     }
 
-    return notes;
+    return this.setState({ noteData: noteData });
   }
 
-  renderNoteItems() {
-    const notesData = this.state.notes
+  async renderNotes() {
+    await this.getNotes()
+    const noteData = this.state.noteData
 
-    return notesData.map(item => {
-      <Note
-        title={item.title}
-        content={item.content}
-      />
+    return this.setState({
+      notes: noteData.map(item => {
+        return (
+          <Note 
+            key={item.note_id}
+            title={item.title}
+            content={item.content}
+          />
+        );
+      })
     });
   }
 
   render() {
-    return (
-      <div>
-        {this.renderNoteItems()}
-      </div>
-    );
+    console.log(this.state.notes)
+    return this.state.notes;
   }
 }
 
