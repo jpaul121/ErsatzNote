@@ -35,12 +35,11 @@ class Notebook extends Component {
       noteData.push(response.data)
     }
 
-    return this.setState({ noteData: noteData });
+    return noteData;
   }
 
   async renderNotes() {
-    await this.getNotes()
-    const noteData = this.state.noteData
+    const noteData = await this.getNotes()
 
     return this.setState({
       notes: noteData.map(item => {
