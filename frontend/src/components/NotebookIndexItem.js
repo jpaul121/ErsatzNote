@@ -12,7 +12,7 @@ class NotebookIndexItem extends Component {
     
     return (
       <tr>
-        <th><Link to={`/notebooks/:notebook_id`}>{this.props.name}</Link></th>
+        <th><Link to={`/notebooks/${notebook_id}`}>{this.props.name}</Link></th>
         <th>{this.props.date_modified}</th>
         <th>{this.props.date_created}</th>
       </tr>
