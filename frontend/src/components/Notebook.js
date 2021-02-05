@@ -11,7 +11,6 @@ class Notebook extends Component {
     super(props)
 
     this.state = {
-      noteData: null,
       notes: null,
     }
   }
@@ -41,7 +40,7 @@ class Notebook extends Component {
   async renderNotes() {
     const noteData = await this.getNotes()
 
-    return this.setState({
+    this.setState({
       notes: noteData.map(item => {
         return (
           <Note 
@@ -55,7 +54,6 @@ class Notebook extends Component {
   }
 
   render() {
-    console.log(this.state.notes)
     return this.state.notes;
   }
 }
