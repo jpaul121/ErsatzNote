@@ -1,3 +1,5 @@
+import 'regenerator-runtime/runtime.js'
+
 import React, { Component } from 'react'
 
 import NotebookIndexItem from './NotebookIndexItem'
@@ -7,37 +9,42 @@ class NotebookIndex extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      notebooks: [],
+      isLoading: true,
+      notebooks: null,
     }
   }
 
-  componentDidMount() {
-    this.getNotebooks()
+  async componentDidMount() {
+    await this.renderNotebookItems()
   }
 
-  getNotebooks() {
-    axios
-      .get('/api/notebooks/')
-      .then(res => this.setState({ notebooks: res.data }))
-      .catch(err => console.log(err))
+  async getNotebooks() {
+    const response = await axios.get('/api/notebooks/')
+
+    return response.data;
   }
 
-  renderNotebookItems() {
-    const notebookList = this.state.notebooks
+  async renderNotebookItems() {
+    const notebookList = await this.getNotebooks()
 
-    return notebookList.map(item => (
-      <NotebookIndexItem
-        key={item.notebook_id}
-        id={item.notebook_id}
-        name={item.name}
-        date_modified={item.date_modified}
-        date_created={item.date_created}
-      />
-    ));
+    this.setState({
+      isLoading: false,
+      notebooks: notebookList.map(item => {
+        return (
+          <NotebookIndexItem
+            key={item.notebook_id}
+            id={item.notebook_id}
+            name={item.name}
+            date_modified={item.date_modified}
+            date_created={item.date_created}
+          />
+        );
+      })
+    })
   }
 
   render() {
-    return (
+    return !this.state.isLoading && (
       <table>
         <thead>
           <tr>
@@ -47,7 +54,7 @@ class NotebookIndex extends Component {
           </tr>
         </thead>
         <tbody>
-          {this.renderNotebookItems()}
+          {this.state.notebooks}
         </tbody>
       </table>
     );

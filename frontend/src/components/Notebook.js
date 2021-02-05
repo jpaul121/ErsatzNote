@@ -11,6 +11,7 @@ class Notebook extends Component {
     super(props)
 
     this.state = {
+      isLoading: true,
       notes: null,
     }
   }
@@ -41,6 +42,7 @@ class Notebook extends Component {
     const noteData = await this.getNotes()
 
     this.setState({
+      isLoading: false,
       notes: noteData.map(item => {
         return (
           <Note 
@@ -50,11 +52,11 @@ class Notebook extends Component {
           />
         );
       })
-    });
+    })
   }
 
   render() {
-    return this.state.notes;
+    return !this.state.isLoading && this.state.notes;
   }
 }
 
