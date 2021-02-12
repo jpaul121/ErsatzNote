@@ -1,50 +1,49 @@
 .nav-bar {
+  background-color: #1a1a1a;
+  box-sizing: border-box;
+  color: #a6a6a6;
   display: flex;
   flex-direction: column;
-  z-index: 1;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
   height: 100%;
-  background-color: #1a1a1a;
   overflow-x: hidden;
   padding-top: 5px;
-  color: #a6a6a6;
   width: 241px;
-  font-size: 14px;
-  box-sizing: border-box;
-  font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  z-index: 1;
 }
 
 .user {
-  margin-top: 10px;
-  margin-left: 16px;
   align-content: center;
-  justify-content: center;
   color: #a9a9a9;
-  font-weight: 200;
-  width: 100%;
   font-size: 16px;
+  font-weight: 200;
+  justify-content: center;
+  margin-left: 16px;
+  margin-top: 10px;
+  width: 100%;
 }
 
 .buttons {
-  margin-top: 54px;
   display: grid;
+  margin-top: 54px;
   width: 100%;
 }
 
 .new-note {
   background-color: #00a82d;
-  color: #f8fcf9;
-  height: 35px;
-  width: 214px;
-  font-size: 14px;
-  border-radius: 20px;
-  margin-right: 6px;
-  padding-right: 73px;
   border-radius: 20px;
   border: none;
-  vertical-align: middle;
-  margin-left: 12px;
+  color: #f8fcf9;
   cursor: pointer;
+  font-size: 14px;
+  height: 35px;
+  margin-left: 12px;
+  margin-right: 6px;
+  padding-right: 73px;
   padding: 4px;
+  vertical-align: middle;
+  width: 214px;
 }
 
 .new-note:hover {
@@ -62,17 +61,17 @@
 }
 
 .notebooks a {
-  height: 32px;
-  width: 241px;
-  text-decoration: none;
+  align-items: center;
   color: inherit;
   display: flex;
-  align-items: center;
+  height: 32px;
+  text-decoration: none;
+  width: 241px;
 }
 
 .row {
-  display: flex;
   align-items: center;
+  display: flex;
 }
 
 .fa, .fas {
