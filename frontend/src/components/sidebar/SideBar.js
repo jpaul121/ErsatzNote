@@ -14,7 +14,10 @@ class SideBar extends Component {
   render() {
     return (
       <div className={styles['nav-bar']}>
-        <h1 className={styles['user']}>Guest</h1>
+        <h1 className={styles['user']}>
+          <i className={'fas fa-user-circle'}></i>
+          &nbsp;&nbsp;Guest User
+        </h1>
         <SearchBar />
         <div className={styles['buttons']}>
           <button className={styles['new-note']}>
