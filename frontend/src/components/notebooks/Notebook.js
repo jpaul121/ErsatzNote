@@ -2,7 +2,7 @@ import 'regenerator-runtime/runtime.js'
 
 import React, { Component } from 'react'
 
-import Note from './Note'
+import Note from '../notes/Note'
 import axios from 'axios'
 import { withRouter } from 'react-router'
 
