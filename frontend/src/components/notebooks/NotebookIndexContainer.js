@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 
+import NotebookIndex from './NotebookIndex'
 import SideBar from '../sidebar/SideBar'
 import styles from './NotebookIndexContainer.module.css'
 
@@ -12,6 +13,7 @@ class NotebookIndexContainer extends Component {
     return (
       <div className={styles['notebook-index-container']}>
         <SideBar />
+        <NotebookIndex />
       </div>
     );
   }

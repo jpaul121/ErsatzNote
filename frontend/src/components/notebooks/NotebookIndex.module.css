@@ -1,0 +1,100 @@
+.notebook-index {
+  width: 100vw;
+  height: 100vh;
+  background-color: #f5f5f5;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  color: #333333;
+}
+
+.notebook-table {
+  padding: 0 30px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.table-top {
+  font-size: 15px;
+  display: flex;
+  margin-top: 76px;
+  margin-bottom: 10px;
+  margin-left: 0;
+  margin-right: 0;
+  min-height: 24px;
+  font-weight: 500;
+}
+
+.table-header {
+  margin-right: auto;
+}
+
+.new-notebook {
+  border: none;
+  background-color: #f5f5f5;
+  color: #333333;
+  font-size: 14px;
+  padding: 0;
+  vertical-align: middle;
+  float: right;
+  cursor: pointer;
+  outline: none;
+}
+
+.table-proper {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  font-weight: 300;
+  border-spacing: 0;
+}
+
+.table-head {
+  border-top: 2px solid #5b6b70;
+  font-size: 11px;
+  color: #a9a9a9;
+  background-color: #f8f8f8;
+  text-align: left;
+  min-width: 300px;
+  vertical-align: middle;
+}
+
+.header-row th {
+  height: 40px;
+  padding: 8px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.header-row th:nth-child(1) {
+  width: 2%;
+}
+
+.header-row th:nth-child(2) {
+  width: 40%;
+}
+
+.header-row th:nth-child(3) {
+  width: 20%;
+}
+
+.table-body th {
+  text-align: left;
+  vertical-align: middle;
+  height: 40px;
+  padding: 8px;
+  overflow: auto;
+}
+
+.table-body tr:hover {
+  background-color: #e0dddc;
+}
+
+.table-body th a {
+  text-decoration: none;
+  color: #333333;
+  vertical-align: middle;
+  height: 40px;
+  padding: 8px;
+  font-weight: 500;
+}

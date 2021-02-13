@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 
 import NotebookIndexItem from './NotebookIndexItem'
 import axios from 'axios'
+import styles from './NotebookIndex.module.css'
 
 class NotebookIndex extends Component {
   constructor(props) {
@@ -45,18 +46,32 @@ class NotebookIndex extends Component {
 
   render() {
     return !this.state.isLoading && (
-      <table>
-        <thead>
-          <tr>
-            <th>TITLE</th>
-            <th>LAST UPDATED</th>
-            <th>CREATED</th>
-          </tr>
-        </thead>
-        <tbody>
-          {this.state.notebooks}
-        </tbody>
-      </table>
+      <div className={styles['notebook-index']}>
+        <div className={styles['notebook-table']}>
+          <div className={styles['table-top']}>
+            <h3 className={styles['table-header']}>
+              Notebooks
+            </h3>
+            <button className={styles['new-notebook']}>
+              <i className={'fas fa-book-medical'}></i>
+              &nbsp;&nbsp;New Notebook
+            </button>
+          </div>
+          <table className={styles['table-proper']}>
+            <thead className={styles['table-head']}>
+              <tr className={styles['header-row']}>
+                <th></th>
+                <th>TITLE</th>
+                <th>LAST UPDATED</th>
+                <th>CREATED</th>
+              </tr>
+            </thead>
+            <tbody className={styles['table-body']}>
+              {this.state.notebooks}
+            </tbody>
+          </table>
+        </div>
+      </div>
     );
   }
 }
