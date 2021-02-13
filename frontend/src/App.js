@@ -4,9 +4,8 @@ import {
   Switch,
 } from 'react-router-dom'
 
-import Notebook from './components/notebooks/Notebook'
-import NotebookIndex from './components/notebooks/NotebookIndex'
 import NotebookIndexContainer from './components/notebooks/NotebookIndexContainer'
+import NotebookViewContainer from './components/notebooks/NotebookViewContainer'
 import React from 'react'
 
 function App() {
@@ -15,14 +14,14 @@ function App() {
       <div>
         <Switch>
           <Route path='/notebooks/:notebook_id/'>
-            <Notebook />
+            <NotebookViewContainer />
           </Route>
           <Route path='/notebooks'>
-            <NotebookIndex />
-          </Route>
-          <Route path='/'>
             <NotebookIndexContainer />
           </Route>
+          {/* <Route path='/'>
+            <HomePage />
+          </Route> */}
         </Switch>
       </div>
     </Router>

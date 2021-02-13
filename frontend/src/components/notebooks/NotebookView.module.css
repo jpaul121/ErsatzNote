@@ -1,0 +1,43 @@
+.notebook-view {
+  width: 362px;
+  height: 100vh;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333333;
+  font-size: 14px;
+}
+
+.notebook-header {
+  display: flex;
+  flex-direction: column;
+  padding-top: 22px;
+  padding-right: 18px;
+  width: 344px;
+  height: 128px;
+  border: 1px solid #e6e6e6;
+  border-left: none;
+  align-items: flex-start;
+}
+
+.notebook-title {
+  padding-left: 25px;
+  flex: 1;
+  min-width: 20px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 20px;
+  padding-top: 15px;
+  padding-bottom: 30px;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+}
+
+.note-count {
+  flex: 1;
+  align-items: flex-end;
+  font-size: 13px;
+  min-width: 50px;
+  font-weight: 300;
+  color: #a9a9a9;
+  padding-left: 25px;
+}

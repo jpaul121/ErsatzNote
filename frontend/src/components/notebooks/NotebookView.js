@@ -4,9 +4,10 @@ import React, { Component } from 'react'
 
 import Note from '../notes/Note'
 import axios from 'axios'
+import styles from './NotebookView.module.css'
 import { withRouter } from 'react-router'
 
-class Notebook extends Component {
+class NotebookView extends Component {
   constructor(props) {
     super(props)
 
@@ -56,10 +57,20 @@ class Notebook extends Component {
   }
 
   render() {
-    return !this.state.isLoading && this.state.notes;
+    // this.state.notes
+    return !this.state.isLoading && (
+      <div className={styles['notebook-view']}>
+        <div className={styles['notebook-header']}>
+          <h1 className={styles['notebook-title']}>Notebook Name</h1>
+          <p className={styles['note-count']}>
+            n notes
+          </p>
+        </div>
+      </div>
+    );
   }
 }
 
-const finishedNotebook = withRouter(Notebook)
+const finishedNotebookView = withRouter(NotebookView)
 
-export default finishedNotebook
+export default finishedNotebookView
