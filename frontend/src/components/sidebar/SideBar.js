@@ -15,8 +15,9 @@ class SideBar extends Component {
     return (
       <div className={styles['nav-bar']}>
         <h1 className={styles['user']}>
-          <i className={'fas fa-user-circle'}></i>
-          &nbsp;&nbsp;Guest User
+          <i className={'fas fa-user-circle fa-2x'}></i>
+          &nbsp;
+          Guest User
         </h1>
         <SearchBar />
         <div className={styles['buttons']}>
@@ -28,7 +29,10 @@ class SideBar extends Component {
           <div className={styles['row']}>
             <Link to={`/notebooks`}>
               <i className={'fas fa-book'}></i>
-              <h3>&nbsp;&nbsp;&nbsp;Notebooks</h3>
+              <h3>
+                &nbsp;&nbsp;&nbsp;
+                Notebooks
+              </h3>
             </Link>
           </div>
         </div>

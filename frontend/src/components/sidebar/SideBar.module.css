@@ -14,11 +14,12 @@
 }
 
 .user {
-  align-content: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   color: #a9a9a9;
   font-size: 16px;
   font-weight: 200;
-  justify-content: center;
   margin-left: 16px;
   margin-top: 10px;
   width: 100%;
