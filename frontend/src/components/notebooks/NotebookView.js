@@ -50,6 +50,7 @@ class NotebookView extends Component {
             key={item.note_id}
             title={item.title}
             content={item.content}
+            date_modified={item.date_modified}
           />
         );
       })
@@ -57,7 +58,6 @@ class NotebookView extends Component {
   }
 
   render() {
-    // this.state.notes
     return !this.state.isLoading && (
       <div className={styles['notebook-view']}>
         <div className={styles['notebook-header']}>
@@ -66,6 +66,9 @@ class NotebookView extends Component {
             n notes
           </p>
         </div>
+        <ul className={styles['note-list']}>
+          {this.state.notes}
+        </ul>
       </div>
     );
   }

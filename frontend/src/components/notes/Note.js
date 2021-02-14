@@ -7,10 +7,11 @@ class Note extends Component {
 
   render() {
     return (
-      <div>
+      <li>
         <h3>{this.props.title}</h3>
         <p>{this.props.content}</p>
-      </div>
+        <h4>{this.props.date_modified}</h4>
+      </li>
     );
   }
 }
