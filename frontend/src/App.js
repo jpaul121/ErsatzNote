@@ -13,7 +13,7 @@ function App() {
     <Router>
       <div>
         <Switch>
-          <Route path='/notebooks/:notebook_id/'>
+          <Route path='/notebooks/:notebook_id'>
             <NotebookViewContainer />
           </Route>
           <Route path='/notebooks'>

@@ -13,6 +13,7 @@ class NotebookView extends Component {
 
     this.state = {
       isLoading: true,
+      name: null,
       notes: null,
     }
   }
@@ -21,11 +22,12 @@ class NotebookView extends Component {
     await this.renderNotes()
   }
 
-  async getNotes() {
+  async getNotebook() {
     const { match } = this.props
     const notebook_id = match.params.notebook_id
     
     const response = await axios.get(`/api/notebooks/${notebook_id}`)
+    const name = response.data.name
     const noteIDs = response.data.notes
     
     let noteData = []
@@ -36,14 +38,15 @@ class NotebookView extends Component {
       noteData.push(response.data)
     }
 
-    return noteData;
+    return [ name, noteData ];
   }
 
   async renderNotes() {
-    const noteData = await this.getNotes()
+    const [ name, noteData ] = await this.getNotebook()
 
     this.setState({
       isLoading: false,
+      name,
       notes: noteData.map(item => {
         return (
           <Note 
@@ -61,9 +64,9 @@ class NotebookView extends Component {
     return !this.state.isLoading && (
       <div className={styles['notebook-view']}>
         <div className={styles['notebook-header']}>
-          <h1 className={styles['notebook-title']}>Notebook Name</h1>
+          <h1 className={styles['notebook-title']}>{this.state.name}</h1>
           <p className={styles['note-count']}>
-            n notes
+            {this.state.notes.length} notes
           </p>
         </div>
         <ul className={styles['note-list']}>
