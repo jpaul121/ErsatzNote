@@ -66,7 +66,11 @@ class NotebookView extends Component {
         <div className={styles['notebook-header']}>
           <h1 className={styles['notebook-title']}>{this.state.name}</h1>
           <p className={styles['note-count']}>
-            {this.state.notes.length} notes
+            {
+              this.state.notes.length == 1
+              ? '1 note'
+              : `${this.state.notes.length} notes`
+            }
           </p>
         </div>
         <ul className={styles['note-list']}>
