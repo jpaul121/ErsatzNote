@@ -2,6 +2,7 @@ import 'regenerator-runtime/runtime.js'
 
 import React, { Component } from 'react'
 
+import { Link } from 'react-router-dom'
 import Note from '../notes/Note'
 import axios from 'axios'
 import styles from './NotebookView.module.css'
@@ -43,18 +44,20 @@ class NotebookView extends Component {
 
   async renderNotes() {
     const [ name, noteData ] = await this.getNotebook()
+    const notebook_id = this.props.match.params.notebook_id
 
     this.setState({
       isLoading: false,
       name,
       notes: noteData.map(item => {
         return (
-          <Note 
-            key={item.note_id}
-            title={item.title}
-            content={item.content}
-            date_modified={item.date_modified}
-          />
+          <Link key={item.note_id} to={`/notebooks/${notebook_id}/notes/${item.note_id}`} >
+            <Note 
+              title={item.title}
+              content={item.content}
+              date_modified={item.date_modified}
+            />
+          </Link>
         );
       })
     })

@@ -13,15 +13,15 @@ function App() {
     <Router>
       <div>
         <Switch>
+          <Route path='/notebooks/:notebook_id/notes/:note_id'>
+            <NotebookViewContainer />
+          </Route>
           <Route path='/notebooks/:notebook_id'>
             <NotebookViewContainer />
           </Route>
           <Route path='/notebooks'>
             <NotebookIndexContainer />
           </Route>
-          {/* <Route path='/'>
-            <HomePage />
-          </Route> */}
         </Switch>
       </div>
     </Router>

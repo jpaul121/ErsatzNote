@@ -15,5 +15,6 @@ urlpatterns = [
     # frontend
     path('', include('frontend.urls')),
     path('notebooks/', include('frontend.urls')),
-    path('notebooks/<slug:pk>/', include('frontend.urls')),
+    path('notebooks/<slug:notebook_pk>/', include('frontend.urls')),
+    path('notebooks/<slug:notebook_pk>/notes/<slug:note_pk>/', include('frontend.urls')),
 ]

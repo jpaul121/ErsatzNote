@@ -84,10 +84,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 13px;
+  color: #333333;
 }
 
 .note-list li h4 {
   margin-top: 10px;
   font-size: 12px;
   color: #a9a9a9;
+}
+
+.note-list a {
+  text-decoration: none;
 }
