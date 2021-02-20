@@ -16,7 +16,3 @@ class NotebookSerializer(serializers.ModelSerializer):
   class Meta:
     model = Notebook
     fields = [ 'notebook_id', 'name', 'notes', 'date_modified', 'date_created' ]
-    # depth = 1
-    # extra_kwargs = {
-    #   'notebook_id': { 'lookup_field': 'notebook_id' }
-    # }

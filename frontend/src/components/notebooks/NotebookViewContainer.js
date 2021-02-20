@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import NoteEditor from '../notes/NoteEditor'
+import NoteEditorContainer from '../notes/NoteEditorContainer'
 import NotebookView from './NotebookView'
 import SideBar from '../sidebar/SideBar'
 import styles from './NotebookViewContainer.module.css'
@@ -15,7 +15,7 @@ class NotebookViewContainer extends Component {
       <div className={styles['notebook-view-container']}>
         <SideBar />
         <NotebookView />
-        <NoteEditor />
+        <NoteEditorContainer />
       </div>
     );
   }
