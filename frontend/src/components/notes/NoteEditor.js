@@ -1,7 +1,7 @@
 import 'regenerator-runtime/runtime.js'
 
 import { Editable, Slate, withReact } from 'slate-react'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import axios from 'axios'
 import { createEditor } from 'slate'
@@ -9,9 +9,8 @@ import deserialize from './Deserializer'
 import { withRouter } from 'react-router'
 
 // to-do: add toolbar
-function NoteEditor({ match, ref }) {
+function NoteEditor({ match, content, setContent }) {
   const editor = useMemo(() => withReact(createEditor()), [])
-  const [ content, setContent ] = useState([])
 
   useEffect(() => {
     async function getNote() {
@@ -30,7 +29,6 @@ function NoteEditor({ match, ref }) {
       editor={editor}
       value={content}
       onChange={newContent => setContent(newContent)}
-      ref={ref}
     >
       <Editable
         placeholder='Write something...'

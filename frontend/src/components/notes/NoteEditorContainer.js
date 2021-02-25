@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useState } from 'react'
 
 import NoteEditor from './NoteEditor'
 import NoteTitleBar from './NoteTitleBar'
@@ -8,18 +8,13 @@ import styles from './NoteEditorContainer.module.css'
 import { withRouter } from 'react-router'
 
 function NoteEditorContainer({ match }) {  
-  function getInput(node) {
-    return node.value;
-  }
-  
-  const title = getInput.bind({})
-  const content = getInput.bind({})
+  const [ title, setTitle ] = useState([])
+  const [ content, setContent ] = useState([])
 
   const saveNote = useCallback(() => {
     // This was confusing because usually databases
     // save content in JSON and the client receives
     // plaintext, but in this case it's the other way around. 
-    const title = title
     const plaintextContent = serialize(content)
     
     axios.put(
@@ -34,8 +29,14 @@ function NoteEditorContainer({ match }) {
 
   return (
     <div className={styles['note-editor-container']}>
-      <NoteTitleBar ref={title} />
-      <NoteEditor ref={content} />
+      <NoteTitleBar
+        title={title}
+        setTitle={setTitle}
+      />
+      <NoteEditor
+        content={content}
+        setContent={setContent}
+      />
       <button
         type='button'
         onClick={saveNote}
