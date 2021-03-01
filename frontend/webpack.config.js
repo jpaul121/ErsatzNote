@@ -22,7 +22,14 @@ module.exports = {
       {
         test: /\.(css)$/,
         use: ['style-loader', 'css-loader']
-      }
+      },
+      {
+        test: /\.(svg|eot|woff|ttf|svg|woff2)$/,
+        use: [
+          'url-loader?limit=100000',
+          'file-loader'
+        ]
+    }
     ]
   },
   mode: 'development',

@@ -1,8 +1,10 @@
+import { Editor, Element as SlateElement, Transforms } from 'slate'
 import React, { forwardRef } from 'react'
 import { css, cx } from '@emotion/css'
 
-import { Editor } from 'slate'
 import { useSlate } from 'slate-react'
+
+const LIST_TYPES = [ 'numbered-list', 'bulleted-list' ]
 
 const Icon = forwardRef(({ className, ...props }, ref) => (
   <span
@@ -45,6 +47,15 @@ function isMarkActive(editor, format) {
   return marks ? marks[format] === true : false;
 }
 
+function isBlockActive(editor, format) {
+  const [ match ] = Editor.nodes(editor, {
+    match: n =>
+      !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === format,
+  })
+
+  return !!match;
+}
+
 function toggleMark(editor, format) {
   const isActive = isMarkActive(editor, format)
   
@@ -52,6 +63,29 @@ function toggleMark(editor, format) {
     Editor.removeMark(editor, format)
   } else {
     Editor.addMark(editor, format, true)
+  }
+}
+
+function toggleBlock(editor, format) {
+  const isActive = isBlockActive(editor, format)
+  const isList = LIST_TYPES.includes(format)
+
+  Transforms.unwrapNodes(editor, {
+    match: n =>
+      LIST_TYPES.includes(
+        !Editor.isEditor(n) && SlateElement.isElement(n) && n.type
+      ),
+    split: true,
+  })
+
+  const newProperties = {
+    type: isActive ? 'paragraph' : isList ? 'list-item' : format,
+  }
+  Transforms.setNodes(editor, newProperties)
+
+  if (!isActive && isList) {
+    const block = { type: format, children: [] }
+    Transforms.wrapNodes(editor, block)
   }
 }
 
@@ -85,6 +119,7 @@ export const Toolbar = forwardRef(({ className, ...props }, ref) => (
         padding: 1px 18px 17px;
         margin: 0 -20px;
         border-bottom: 2px solid #eee;
+        margin-top: 10px;
         margin-bottom: 20px;
       `
     )}
@@ -100,6 +135,22 @@ export function MarkButton({ format, icon }) {
       onMouseDown={event => {
         event.preventDefault()
         toggleMark(editor, format)
+      }}
+    >
+      <Icon>{icon}</Icon>
+    </Button>
+  );
+}
+
+export function BlockButton({ format, icon }) {
+  const editor = useSlate()
+  
+  return (
+    <Button
+      active={isBlockActive(editor, format)}
+      onMouseDown={event => {
+        event.preventDefault()
+        toggleBlock(editor, format)
       }}
     >
       <Icon>{icon}</Icon>

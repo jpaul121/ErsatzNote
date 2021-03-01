@@ -7,7 +7,7 @@ import serialize from './Serializer'
 import styles from './NoteEditorContainer.module.css'
 import { withRouter } from 'react-router'
 
-function NoteEditorContainer({ match }) {  
+function NoteEditorContainer({ match }) {
   const [ title, setTitle ] = useState([])
   const [ content, setContent ] = useState([])
 
