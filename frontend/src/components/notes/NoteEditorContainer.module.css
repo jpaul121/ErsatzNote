@@ -1,3 +1,20 @@
 .note-editor-container {
-  
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.4;
+  background-color: #eeeeee;
+}
+
+.editor-proper {
+  background-color: #f5f5f5;
+  max-width: 42em;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.note-editor-container button {
+  margin: 0px auto;
+  border: none;
+  line-height: 1.4;
+  font-weight: bold;
+  cursor: pointer;
 }

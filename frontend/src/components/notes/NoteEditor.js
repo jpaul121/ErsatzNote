@@ -1,7 +1,7 @@
 import 'regenerator-runtime/runtime.js'
 
 import { Editable, Slate, withReact } from 'slate-react'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import axios from 'axios'
 import { createEditor } from 'slate'

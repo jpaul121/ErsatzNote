@@ -29,20 +29,22 @@ function NoteEditorContainer({ match }) {
 
   return (
     <div className={styles['note-editor-container']}>
-      <NoteTitleBar
-        title={title}
-        setTitle={setTitle}
-      />
-      <NoteEditor
-        content={content}
-        setContent={setContent}
-      />
+      <div className={styles['editor-proper']}>
+        <NoteTitleBar
+          title={title}
+          setTitle={setTitle}
+        />
+        <NoteEditor
+          content={content}
+          setContent={setContent}
+        />
+      </div>
       <button
         type='button'
         onClick={saveNote}
       >
         Save
-      </button>  
+      </button>
     </div>
   );
 }
