@@ -1,6 +1,7 @@
 import 'regenerator-runtime/runtime.js'
 
 import { Editable, Slate, withReact } from 'slate-react'
+import { MarkButton, Toolbar } from './BaseComponents'
 import React, { useEffect, useMemo } from 'react'
 
 import axios from 'axios'
@@ -30,6 +31,9 @@ function NoteEditor({ match, content, setContent }) {
       value={content}
       onChange={newContent => setContent(newContent)}
     >
+      <Toolbar>
+        <MarkButton format='bold' icon='format_bold' />
+      </Toolbar>
       <Editable
         placeholder='Write something...'
       />

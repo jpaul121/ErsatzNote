@@ -1,35 +1,43 @@
-import { Editor, useSlate } from 'slate-react'
 import React, { forwardRef } from 'react'
+import { css, cx } from '@emotion/css'
 
-const Icon = forwardRef(({ className, ...props }, ref) => {
+import { Editor } from 'slate'
+import { useSlate } from 'slate-react'
+
+const Icon = forwardRef(({ className, ...props }, ref) => (
   <span
     {...props}
     ref={ref}
-    className={`material-icons ${className}`}
-    style='font-size:18px;vertical-align:text-bottom;'
+    className={cx(
+      'material-icons',
+      className,
+      css`
+        font-size: 18px;
+        vertical-align: text-bottom;
+      `
+    )}
   />
-})
+))
 
-const Button = forwardRef(({ className, active, reversed, ...props }, ref) => {
-  const buttonColor = (
-    reversed
-      ? active
-        ? 'white'
-        : '#aaa'
-      : active
-        ? 'black'
-        : '#ccc'
-  )
-  
-  return (
-    <span
-      {...props}
-      ref={ref}
-      className={`${className}`}
-      style={`cursor:pointer;color:${buttonColor}`}
-    />
-  );
-})
+const Button = forwardRef(({ className, active, reversed, ...props }, ref) => (
+  <span
+    {...props}
+    ref={ref}
+    className={cx(
+      className,
+      css`
+        cursor: pointer;
+        color: ${reversed
+          ? active
+            ? 'white'
+            : '#aaa'
+          : active
+          ? 'black'
+          : '#ccc'};
+      `
+    )}
+  />
+))
 
 function isMarkActive(editor, format) {
   const marks = Editor.marks(editor)
@@ -47,26 +55,41 @@ function toggleMark(editor, format) {
   }
 }
 
-const Menu = forwardRef(({ className, ...props }, ref) => {
+const Menu = forwardRef(({ className, ...props }, ref) => (
   <div
     {...props}
     ref={ref}
-    className={className}
-    style='display: inline-block; margin-left: 15px;'
+    className={cx(
+      className,
+      css`
+        & > * {
+          display: inline-block;
+        }
+        
+        & > * + * {
+          margin-left: 15px;
+        }
+      `
+    )}
   />
-})
+))
 
-export const Toolbar = forwardRef(({ className, ...props }, ref) => {
+export const Toolbar = forwardRef(({ className, ...props }, ref) => (
   <Menu
     {...props}
     ref={ref}
-    className={className}
-    style={
-      'position: relative; padding: 1px 18px 17px;'
-      + 'margin: 0 -20px; border-bottom: 2px solid #eee; margin-bottom: 20px;'
-    }
+    className={cx(
+      className,
+      css`
+        position: relative;
+        padding: 1px 18px 17px;
+        margin: 0 -20px;
+        border-bottom: 2px solid #eee;
+        margin-bottom: 20px;
+      `
+    )}
   />
-})
+))
 
 export function MarkButton({ format, icon }) {
   const editor = useSlate()
