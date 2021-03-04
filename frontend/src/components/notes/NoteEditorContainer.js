@@ -2,8 +2,6 @@ import React, { useCallback, useState } from 'react'
 
 import NoteEditor from './NoteEditor'
 import NoteTitleBar from './NoteTitleBar'
-import axios from 'axios'
-import serialize from './Serializer'
 import styles from './NoteEditorContainer.module.css'
 import { withRouter } from 'react-router'
 

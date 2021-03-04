@@ -4,6 +4,7 @@ import {
   Switch,
 } from 'react-router-dom'
 
+import NewNoteContainer from './components/notes/NewNoteContainer';
 import NotebookIndexContainer from './components/notebooks/NotebookIndexContainer'
 import NotebookViewContainer from './components/notebooks/NotebookViewContainer'
 import React from 'react'
@@ -21,6 +22,9 @@ function App() {
           </Route>
           <Route path='/notebooks'>
             <NotebookIndexContainer />
+          </Route>
+          <Route path='/new-note'>
+            <NewNoteContainer />
           </Route>
         </Switch>
       </div>

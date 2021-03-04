@@ -73,6 +73,11 @@
   width: 241px;
 }
 
+.buttons a {
+  text-decoration: none;
+  color: inherit;
+}
+
 .row {
   align-items: center;
   display: flex;

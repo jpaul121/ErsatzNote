@@ -7,7 +7,7 @@ class NoteSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Note
-    fields = [ 'note_id', 'title', 'content', 'date_modified', 'date_created' ]
+    fields = [ 'note_id', 'title', 'content', 'notebook', 'date_modified', 'date_created' ]
 
 class NotebookSerializer(serializers.ModelSerializer):
   notebook_id = serializers.SlugField(source='id')

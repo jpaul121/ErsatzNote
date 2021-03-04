@@ -13,11 +13,16 @@ function NoteTitleBar({ match, title, setTitle }) {
 
   useEffect(() => {
     async function getTitle() {
-      const response = await axios.get(
-        `/api/notes/${match.params.note_id}`,
-      )
+      if (match.params.note_id) {
+        const response = await axios.get(
+          `/api/notes/${match.params.note_id}`,
+        )
+        
+        setTitle(deserialize(response.data.title))
+      } else {
+        setTitle([{ children: [{ text: '' }] }])
+      }
 
-      setTitle(deserialize(response.data.title))
     }
 
     getTitle()

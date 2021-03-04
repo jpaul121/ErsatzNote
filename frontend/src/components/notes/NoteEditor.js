@@ -7,7 +7,6 @@ import React, { useCallback, useEffect, useMemo } from 'react'
 import axios from 'axios'
 import { createEditor } from 'slate'
 import deserialize from './Deserializer'
-import serialize from './Serializer'
 import { withRouter } from 'react-router'
 
 function NoteEditor({ match, content, setContent, title }) {
@@ -16,28 +15,36 @@ function NoteEditor({ match, content, setContent, title }) {
   const renderLeaf = useCallback(props => <Leaf {...props} />, [])
 
   const saveNote = useCallback(() => {
-    // This was confusing because usually databases
-    // save content in JSON and the client receives
-    // plaintext, but in this case it's the other way around. 
-    const plaintextContent = serialize(content)
-    
-    axios.put(
-      `/api/notes/${match.params.note_id}/`,
-      {
-        note_id: match.params.note_id,
-        title,
-        content: plaintextContent,
-      }
-    )
+    if (match.params.note_id) {
+      axios.put(
+        `/api/notes/${match.params.note_id}/`,
+        {
+          title,
+          content,
+        }
+      )
+    } else {
+      axios.post(
+        `/new-note`,
+        {
+          title,
+          content,
+        }
+      )
+    }
   }, [ match, title, content ])
 
   useEffect(() => {
     async function getNote() {
-      const response = await axios.get(
-        `/api/notes/${match.params.note_id}/`,
-      )
-      
-      setContent(deserialize(response.data.content))
+      if (match.params.note_id) {
+        const response = await axios.get(
+          `/api/notes/${match.params.note_id}/`,
+        )
+        
+        setContent(response.data.content)
+      } else {
+        setContent([{ children: [{ text: '' }] }])
+      }
     }
 
     getNote()

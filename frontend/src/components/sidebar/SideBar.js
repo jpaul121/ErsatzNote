@@ -22,9 +22,11 @@ class SideBar extends Component {
         <SearchBar />
         <div className={styles['buttons']}>
           <button className={styles['new-note']}>
-            <i className={'fas fa-plus'}></i>
-            &nbsp;&nbsp;&nbsp;
-            New Note
+            <Link to={`/new-note`}>
+              <i className={'fas fa-plus'}></i>
+              &nbsp;&nbsp;&nbsp;
+              New Note
+            </Link>
           </button>
         </div>
         <div className={styles['notebooks']}>
