@@ -71,6 +71,7 @@ function NoteEditor({ match, content, setContent, title }) {
       </Toolbar>
       <Editable
         placeholder='Write something...'
+        style={{ minHeight: 600 }}
       />
     </Slate>
   );

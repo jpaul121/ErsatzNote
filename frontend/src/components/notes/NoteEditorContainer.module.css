@@ -9,6 +9,7 @@
   max-width: 42em;
   margin: 20px auto;
   padding: 20px;
+  border-radius: 6px;
 }
 
 .note-editor-container button {
