@@ -9,13 +9,6 @@ class NoteViewSet(viewsets.ModelViewSet):
   queryset = Note.objects.all()
   serializer_class = NoteSerializer
 
-  @action(detail=True, methods=['put'])
-  def edit_note(self, request, pk):
-    note = Note.objects.get(id=pk)
-    note.title = request.data.title
-    note.content = request.data.content
-    
-    note.save()
 
 
 

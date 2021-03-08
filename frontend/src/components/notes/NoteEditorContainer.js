@@ -1,11 +1,10 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 
 import NoteEditor from './NoteEditor'
 import NoteTitleBar from './NoteTitleBar'
 import styles from './NoteEditorContainer.module.css'
-import { withRouter } from 'react-router'
 
-function NoteEditorContainer({ match }) {
+function NoteEditorContainer() {
   const [ title, setTitle ] = useState([])
   const [ content, setContent ] = useState([])
 
@@ -26,6 +25,4 @@ function NoteEditorContainer({ match }) {
   );
 }
 
-const finishedNoteEditorContainer = withRouter(NoteEditorContainer)
-
-export default finishedNoteEditorContainer
+export default NoteEditorContainer

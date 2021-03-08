@@ -1,7 +1,5 @@
-import React, { useState } from 'react'
-
-import NoteEditor from './NoteEditor'
 import NoteEditorContainer from './NoteEditorContainer'
+import React from 'react'
 import SideBar from '../sidebar/SideBar'
 import styles from './NewNoteContainer.module.css'
 
