@@ -5,7 +5,7 @@ import React, { useEffect, useMemo } from 'react'
 
 import axios from 'axios'
 import { createEditor } from 'slate'
-import deserialize from './Deserializer'
+import { deserialize } from './Deserializers'
 import { withRouter } from 'react-router'
 
 function NoteTitleBar({ match, title, setTitle }) {

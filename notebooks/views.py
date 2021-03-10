@@ -1,4 +1,6 @@
-from rest_framework import viewsets
+import json
+
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -8,6 +10,39 @@ from .models import Note, Notebook
 class NoteViewSet(viewsets.ModelViewSet):
   queryset = Note.objects.all()
   serializer_class = NoteSerializer
+
+  def retrieve(self, request, *args, **kwargs):
+    instance = self.get_object()
+    serializer = NoteSerializer(instance)
+
+    print(serializer.data)
+
+    title = json.loads(serializer.data['title'])
+    content = json.loads(serializer.data['content'])
+
+    response_data = {
+      'note_id': serializer.data['note_id'],
+      'title': title,
+      'content': content,
+      'notebook': serializer.data['notebook'],
+      'date_modified': serializer.data['date_modified'],
+      'date_created': serializer.data['date_created'],
+    }
+
+    return Response(response_data)
+  
+  def list(self, request, *args, **kwargs):
+    queryset = self.filter_queryset(self.get_queryset())
+
+    page = self.paginate_queryset(queryset)
+    if page is not None:
+      serializer = self.get_serializer(page, many=True)
+      return self.get_paginated_response(serializer.data)
+
+    serializer = self.get_serializer(queryset, many=True)
+    print(serializer.data)
+    return Response(serializer.data)
+
 
 
 

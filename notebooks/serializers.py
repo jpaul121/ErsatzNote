@@ -5,23 +5,29 @@ from rest_framework import serializers
 from .models import Note, Notebook, User
 
 class NoteSerializer(serializers.ModelSerializer):
-  note_id = serializers.SlugField(source='Note.id', read_only=True, required=False)
-  title = serializers.JSONField(source='Note.title', required=False)
-  content = serializers.JSONField(source='Note.content', required=False)
+  note_id = serializers.SlugField(source='id', read_only=True, required=False)
+  title = serializers.JSONField(required=False)
+  content = serializers.JSONField(required=False)
   notebook = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
 
-  date_modified = serializers.DateField(source='Note.date_modified', read_only=True, required=False)
-  date_created = serializers.DateField(source='Note.date_created', read_only=True, required=False)
+  date_modified = serializers.DateField(read_only=True, required=False)
+  date_created = serializers.DateField(read_only=True, required=False)
 
-  def create(self, data):
-    title = json.dumps(data['Note']['title'])
-    content = json.dumps(data['Note']['content'])
+  def create(self, validated_data):
+    print(validated_data)
+    title = json.dumps(validated_data['title'])
+    content = json.dumps(validated_data['content'])
 
-    return Note.objects.create(**{ 'title': title, 'content': content })
+    response_data = {
+      'title': title,
+      'content': content,
+    }
 
-  def update(self, instance, data):
-    instance.title = json.dumps(data['Note']['title'])
-    instance.content = json.dumps(data['Note']['content'])
+    return Note.objects.create(**response_data)
+
+  def update(self, instance, validated_data):
+    instance.title = json.dumps(validated_data['title'])
+    instance.content = json.dumps(validated_data['content'])
 
     instance.save()
 

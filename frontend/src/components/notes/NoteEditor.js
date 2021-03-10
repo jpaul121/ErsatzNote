@@ -6,8 +6,7 @@ import React, { useCallback, useEffect, useMemo } from 'react'
 
 import axios from 'axios'
 import { createEditor } from 'slate'
-import deserialize from './Deserializer'
-import serialize from './Serializer'
+import { deserialize } from './Deserializers'
 import { withRouter } from 'react-router'
 
 function NoteEditor({ match, content, setContent, title }) {
@@ -25,9 +24,6 @@ function NoteEditor({ match, content, setContent, title }) {
         }
       )
     } else {
-      console.log(title)
-      console.log(typeof(title))
-      
       axios.post(
         `/api/notes/`,
         {
@@ -45,7 +41,7 @@ function NoteEditor({ match, content, setContent, title }) {
           `/api/notes/${match.params.note_id}/`,
         )
         
-        setContent(deserialize(response.data.content))
+        setContent(response.data.content)
       } else {
         setContent([{ children: [{ text: '' }] }])
       }

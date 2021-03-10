@@ -5,7 +5,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Note from '../notes/Note'
 import axios from 'axios'
-import deserialize from '../notes/Deserializer'
+import { deserializePreview } from '../notes/Deserializers'
 import styles from './NotebookView.module.css'
 import { withRouter } from 'react-router'
 
@@ -47,6 +47,8 @@ class NotebookView extends Component {
     const [ name, noteData ] = await this.getNotebook()
     const notebook_id = this.props.match.params.notebook_id
 
+    console.log(noteData[0])
+
     this.setState({
       isLoading: false,
       name,
@@ -54,8 +56,8 @@ class NotebookView extends Component {
         return (
           <Link key={item.note_id} to={`/notebooks/${notebook_id}/notes/${item.note_id}`} >
             <Note 
-              title={item.title}
-              content={deserialize(item.content)}
+              title={deserializePreview(item.title)}
+              content={deserializePreview(item.content)}
               date_modified={item.date_modified}
             />
           </Link>
