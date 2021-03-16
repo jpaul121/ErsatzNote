@@ -5,7 +5,6 @@ import React, { useEffect, useMemo } from 'react'
 
 import axios from 'axios'
 import { createEditor } from 'slate'
-import { deserialize } from './Deserializers'
 import { withRouter } from 'react-router'
 
 function NoteTitleBar({ match, title, setTitle }) {
@@ -18,7 +17,7 @@ function NoteTitleBar({ match, title, setTitle }) {
           `/api/notes/${match.params.note_id}`,
         )
         
-        setTitle(deserialize(response.data.title))
+        setTitle(response.data.title)
       } else {
         setTitle([{ children: [{ text: '' }] }])
       }

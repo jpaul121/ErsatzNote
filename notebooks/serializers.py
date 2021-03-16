@@ -14,7 +14,7 @@ class NoteSerializer(serializers.ModelSerializer):
   date_created = serializers.DateField(read_only=True, required=False)
 
   def create(self, validated_data):
-    print(validated_data)
+    print('notebooks/serializers.py,\n', 'line 17, validated_data\n', validated_data)
     title = json.dumps(validated_data['title'])
     content = json.dumps(validated_data['content'])
 

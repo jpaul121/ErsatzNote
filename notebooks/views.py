@@ -15,7 +15,7 @@ class NoteViewSet(viewsets.ModelViewSet):
     instance = self.get_object()
     serializer = NoteSerializer(instance)
 
-    print(serializer.data)
+    print('notebooks/views.py\n', 'line 18, serializer.data\n', serializer.data)
 
     title = json.loads(serializer.data['title'])
     content = json.loads(serializer.data['content'])
@@ -40,7 +40,7 @@ class NoteViewSet(viewsets.ModelViewSet):
       return self.get_paginated_response(serializer.data)
 
     serializer = self.get_serializer(queryset, many=True)
-    print(serializer.data)
+    print('notebooks/views.py\n', 'line 43\n', serializer.data)
     return Response(serializer.data)
 
 

@@ -6,7 +6,6 @@ import React, { useCallback, useEffect, useMemo } from 'react'
 
 import axios from 'axios'
 import { createEditor } from 'slate'
-import { deserialize } from './Deserializers'
 import { withRouter } from 'react-router'
 
 function NoteEditor({ match, content, setContent, title }) {

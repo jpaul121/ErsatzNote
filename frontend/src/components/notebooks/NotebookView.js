@@ -1,11 +1,11 @@
 import 'regenerator-runtime/runtime.js'
 
 import React, { Component } from 'react'
+import { getContentPreview, getTitlePreview } from '../notes/Serialization'
 
 import { Link } from 'react-router-dom'
 import Note from '../notes/Note'
 import axios from 'axios'
-import { deserializePreview } from '../notes/Deserializers'
 import styles from './NotebookView.module.css'
 import { withRouter } from 'react-router'
 
@@ -47,7 +47,7 @@ class NotebookView extends Component {
     const [ name, noteData ] = await this.getNotebook()
     const notebook_id = this.props.match.params.notebook_id
 
-    console.log(noteData[0])
+    console.log('Django response data:\n', 'NotebookView.js, line 49\n', noteData)
 
     this.setState({
       isLoading: false,
@@ -56,8 +56,8 @@ class NotebookView extends Component {
         return (
           <Link key={item.note_id} to={`/notebooks/${notebook_id}/notes/${item.note_id}`} >
             <Note 
-              title={deserializePreview(item.title)}
-              content={deserializePreview(item.content)}
+              title={getTitlePreview(item)}
+              content={getContentPreview(item)}
               date_modified={item.date_modified}
             />
           </Link>
