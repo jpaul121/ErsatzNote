@@ -54,7 +54,7 @@ class NotebookView extends Component {
       name,
       notes: noteData.map(item => {
         return (
-          <Link key={item.note_id} to={`/notebooks/${notebook_id}/notes/${item.note_id}`} >
+          <Link key={item.note_id} to={`/notebooks/${notebook_id}/notes/${item.note_id}`}>
             <Note 
               title={getTitlePreview(item)}
               content={getContentPreview(item)}

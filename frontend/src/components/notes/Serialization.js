@@ -5,7 +5,7 @@ export function getTitlePreview(note) {
 }
 
 export function getContentPreview(note) {
-  const content = note.title[0].children[0]
+  const content = note.content[0].children[0]
 
   return content.text;
 }
