@@ -40,6 +40,8 @@ function NoteEditor({ match, content, setContent, title }) {
           `/api/notes/${match.params.note_id}/`,
         )
         
+        console.log('Django response data:\n', 'NoteEditor.js, line 43\n', response.data)
+        
         setContent(response.data.content)
       } else {
         setContent([{ children: [{ text: '' }] }])

@@ -47,8 +47,6 @@ class NotebookView extends Component {
     const [ name, noteData ] = await this.getNotebook()
     const notebook_id = this.props.match.params.notebook_id
 
-    console.log('Django response data:\n', 'NotebookView.js, line 49\n', noteData)
-
     this.setState({
       isLoading: false,
       name,
