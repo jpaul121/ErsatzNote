@@ -1,5 +1,6 @@
 import json
 
+from django.core.files.base import ContentFile
 from rest_framework import serializers
 
 from .models import Note, Notebook, User
@@ -15,8 +16,9 @@ class NoteSerializer(serializers.ModelSerializer):
 
   def create(self, validated_data):
     print('notebooks/serializers.py,\n', 'line 17, validated_data\n', validated_data)
+
     title = json.dumps(validated_data['title'])
-    content = json.dumps(validated_data['content'])
+    content = ContentFile(validated_data['content'])
 
     response_data = {
       'title': title,
@@ -27,7 +29,8 @@ class NoteSerializer(serializers.ModelSerializer):
 
   def update(self, instance, validated_data):
     instance.title = json.dumps(validated_data['title'])
-    instance.content = json.dumps(validated_data['content'])
+    instance.content = ContentFile(validated_data['content'])
+    # instance.content.save(validated_data['note_id'], ContentFile(validated_data['content']))
 
     instance.save()
 

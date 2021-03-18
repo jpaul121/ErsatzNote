@@ -18,7 +18,10 @@ class NoteViewSet(viewsets.ModelViewSet):
     print('notebooks/views.py\n', 'line 18, serializer.data\n', serializer.data)
 
     title = json.loads(serializer.data['title'])
-    content = json.loads(serializer.data['content'])
+    
+    with instance.content.open('r') as f:
+      content = f.readlines()
+      f.close()
 
     response_data = {
       'note_id': serializer.data['note_id'],

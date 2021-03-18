@@ -3,6 +3,7 @@ import 'regenerator-runtime/runtime.js'
 import { BlockButton, Element, Leaf, MarkButton, SaveButton, Toolbar } from './BaseComponents'
 import { Editable, Slate, withReact } from 'slate-react'
 import React, { useCallback, useEffect, useMemo } from 'react'
+import { deserialize, serialize } from './Serialization'
 
 import axios from 'axios'
 import { createEditor } from 'slate'
@@ -18,8 +19,9 @@ function NoteEditor({ match, content, setContent, title }) {
       axios.put(
         `/api/notes/${match.params.note_id}/`,
         {
+          note_id: match.params.note_id,
           title,
-          content,
+          content: serialize(content),
         }
       )
     } else {
@@ -27,7 +29,7 @@ function NoteEditor({ match, content, setContent, title }) {
         `/api/notes/`,
         {
           title,
-          content,
+          content: serialize(content),
         }
       )
     }
@@ -41,8 +43,10 @@ function NoteEditor({ match, content, setContent, title }) {
         )
         
         console.log('Django response data:\n', 'NoteEditor.js, line 43\n', response.data)
+
+        const document = new DOMParser().parseFromString(response.data.content, 'text/html')
         
-        setContent(response.data.content)
+        setContent(deserialize(document.body))
       } else {
         setContent([{ children: [{ text: '' }] }])
       }

@@ -41,6 +41,59 @@ const Button = forwardRef(({ className, active, reversed, ...props }, ref) => (
   />
 ))
 
+export function MarkButton({ format, icon }) {
+  const editor = useSlate()
+
+  return (
+    <Button
+      active={isMarkActive(editor, format)}
+      onMouseDown={event => {
+        event.preventDefault()
+        toggleMark(editor, format)
+      }}
+    >
+      <Icon>{icon}</Icon>
+    </Button>
+  );
+}
+
+export function BlockButton({ format, icon }) {
+  const editor = useSlate()
+  
+  return (
+    <Button
+      active={isBlockActive(editor, format)}
+      onMouseDown={event => {
+        event.preventDefault()
+        toggleBlock(editor, format)
+      }}
+    >
+      <Icon>{icon}</Icon>
+    </Button>
+  );
+}
+
+export function SaveButton({ saveNote }) {
+  return (
+    <span
+      onMouseDown={event => {
+        event.preventDefault()
+        saveNote()
+      }}
+      className={cx(
+        'material-icons',
+        css`
+          cursor: pointer;
+          color: black;
+          float: right;
+        `
+      )}
+    >
+      <Icon>save</Icon>
+    </span>
+  );
+}
+
 export function Element({ attributes, children, element }) {
   switch (element.type) {
     case 'block-quote':
@@ -164,56 +217,3 @@ export const Toolbar = forwardRef(({ className, ...props }, ref) => (
     )}
   />
 ))
-
-export function MarkButton({ format, icon }) {
-  const editor = useSlate()
-
-  return (
-    <Button
-      active={isMarkActive(editor, format)}
-      onMouseDown={event => {
-        event.preventDefault()
-        toggleMark(editor, format)
-      }}
-    >
-      <Icon>{icon}</Icon>
-    </Button>
-  );
-}
-
-export function BlockButton({ format, icon }) {
-  const editor = useSlate()
-  
-  return (
-    <Button
-      active={isBlockActive(editor, format)}
-      onMouseDown={event => {
-        event.preventDefault()
-        toggleBlock(editor, format)
-      }}
-    >
-      <Icon>{icon}</Icon>
-    </Button>
-  );
-}
-
-export function SaveButton({ saveNote }) {
-  return (
-    <span
-      onMouseDown={event => {
-        event.preventDefault()
-        saveNote()
-      }}
-      className={cx(
-        'material-icons',
-        css`
-          cursor: pointer;
-          color: black;
-          float: right;
-        `
-      )}
-    >
-      <Icon>save</Icon>
-    </span>
-  );
-}
