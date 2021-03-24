@@ -9,7 +9,7 @@ import NotebookIndexContainer from './components/notebooks/NotebookIndexContaine
 import NotebookViewContainer from './components/notebooks/NotebookViewContainer'
 import React from 'react'
 
-function App() {
+function App(): JSX.Element {
   return (
     <Router>
       <div>

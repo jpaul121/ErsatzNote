@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import 'regenerator-runtime/runtime.js'
 
 import { Editable, Slate, withReact } from 'slate-react'

@@ -1,11 +1,17 @@
+import { NoteDataObject, deserialize } from './Serialization'
 import React, { Component } from 'react'
 
 import NoteIndexItem from './NoteIndexItem'
 import axios from 'axios'
-import deserialize from './Deserializer'
 
-class NoteIndex extends Component {
-  constructor(props) {
+interface NoteIndexState {
+  isLoading: boolean,
+  noteIDs: Array<string>,
+  notes: Array<NoteDataObject>,
+}
+
+class NoteIndex extends Component<{}, NoteIndexState> {
+  constructor(props: any) {
     super(props)
     this.state = {
       isLoading: true,
@@ -24,7 +30,7 @@ class NoteIndex extends Component {
       .then(res => this.setState({ noteIDs: res.data.notes }))
       .catch(err => console.log(err))
 
-    let notes = []
+    let notes: Array<NoteDataObject> = []
 
     for (const noteID of this.state.noteIDs) {
       axios
@@ -36,12 +42,13 @@ class NoteIndex extends Component {
     return notes;
   }
 
-  renderNoteItems() {
+  async renderNoteItems() {
     const notesList = await this.getNotes()
     
     return notesList.map(item => (
       <NoteIndexItem 
         key={item.note_id}
+        // @ts-ignore
         title={deserialize(item.title)}
         date_modified={item.date_modified}
         date_created={item.date_created}

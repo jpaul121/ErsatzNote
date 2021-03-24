@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { Component } from 'react'
 
 import NoteEditorContainer from '../notes/NoteEditorContainer'
@@ -6,7 +8,7 @@ import SideBar from '../sidebar/SideBar'
 import styles from './NotebookViewContainer.module.css'
 
 class NotebookViewContainer extends Component {
-  constructor(props) {
+  constructor(props: any) {
     super(props)
   }
 

@@ -5,7 +5,7 @@ import SideBar from '../sidebar/SideBar'
 import styles from './NotebookIndexContainer.module.css'
 
 class NotebookIndexContainer extends Component {
-  constructor(props) {
+  constructor(props: any) {
     super(props)
   }
 

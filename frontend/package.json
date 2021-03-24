@@ -14,7 +14,7 @@
     "start": "webpack serve",
     "test": "echo \"Error: no test specified\" && exit 1",
     "create": "webpack",
-    "dev": "webpack --mode development --entry ./src/index.js --output-path ./static/frontend",
+    "dev": "webpack --mode development --entry ./src/index.tsx --output-path ./static/frontend",
     "build": "webpack --mode development --entry ./src/index.js --output-path ./static/frontend"
   },
   "repository": {
@@ -32,11 +32,16 @@
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.12.10",
+    "@babel/preset-typescript": "^7.13.0",
+    "@types/escape-html": "^1.0.0",
+    "@types/react-router-dom": "^5.1.7",
+    "@types/slate": "^0.47.8",
     "babel-loader": "^8.2.2",
     "css-loader": "^5.1.0",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^4.5.1",
     "style-loader": "^2.0.0",
+    "ts-loader": "^8.0.18",
     "url-loader": "^4.1.1",
     "webpack": "^5.13.0",
     "webpack-cli": "^4.3.1",
@@ -45,6 +50,10 @@
   "dependencies": {
     "@emotion/css": "^11.1.3",
     "@fortawesome/fontawesome-free": "^5.15.2",
+    "@types/jest": "^26.0.21",
+    "@types/node": "^14.14.35",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.3",
     "axios": "^0.21.1",
     "escape-html": "^1.0.3",
     "material-design-icons": "^3.0.1",
@@ -55,6 +64,7 @@
     "regenerator-runtime": "^0.13.7",
     "slate": "^0.59.0",
     "slate-hyperscript": "^0.59.0",
-    "slate-react": "^0.59.0"
+    "slate-react": "^0.59.0",
+    "typescript": "^4.2.3"
   }
 }

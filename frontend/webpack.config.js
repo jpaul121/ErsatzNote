@@ -3,20 +3,28 @@ var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: [
-    './src/index.js',
+    './src/index.tsx',
     'webpack-dev-server/client?http://localhost:8080/'
   ],
   output: {
     path: path.resolve(__dirname, 'static/frontend'),
     filename: 'index.js'
   },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.jsx']
+  },
   module: {
     rules: [
       {
-        test: /\.(js)$/,
+        test: /\.(js|ts|tsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader'
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              ['@babel/preset-typescript']
+            ],
+          }
         }
       },
       {

@@ -3,7 +3,7 @@ import React from 'react'
 import SideBar from '../sidebar/SideBar'
 import styles from './NewNoteContainer.module.css'
 
-function NewNoteContainer() {
+function NewNoteContainer(): JSX.Element {
   return (
     <div className={styles['new-note-container']}>
       <SideBar />

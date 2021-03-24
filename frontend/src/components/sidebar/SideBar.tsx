@@ -7,7 +7,7 @@ import SearchBar from './SearchBar'
 import styles from './Sidebar.module.css'
 
 class SideBar extends Component {
-  constructor(props) {
+  constructor(props: any) {
     super(props)
   }
   

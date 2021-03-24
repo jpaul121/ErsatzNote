@@ -1,12 +1,25 @@
+// @ts-nocheck
+
 import { Editor, Element as SlateElement, Transforms } from 'slate'
-import React, { forwardRef } from 'react'
+import React, { PropsWithChildren, Ref, forwardRef } from 'react'
 import { css, cx } from '@emotion/css'
 
 import { useSlate } from 'slate-react'
 
 const LIST_TYPES = [ 'numbered-list', 'bulleted-list' ]
 
-const Icon = forwardRef(({ className, ...props }, ref) => (
+interface BaseProps {
+  className: string,
+  [ key: string ]: unknown,
+}
+
+type OrNull<T> = T | null
+
+const Icon = forwardRef(
+(
+  { className, ...props }: PropsWithChildren<BaseProps>,
+  ref: any,
+) => (
   <span
     {...props}
     ref={ref}
@@ -21,7 +34,11 @@ const Icon = forwardRef(({ className, ...props }, ref) => (
   />
 ))
 
-const Button = forwardRef(({ className, active, reversed, ...props }, ref) => (
+const Button = forwardRef(
+  (
+    { className, active, reversed, ...props }: PropsWithChildren<BaseProps>,
+    ref: any,
+  ) => (
   <span
     {...props}
     ref={ref}

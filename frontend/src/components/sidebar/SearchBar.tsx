@@ -5,7 +5,7 @@ import React, { Component } from 'react'
 import styles from './SearchBar.module.css'
 
 class SearchBar extends Component {
-  constructor(props) {
+  constructor(props: any) {
     super(props)
   }
 

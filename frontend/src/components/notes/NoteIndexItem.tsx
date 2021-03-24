@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { Component } from 'react'
 
 class NoteIndexItem extends Component {

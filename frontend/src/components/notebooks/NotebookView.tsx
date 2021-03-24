@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import 'regenerator-runtime/runtime.js'
 
 import React, { Component } from 'react'

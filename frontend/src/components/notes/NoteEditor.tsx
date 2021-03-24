@@ -3,19 +3,34 @@ import 'regenerator-runtime/runtime.js'
 import { BlockButton, Element, Leaf, MarkButton, SaveButton, Toolbar } from './BaseComponents'
 import { Editable, Slate, withReact } from 'slate-react'
 import React, { useCallback, useEffect, useMemo } from 'react'
-import { deserialize, serialize } from './Serialization'
+import { RouteComponentProps, match } from 'react-router-dom'
+import { deserialize, emptyValue, serialize } from './Serialization'
 
+import { Node } from 'slate'
 import axios from 'axios'
 import { createEditor } from 'slate'
 import { withRouter } from 'react-router'
 
-function NoteEditor({ match, content, setContent, title }) {
+interface MatchParams {
+  note_id: string,
+}
+
+interface NoteEditorProps {
+  content: Node[],
+  match: match<MatchParams>,
+  setContent: React.Dispatch<React.SetStateAction<Node[]>>,
+  title: Node[],
+}
+
+function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
   const editor = useMemo(() => withReact(createEditor()), [])
   const renderElement = useCallback(props => <Element {...props} />, [])
   const renderLeaf = useCallback(props => <Leaf {...props} />, [])
 
   const saveNote = useCallback(() => {
-    if (match.params.note_id) {
+    if (match.params?.note_id) {
+      console.log('content\n', content)
+      
       axios.put(
         `/api/notes/${match.params.note_id}/`,
         {
@@ -25,6 +40,8 @@ function NoteEditor({ match, content, setContent, title }) {
         }
       )
     } else {
+      console.log('content\n', content)
+      
       axios.post(
         `/api/notes/`,
         {
@@ -48,7 +65,7 @@ function NoteEditor({ match, content, setContent, title }) {
         
         setContent(deserialize(document.body))
       } else {
-        setContent([{ children: [{ text: '' }] }])
+        setContent(emptyValue)
       }
     }
 
@@ -63,7 +80,8 @@ function NoteEditor({ match, content, setContent, title }) {
       value={content}
       onChange={newContent => setContent(newContent)}
     >
-      <Toolbar>
+      < // @ts-ignore
+        Toolbar>
         <MarkButton format='bold' icon='format_bold' />
         <MarkButton format='italic' icon='format_italic' />
         <MarkButton format='code' icon='code' />
@@ -82,6 +100,7 @@ function NoteEditor({ match, content, setContent, title }) {
   );
 }
 
+// @ts-ignore
 const finishedNoteEditor = withRouter(NoteEditor)
 
 export default finishedNoteEditor
