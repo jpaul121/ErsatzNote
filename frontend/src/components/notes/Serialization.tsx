@@ -26,42 +26,31 @@ export function getContentPreview(note) {
   return content.text;
 }
 
-export function serialize(content) {
-  let html = ''
+export function serialize(node: Node) {
+  if (Text.isText(node)) {
+    return escapeHtml(node.text);
+  }
   
-  content.forEach(function(node) {
-    if (Text.isText(node)) {
-      html += escapeHtml(node.text)
-      return;
-    }
-    const children = node.children.map(n => serialize(n)).join('')
-  
-    switch (node.type) {
-      case 'block-quote':
-        html += `<blockquote><p>${children}</p></blockquote>`
-        break;
-      case 'bulleted-list':
-        html += `<ul {...attributes}>${children}</ul>`
-        break;
-      case 'heading-one':
-        html += `<h1 {...attributes}>${children}</h1>`
-        break;
-      case 'heading-two':
-        html += `<h2 {...attributes}>${children}</h2>`
-        break;
-      case 'list-item':
-        html += `<li {...attributes}>${children}</li>`
-        break;
-      case 'numbered-list':
-        html += `<ol {...attributes}>${children}</ol>`
-        break;
-      default:
-        html += `<p>${children}</p>`
-        break;
-    }
-  })
+  const children = node.children.map(n => serialize(n)).join('')
 
-  return html;
+  switch (node.type) {
+    case 'block-quote':
+      return `<blockquote><p>${children}</p></blockquote>`;
+    case 'bulleted-list':
+      return `<ul {...attributes}>${children}</ul>`;
+    case 'heading-one':
+      return `<h1 {...attributes}>${children}</h1>`;
+    case 'heading-two':
+      return `<h2 {...attributes}>${children}</h2>`;
+    case 'list-item':
+      return `<li {...attributes}>${children}</li>`;
+    case 'numbered-list':
+      return `<ol {...attributes}>${children}</ol>`;
+    case 'paragraph':
+      return `<p>${children}</p>`;
+    default:
+      return children;
+  }
 }
 
 export function deserialize(el) {

@@ -3,12 +3,12 @@ import 'regenerator-runtime/runtime.js'
 import { BlockButton, Element, Leaf, MarkButton, SaveButton, Toolbar } from './BaseComponents'
 import { Editable, Slate, withReact } from 'slate-react'
 import React, { useCallback, useEffect, useMemo } from 'react'
-import { RouteComponentProps, match } from 'react-router-dom'
 import { deserialize, emptyValue, serialize } from './Serialization'
 
 import { Node } from 'slate'
 import axios from 'axios'
 import { createEditor } from 'slate'
+import { match } from 'react-router-dom'
 import { withRouter } from 'react-router'
 
 interface MatchParams {
@@ -28,7 +28,7 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
   const renderLeaf = useCallback(props => <Leaf {...props} />, [])
 
   const saveNote = useCallback(() => {
-    if (match.params?.note_id) {
+    if (match.params.note_id) {
       console.log('content\n', content)
       
       axios.put(
@@ -36,17 +36,17 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
         {
           note_id: match.params.note_id,
           title,
-          content: serialize(content),
+          content: serialize({ children: content }),
         }
       )
     } else {
-      console.log('content\n', content)
+      // console.log('content\n', content)
       
       axios.post(
         `/api/notes/`,
         {
           title,
-          content: serialize(content),
+          content: serialize({ children: content }),
         }
       )
     }
