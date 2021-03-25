@@ -8,7 +8,7 @@ import { jsx } from 'slate-hyperscript'
 export interface NoteDataObject {
   note_id: string,
   title: any,
-  content: any
+  content: any,
   date_created: string,
   date_modified: string,
 }
