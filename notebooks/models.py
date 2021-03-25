@@ -10,7 +10,7 @@ class Note(models.Model):
 
   id = models.SlugField(max_length=settings.MAX_SLUG_LENGTH, primary_key=True)
   title = JSONField(null=True)
-  content = models.FileField(null=True)
+  content = models.TextField(null=True)
   notebook = models.ForeignKey('Notebook', related_name='notes', on_delete=models.CASCADE, null=True, blank=True)
   user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
   date_created = models.DateField(auto_now_add=True)

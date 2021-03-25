@@ -8,7 +8,7 @@ from .models import Note, Notebook, User
 class NoteSerializer(serializers.ModelSerializer):
   note_id = serializers.SlugField(source='id', read_only=True, required=False)
   title = serializers.JSONField(required=False)
-  content = serializers.JSONField(required=False)
+  content = serializers.CharField(required=False)
   notebook = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
 
   date_modified = serializers.DateField(read_only=True, required=False)
@@ -18,19 +18,17 @@ class NoteSerializer(serializers.ModelSerializer):
     print('notebooks/serializers.py,\n', 'line 17, validated_data\n', validated_data)
 
     title = json.dumps(validated_data['title'])
-    content = ContentFile(validated_data['content'])
 
     response_data = {
       'title': title,
-      'content': content,
+      'content': validated_data['content'],
     }
 
     return Note.objects.create(**response_data)
 
   def update(self, instance, validated_data):
     instance.title = json.dumps(validated_data['title'])
-    instance.content = ContentFile(validated_data['content'])
-    # instance.content.save(validated_data['note_id'], ContentFile(validated_data['content']))
+    instance.content = validated_data['content']
 
     instance.save()
 
