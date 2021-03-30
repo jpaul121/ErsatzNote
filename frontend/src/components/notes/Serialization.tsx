@@ -8,7 +8,7 @@ import { jsx } from 'slate-hyperscript'
 export interface NoteDataObject {
   note_id: string,
   title: any,
-  content: any,
+  content: string,
   date_created: string,
   date_modified: string,
 }
@@ -18,12 +18,6 @@ export function getTitlePreview(note) {
   const title = note.title[0].children[0]
 
   return title.text;
-}
-
-export function getContentPreview(note) {
-  const content = note.content[0].children[0]
-
-  return content.text;
 }
 
 export function serialize(node: Node) {
@@ -65,18 +59,20 @@ export function deserialize(el) {
   switch (el.nodeName) {
     case 'BODY':
       return jsx('fragment', {}, children);
-    case 'BR':
-      return '\n';
+    case 'H1':
+      return jsx('element', { type: 'heading-one' }, children);
+    case 'H2':
+      return jsx('element', { type: 'heading-two' }, children);
     case 'BLOCKQUOTE':
-      return jsx('element', { type: 'quote' }, children);
+      return jsx('element', { type: 'block-quote' }, children);
     case 'P':
       return jsx('element', { type: 'paragraph' }, children);
-    case 'A':
-      return jsx(
-        'element',
-        { type: 'link', url: el.getAttribute('href') },
-        children
-      );
+    case 'UL':
+      return jsx('element', { type: 'bulleted-list' }, children);
+    case 'OL':
+      return jsx('element', { type: 'numbered-list' }, children);
+    case 'LI':
+      return jsx('element', { type: 'list-item' }, children);
     default:
       return el.textContent;
   }
