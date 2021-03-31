@@ -3,7 +3,7 @@
 import 'regenerator-runtime/runtime.js'
 
 import React, { Component } from 'react'
-import { deserialize, getContentPreview, getTitlePreview } from '../notes/Serialization'
+import { getContentPreview, getTitlePreview } from '../notes/Serialization'
 
 import { Link } from 'react-router-dom'
 import Note from '../notes/Note'
@@ -57,7 +57,7 @@ class NotebookView extends Component {
           <Link key={item.note_id} to={`/notebooks/${notebook_id}/notes/${item.note_id}`}>
             <Note 
               title={getTitlePreview(item)}
-              content={deserialize(item)}
+              content={getContentPreview(item)}
               date_modified={item.date_modified}
             />
           </Link>

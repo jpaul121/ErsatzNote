@@ -3,24 +3,37 @@
 import { Node, Text } from 'slate'
 
 import escapeHtml from 'escape-html'
-import { jsx } from 'slate-hyperscript'
 
 export interface NoteDataObject {
   note_id: string,
-  title: any,
+  title: Node[],
   content: string,
   date_created: string,
   date_modified: string,
 }
 
 
-export function getTitlePreview(note) {
+export function getTitlePreview(note: NoteDataObject): string {
   const title = note.title[0].children[0]
 
   return title.text;
 }
 
-export function serialize(node: Node) {
+export function getContentPreview(note: NoteDataObject): string {
+  const document = new DOMParser().parseFromString(note.content, 'text/html')
+  const formattedContent = deserialize(document.body)
+  console.log(formattedContent)
+
+  let preview = ''
+  for (const node of formattedContent) {
+    console.log(node)
+    preview += Node.string(node)
+  }
+
+  return preview;
+}
+
+export function serialize(node: Node): string {
   if (Text.isText(node)) {
     return escapeHtml(node.text);
   }
@@ -47,34 +60,40 @@ export function serialize(node: Node) {
   }
 }
 
-export function deserialize(el) {
+export function deserialize(el: HTMLElement): Node[] {
   if (el.nodeType === 3) {
-    return el.textContent;
+    return { text: el.textContent };
   } else if (el.nodeType !== 1) {
     return null;
   }
 
   const children = Array.from(el.childNodes).map(deserialize)
 
+  if (children.length === 0) {
+    children = [{ text: '' }]
+  }
+
   switch (el.nodeName) {
     case 'BODY':
-      return jsx('fragment', {}, children);
+      return children;
+    case 'BR':
+      return '\n';
     case 'H1':
-      return jsx('element', { type: 'heading-one' }, children);
+      return { type: 'heading-one', children };
     case 'H2':
-      return jsx('element', { type: 'heading-two' }, children);
+      return { type: 'heading-two', children };
     case 'BLOCKQUOTE':
-      return jsx('element', { type: 'block-quote' }, children);
+      return { type: 'block-quote', children };
     case 'P':
-      return jsx('element', { type: 'paragraph' }, children);
+      return { type: 'paragraph', children };
     case 'UL':
-      return jsx('element', { type: 'bulleted-list' }, children);
+      return { type: 'bulleted-list', children };
     case 'OL':
-      return jsx('element', { type: 'numbered-list' }, children);
+      return { type: 'numbered-list', children };
     case 'LI':
-      return jsx('element', { type: 'list-item' }, children);
+      return { type: 'list-item', children };
     default:
-      return el.textContent;
+      return { text: el.textContent };
   }
 }
 
