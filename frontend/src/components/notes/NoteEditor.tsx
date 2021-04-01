@@ -9,6 +9,7 @@ import { Node } from 'slate'
 import axios from 'axios'
 import { createEditor } from 'slate'
 import { match } from 'react-router-dom'
+import { withHistory } from 'slate-history'
 import { withRouter } from 'react-router'
 
 interface MatchParams {
@@ -23,14 +24,12 @@ interface NoteEditorProps {
 }
 
 function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
-  const editor = useMemo(() => withReact(createEditor()), [])
+  const editor = useMemo(() => withHistory(withReact(createEditor())), [])
   const renderElement = useCallback(props => <Element {...props} />, [])
   const renderLeaf = useCallback(props => <Leaf {...props} />, [])
 
   const saveNote = useCallback(() => {
     if (match.params.note_id) {
-      console.log('content\n', content)
-      
       axios.put(
         `/api/notes/${match.params.note_id}/`,
         {
@@ -40,8 +39,6 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
         }
       )
     } else {
-      // console.log('content\n', content)
-      
       axios.post(
         `/api/notes/`,
         {
@@ -95,6 +92,8 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
       <Editable
         placeholder='Write something...'
         style={{ minHeight: 600 }}
+        spellCheck
+        autoFocus
       />
     </Slate>
   );

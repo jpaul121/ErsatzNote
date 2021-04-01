@@ -135,19 +135,11 @@ export function Leaf({ attributes, children, leaf }) {
     children = <strong>{children}</strong>
   }
 
-  if (leaf.code) {
-    children = <code>{children}</code>
-  }
-
   if (leaf.italic) {
     children = <em>{children}</em>
   }
 
-  if (leaf.underline) {
-    children = <u>{children}</u>
-  }
-
-  return <span {...attributes}>{children}</span>;
+  return children;
 }
 
 function isMarkActive(editor, format) {
@@ -187,7 +179,7 @@ function toggleBlock(editor, format) {
     split: true,
   })
 
-  const newProperties = {
+  const newProperties: Partial<SlateElement> = {
     type: isActive ? 'paragraph' : isList ? 'list-item' : format,
   }
   Transforms.setNodes(editor, newProperties)

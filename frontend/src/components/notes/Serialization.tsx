@@ -22,11 +22,9 @@ export function getTitlePreview(note: NoteDataObject): string {
 export function getContentPreview(note: NoteDataObject): string {
   const document = new DOMParser().parseFromString(note.content, 'text/html')
   const formattedContent = deserialize(document.body)
-  console.log(formattedContent)
 
   let preview = ''
   for (const node of formattedContent) {
-    console.log(node)
     preview += Node.string(node)
   }
 
@@ -35,7 +33,17 @@ export function getContentPreview(note: NoteDataObject): string {
 
 export function serialize(node: Node): string {
   if (Text.isText(node)) {
-    return escapeHtml(node.text);
+    let formattedText = escapeHtml(node.text)
+
+    if (node.bold) {
+      formattedText = '<strong>' + formattedText + '</strong>'
+    }
+
+    if (node.italic) {
+      formattedText = '<em>' + formattedText + '</em>'
+    }
+    
+    return formattedText;
   }
   
   const children = node.children.map(n => serialize(n)).join('')
