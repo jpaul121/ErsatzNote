@@ -132,14 +132,14 @@ export function Element({ attributes, children, element }) {
 
 export function Leaf({ attributes, children, leaf }) {
   if (leaf.bold) {
-    children = <strong>{children}</strong>
+    children = <strong {...attributes}>{children}</strong>
   }
 
   if (leaf.italic) {
-    children = <em>{children}</em>
+    children = <em {...attributes}>{children}</em>
   }
 
-  return children;
+  return <span {...attributes}>{children}</span>;
 }
 
 function isMarkActive(editor, format) {

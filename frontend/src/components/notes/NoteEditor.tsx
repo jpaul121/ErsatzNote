@@ -1,11 +1,11 @@
 import 'regenerator-runtime/runtime.js'
 
 import { BlockButton, Element, Leaf, MarkButton, SaveButton, Toolbar } from './BaseComponents'
-import { Editable, Slate, withReact } from 'slate-react'
+import { Editable, ReactEditor, Slate, withReact } from 'slate-react'
+import { Node, Transforms } from 'slate'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { deserialize, emptyValue, serialize } from './Serialization'
 
-import { Node } from 'slate'
 import axios from 'axios'
 import { createEditor } from 'slate'
 import { match } from 'react-router-dom'
@@ -55,8 +55,6 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
         const response = await axios.get(
           `/api/notes/${match.params.note_id}/`,
         )
-        
-        console.log('Django response data:\n', 'NoteEditor.js, line 43\n', response.data)
 
         const document = new DOMParser().parseFromString(response.data.content, 'text/html')
         
@@ -72,8 +70,6 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
   return (
     <Slate
       editor={editor}
-      renderElement={renderElement}
-      renderLeaf={renderLeaf}
       value={content}
       onChange={newContent => setContent(newContent)}
     >
@@ -92,6 +88,8 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
       <Editable
         placeholder='Write something...'
         style={{ minHeight: 600 }}
+        renderElement={renderElement}
+        renderLeaf={renderLeaf}
         spellCheck
         autoFocus
       />

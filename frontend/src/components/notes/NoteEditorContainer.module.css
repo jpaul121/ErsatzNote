@@ -12,6 +12,23 @@
   border-radius: 6px;
 }
 
+.editor-proper strong {
+  font-weight: bold;
+}
+
+.editor-proper em {
+  font-style: italic;
+}
+
+.editor-proper blockquote {
+  border-left: 2px solid #dddddd;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 10px;
+  color: #aaaaaa;
+  font-style: italic;
+}
+
 .note-editor-container button {
   margin: 0px auto;
   border: none;

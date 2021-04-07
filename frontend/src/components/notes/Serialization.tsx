@@ -50,7 +50,7 @@ export function serialize(node: Node): string {
 
   switch (node.type) {
     case 'block-quote':
-      return `<blockquote><p>${children}</p></blockquote>`;
+      return `<blockquote>${children}</blockquote>`;
     case 'bulleted-list':
       return `<ul {...attributes}>${children}</ul>`;
     case 'heading-one':
@@ -86,6 +86,24 @@ export function deserialize(el: HTMLElement): Node[] {
       return children;
     case 'BR':
       return '\n';
+    case 'STRONG':
+      if (el.textContent?.includes('<em>')) {
+        let finalString = el.textContent
+
+        finalString = finalString.replace('<em>', '').replace('</em>', '')
+        
+        return { bold: true, italic: true, text: finalString };
+      }
+      return { bold: true, text: el.textContent };
+    case 'EM':
+      if (el.textContent?.includes('<strong>')) {
+        let finalString = el.textContent
+
+        finalString = finalString.replace('<strong>', '').replace('</strong>', '')
+        
+        return { bold: true, italic: true, text: finalString };
+      }
+      return { italic: true, text: el.textContent };
     case 'H1':
       return { type: 'heading-one', children };
     case 'H2':
