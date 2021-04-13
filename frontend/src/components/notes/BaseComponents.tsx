@@ -1,9 +1,10 @@
 // @ts-nocheck
 
 import { Editor, Element as SlateElement, Transforms } from 'slate'
-import React, { PropsWithChildren, Ref, forwardRef } from 'react'
+import React, { PropsWithChildren, Ref, forwardRef, useRef } from 'react'
 import { css, cx } from '@emotion/css'
 
+import { ReactEditor } from 'slate-react'
 import { useSlate } from 'slate-react'
 
 const LIST_TYPES = [ 'numbered-list', 'bulleted-list' ]
@@ -12,8 +13,6 @@ interface BaseProps {
   className: string,
   [ key: string ]: unknown,
 }
-
-type OrNull<T> = T | null
 
 const Icon = forwardRef(
 (
@@ -132,11 +131,15 @@ export function Element({ attributes, children, element }) {
 
 export function Leaf({ attributes, children, leaf }) {
   if (leaf.bold) {
-    children = <strong {...attributes}>{children}</strong>
+    children = <strong>{children}</strong>
   }
 
   if (leaf.italic) {
-    children = <em {...attributes}>{children}</em>
+    children = <em>{children}</em>
+  }
+
+  if (leaf.code) {
+    children = <code>{children}</code>
   }
 
   return <span {...attributes}>{children}</span>;
@@ -226,3 +229,15 @@ export const Toolbar = forwardRef(({ className, ...props }, ref) => (
     )}
   />
 ))
+
+const initialValue = {}
+
+export function useLazyRef<T>(init: () => T): MutableRefObject<T> {
+	const ref = useRef<Editor | ReactEditor | typeof initialValue>(initialValue);
+
+	if (ref.current === initialValue) {
+		ref.current = init();
+	}
+
+	return ref as MutableRefObject<T>;
+}

@@ -29,6 +29,42 @@
   font-style: italic;
 }
 
+.editor-proper h1 {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.editor-proper h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.editor-proper code {
+  font-family: monospace;
+  background-color: #eeeeee;
+  padding: 3px;
+}
+
+.editor-proper ul { 
+  list-style-type: disc; 
+  list-style-position: inside; 
+}
+
+.editor-proper ol { 
+  list-style-type: decimal; 
+  list-style-position: inside; 
+}
+
+.editor-proper ul ul, .editor-proper ol ul {
+  list-style-position: inside;
+  margin-left: 15px;
+}
+
+.editor-proper ol li, .editor-proper ul li { 
+  list-style-position: inside;
+  margin-left: 15px;
+}
+
 .note-editor-container button {
   margin: 0px auto;
   border: none;

@@ -1,13 +1,14 @@
 import 'regenerator-runtime/runtime.js'
 
-import { BlockButton, Element, Leaf, MarkButton, SaveButton, Toolbar } from './BaseComponents'
+import { BlockButton, Element, Leaf, MarkButton, SaveButton, Toolbar, useLazyRef } from './BaseComponents'
 import { Editable, ReactEditor, Slate, withReact } from 'slate-react'
+import { Editor, createEditor } from 'slate'
 import { Node, Transforms } from 'slate'
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react'
 import { deserialize, emptyValue, serialize } from './Serialization'
 
 import axios from 'axios'
-import { createEditor } from 'slate'
+import { create } from 'node:domain'
 import { match } from 'react-router-dom'
 import { withHistory } from 'slate-history'
 import { withRouter } from 'react-router'
@@ -24,18 +25,26 @@ interface NoteEditorProps {
 }
 
 function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
-  const editor = useMemo(() => withHistory(withReact(createEditor())), [])
   const renderElement = useCallback(props => <Element {...props} />, [])
   const renderLeaf = useCallback(props => <Leaf {...props} />, [])
 
+  const editorRef = useLazyRef<Editor & ReactEditor>(() => withHistory(withReact(createEditor())))
+  const _isMounted = useRef<boolean>(false)
+
+  const editor = editorRef.current
+
+  const signal = axios.CancelToken.source()
+
   const saveNote = useCallback(() => {
+    const editorContent: Node = { children: content }
+    
     if (match.params.note_id) {
       axios.put(
         `/api/notes/${match.params.note_id}/`,
         {
           note_id: match.params.note_id,
           title,
-          content: serialize({ children: content }),
+          content: serialize(editorContent),
         }
       )
     } else {
@@ -43,28 +52,43 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
         `/api/notes/`,
         {
           title,
-          content: serialize({ children: content }),
+          content: serialize(editorContent),
         }
       )
     }
   }, [ match, title, content ])
 
   useEffect(() => {
+    console.log('setup useEffect')
+    _isMounted.current = true
+    
     async function getNote() {
       if (match.params.note_id) {
-        const response = await axios.get(
-          `/api/notes/${match.params.note_id}/`,
-        )
+        try {
+          const response = await axios.get(
+            `/api/notes/${match.params.note_id}/`, {
+              cancelToken: signal.token,
+            }
+          )
 
-        const document = new DOMParser().parseFromString(response.data.content, 'text/html')
-        
-        setContent(deserialize(document.body))
+          const document = new DOMParser().parseFromString(response.data.content, 'text/html')
+          
+          if (_isMounted.current) setContent(deserialize(document.body))
+        } catch (err) {
+          if (axios.isCancel(err)) {
+            console.log('Error: ', err.message)
+          }
+        }
       } else {
-        setContent(emptyValue)
+        if (_isMounted.current) setContent(emptyValue)
       }
     }
 
     getNote()
+
+    return () => {
+      signal.cancel('Request is being cancelled.')
+    }
   }, [ match ])
 
   return (
@@ -80,9 +104,9 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
         <MarkButton format='code' icon='code' />
         <BlockButton format='heading-one' icon='looks_one' />
         <BlockButton format='heading-two' icon='looks_two' />
-        <BlockButton format='block_quote' icon='format_quote' />
-        <BlockButton format='bulleted_list' icon='format_list_bulleted' />
-        <BlockButton format='numbered_list' icon='format_list_numbered' />
+        <BlockButton format='block-quote' icon='format_quote' />
+        <BlockButton format='bulleted-list' icon='format_list_bulleted' />
+        <BlockButton format='numbered-list' icon='format_list_numbered' />
         <SaveButton saveNote={saveNote} />
       </Toolbar>
       <Editable

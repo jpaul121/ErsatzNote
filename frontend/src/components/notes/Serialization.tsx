@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { Node, Text } from 'slate'
+import { Descendant, Node, Text } from 'slate'
 
 import escapeHtml from 'escape-html'
 
@@ -26,6 +26,7 @@ export function getContentPreview(note: NoteDataObject): string {
   let preview = ''
   for (const node of formattedContent) {
     preview += Node.string(node)
+    preview += '\n'
   }
 
   return preview;
@@ -43,6 +44,10 @@ export function serialize(node: Node): string {
       formattedText = '<em>' + formattedText + '</em>'
     }
     
+    if (node.code) {
+      formattedText = '<code>' + formattedText + '</code>'
+    }
+    
     return formattedText;
   }
   
@@ -50,7 +55,7 @@ export function serialize(node: Node): string {
 
   switch (node.type) {
     case 'block-quote':
-      return `<blockquote>${children}</blockquote>`;
+      return `<blockquote {...attributes}>${children}</blockquote>`;
     case 'bulleted-list':
       return `<ul {...attributes}>${children}</ul>`;
     case 'heading-one':
@@ -75,7 +80,7 @@ export function deserialize(el: HTMLElement): Node[] {
     return null;
   }
 
-  const children = Array.from(el.childNodes).map(deserialize)
+  let children = Array.from(el.childNodes).map(deserialize)
 
   if (children.length === 0) {
     children = [{ text: '' }]
@@ -86,6 +91,8 @@ export function deserialize(el: HTMLElement): Node[] {
       return children;
     case 'BR':
       return '\n';
+    case 'CODE':
+      return { code: true, text: el.textContent };
     case 'STRONG':
       if (el.textContent?.includes('<em>')) {
         let finalString = el.textContent
@@ -123,4 +130,4 @@ export function deserialize(el: HTMLElement): Node[] {
   }
 }
 
-export const emptyValue = [ { type: 'paragraph', children: [ { text: '' } ] } ]
+export const emptyValue: Descendant[] = [ { type: 'paragraph', children: [ { text: '' } ] } ]
