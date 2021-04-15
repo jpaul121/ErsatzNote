@@ -1,90 +1,110 @@
-// @ts-nocheck
-
 import 'regenerator-runtime/runtime.js'
 
-import React, { Component } from 'react'
-import { getContentPreview, getTitlePreview } from '../notes/Serialization'
+import { NoteDataObject, getContentPreview, getTitlePreview } from '../notes/Serialization'
+import React, { useEffect, useRef, useState } from 'react'
+import { RouteComponentProps, withRouter } from 'react-router'
 
 import { Link } from 'react-router-dom'
 import Note from '../notes/Note'
 import axios from 'axios'
 import styles from './NotebookView.module.css'
-import { withRouter } from 'react-router'
 
-class NotebookView extends Component {
-  constructor(props) {
-    super(props)
+function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {  
+  const [ notebookName, setNotebookName ] = useState('')
+  const [ noteList, setNoteList ] = useState<NoteDataObject[]>()
+  const notebookID = props.match.params.notebook_id
+  
+  const [ _isLoading, _setLoadingStatus ] = useState(true)
+  const _isMounted = useRef(false)
 
-    this.state = {
-      isLoading: true,
-      name: null,
-      notes: null,
+  const signal = axios.CancelToken.source()
+
+  useEffect(() => {
+    async function getNotebook(): Promise<[ string, NoteDataObject[] ] | undefined> {      
+      try {
+        const response = await axios.get(
+          `/api/notebooks/${notebookID}`, {
+            cancelToken: signal.token,
+          }
+        )
+        const name = response.data.name
+        const noteIDs = response.data.notes
+        
+        let noteData = []
+        
+        for (let noteID of noteIDs) {
+          const noteObject = await axios.get(
+            `/api/notes/${noteID}`, {
+              cancelToken: signal.token,
+            }
+          )
+    
+          noteData.push(noteObject.data)
+        }
+        
+        return [ name, noteData ];
+      } catch (err) {
+        if (axios.isCancel(err)) {
+          console.log('Error: ', err)
+        }
+      }
     }
-  }
-
-  async componentDidMount() {
-    await this.renderNotes()
-  }
-
-  async getNotebook() {
-    const { match } = this.props
-    const notebook_id = match.params.notebook_id
     
-    const response = await axios.get(`/api/notebooks/${notebook_id}`)
-    const name = response.data.name
-    const noteIDs = response.data.notes
-    
-    let noteData = []
-    
-    for (let noteID of noteIDs) {
-      const response = await axios.get(`/api/notes/${noteID}`)
+    async function loadNotes() {
+      const notebookContents = await getNotebook()
 
-      noteData.push(response.data)
+      if (notebookContents) {
+        const [ name, noteData ] = notebookContents
+
+        console.log(noteData)
+  
+        if (_isMounted.current) setNotebookName(name)
+        if (_isMounted.current) setNoteList(noteData.map(item => {
+          return (
+            <Link key={item.note_id} to={`/notebooks/${notebookID}/notes/${item.note_id}`}>
+              <Note 
+                title={getTitlePreview(item)}
+                content={getContentPreview(item)}
+                date_modified={item.date_modified}
+              />
+            </Link>
+          );
+        }) as unknown as NoteDataObject[])
+        if (_isMounted.current) _setLoadingStatus(false)
+      }
     }
 
-    return [ name, noteData ];
-  }
+    _isMounted.current = true
+    loadNotes()
 
-  async renderNotes() {
-    const [ name, noteData ] = await this.getNotebook()
-    const notebook_id = this.props.match.params.notebook_id
+    return () => {
+      signal.cancel('Request is being cancelled.')
+    };
+  }, [ notebookID ])
 
-    this.setState({
-      isLoading: false,
-      name,
-      notes: noteData.map(item => {
-        return (
-          <Link key={item.note_id} to={`/notebooks/${notebook_id}/notes/${item.note_id}`}>
-            <Note 
-              title={getTitlePreview(item)}
-              content={getContentPreview(item)}
-              date_modified={item.date_modified}
-            />
-          </Link>
-        );
-      })
-    })
-  }
-
-  render() {
-    return !this.state.isLoading && (
-      <div className={styles['notebook-view']}>
-        <div className={styles['notebook-header']}>
-          <h1 className={styles['notebook-title']}>{this.state.name}</h1>
+  return (
+    <div className={styles['notebook-view']}>
+      <div className={styles['notebook-header']}>
+        <h1 className={styles['notebook-title']}>{notebookName}</h1>
+        {
+          !_isLoading &&
           <p className={styles['note-count']}>
             {
-              this.state.notes.length == 1
+              noteList?.length == 1
               ? '1 note'
-              : `${this.state.notes.length} notes`
+              : `${noteList?.length} notes`
             }
           </p>
-        </div>
-        <ul className={styles['note-list']}>
-          {this.state.notes}
-        </ul>
+        }
       </div>
-    );
-  }
+      {
+        !_isLoading &&
+        <ul className={styles['note-list']}>
+          {noteList}
+        </ul>
+      }
+    </div>
+  );
 }
 
 const finishedNotebookView = withRouter(NotebookView)

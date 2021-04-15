@@ -5,10 +5,10 @@ import { Descendant, Node, Text } from 'slate'
 import escapeHtml from 'escape-html'
 
 export interface NoteDataObject {
-  note_id: string,
-  title: Node[],
+  note_id?: string,
+  title: Node[] | string,
   content: string,
-  date_created: string,
+  date_created?: string,
   date_modified: string,
 }
 
