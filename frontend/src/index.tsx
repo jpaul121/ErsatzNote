@@ -1,5 +1,7 @@
+import '../node_modules/react-app-polyfill/stable'
 import './index.css'
 import './fonts.css'
+import 'source-map-support/register'
 
 import App from './App'
 import React from 'react'

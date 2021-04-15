@@ -1,5 +1,6 @@
 var path = require('path')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
 
 module.exports = {
   entry: [
@@ -10,8 +11,13 @@ module.exports = {
     path: path.resolve(__dirname, 'static/frontend'),
     filename: 'index.js'
   },
+  // target: "node",
+  devtool: "source-map",
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx']
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    fallback: {
+      fs: false
+    }
   },
   module: {
     rules: [
@@ -45,6 +51,10 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/index.html',
       favicon: 'src/favicon.ico'
+    }),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+      Buffer: ['buffer', 'Buffer']
     })
   ]
 }

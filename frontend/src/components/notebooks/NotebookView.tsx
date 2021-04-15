@@ -20,7 +20,7 @@ function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {
   const signal = axios.CancelToken.source()
 
   useEffect(() => {
-    async function getNotebook(): Promise<[ string, NoteDataObject[] ] | undefined> {      
+    async function getNotebook(): Promise<[ string, NoteDataObject[] ] | undefined> {
       try {
         const response = await axios.get(
           `/api/notebooks/${notebookID}`, {

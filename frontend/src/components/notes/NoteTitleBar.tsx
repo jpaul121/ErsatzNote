@@ -3,14 +3,17 @@
 import 'regenerator-runtime/runtime.js'
 
 import { Editable, Slate, withReact } from 'slate-react'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 
 import axios from 'axios'
 import { createEditor } from 'slate'
+import { emptyValue } from './Serialization'
 import { withRouter } from 'react-router'
 
 function NoteTitleBar({ match, title, setTitle }) {
   const titleBar = useMemo(() => withReact(createEditor()), [])
+  
+  const _isMounted = useRef(false)
 
   useEffect(() => {
     async function getTitle() {
@@ -19,13 +22,14 @@ function NoteTitleBar({ match, title, setTitle }) {
           `/api/notes/${match.params.note_id}`,
         )
         
-        setTitle(response.data.title)
+        if (_isMounted.current) setTitle(response.data.title)
       } else {
-        setTitle([{ children: [{ text: '' }] }])
+        if (_isMounted.current) setTitle(emptyValue)
       }
 
     }
 
+    _isMounted.current = true
     getTitle()
   }, [ match ])
 
