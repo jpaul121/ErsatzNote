@@ -6,17 +6,14 @@ import NoteTitleBar from './NoteTitleBar'
 import { emptyValue } from './Serialization'
 import styles from './NoteEditorContainer.module.css'
 
-function NoteEditorContainer(): JSX.Element {
-  const [ title, setTitle ] = useState<Descendant[]>()
-  const [ content, setContent ] = useState<Descendant[]>()
-  
-  const _isMounted = useRef(false)
+function NoteEditorContainer() {
+  const [ title, setTitle ] = useState<Descendant[] | undefined>(emptyValue)
+  const [ content, setContent ] = useState<Descendant[] | undefined>(emptyValue)
 
   useEffect(() => {
-    _isMounted.current = true
-    
-    if (_isMounted) setTitle(emptyValue)
-    if (_isMounted) setContent(emptyValue)
+    console.log('Mounting NoteEditorContainer')
+
+    return () => { console.log('Unmounting NoteEditorContainer') }
   })
 
   return (

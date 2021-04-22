@@ -60,6 +60,8 @@ const Button = forwardRef(
 export function MarkButton({ format, icon }) {
   const editor = useSlate()
 
+  console.log('editor.children:\n', editor.children)
+
   return (
     <Button
       active={isMarkActive(editor, format)}

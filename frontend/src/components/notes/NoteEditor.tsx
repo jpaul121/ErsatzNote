@@ -59,7 +59,7 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
   }, [ match, title, content ])
 
   useEffect(() => {
-    console.log('setup useEffect')
+    console.log('Mounting NoteEditor')
     _isMounted.current = true
     
     async function getNote() {
@@ -87,6 +87,7 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
     getNote()
 
     return () => {
+      console.log('Unmounting NoteEditor')
       signal.cancel('Request is being cancelled.')
     }
   }, [ match ])
