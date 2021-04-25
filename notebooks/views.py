@@ -15,8 +15,6 @@ class NoteViewSet(viewsets.ModelViewSet):
     instance = self.get_object()
     serializer = NoteSerializer(instance)
 
-    print('notebooks/views.py\n', 'line 18, serializer.data\n', serializer.data)
-
     title = json.loads(serializer.data['title'])
 
     response_data = {

@@ -15,20 +15,30 @@ class NoteSerializer(serializers.ModelSerializer):
   date_created = serializers.DateField(read_only=True, required=False)
 
   def create(self, validated_data):
-    print('notebooks/serializers.py,\n', 'line 17, validated_data\n', validated_data)
-
     title = json.dumps(validated_data['title'])
+
+    # Workaround to fix a currently unpatched bug in Slate
+    # that occurs when an editor's contents begin with a list
+    content = validated_data['content']
+    if content.startswith('<ul') or content.startswith('<ol'):
+      content = '<p></p>' + content
 
     response_data = {
       'title': title,
-      'content': validated_data['content'],
+      'content': content,
     }
 
     return Note.objects.create(**response_data)
 
   def update(self, instance, validated_data):
     instance.title = json.dumps(validated_data['title'])
-    instance.content = validated_data['content']
+
+    # See the above comment in the 'create' method
+    content = validated_data['content']
+    if content.startswith('<ul') or content.startswith('<ol'):
+      content = '<p></p>' + content
+    
+    instance.content = content
 
     instance.save()
 
