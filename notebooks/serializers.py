@@ -15,17 +15,6 @@ class NoteSerializer(serializers.ModelSerializer):
   date_modified = serializers.DateField(read_only=True, required=False)
   date_created = serializers.DateField(read_only=True, required=False)
 
-  def validate(self, data):
-    # Keeps people from using my VPS to mine crypto
-    sanitized_content = bleach.clean(
-      data['content'],
-      tags=[ 'strong', 'em', 'code', 'blockquote', 'ul', 'h1', 'h2', 'li', 'ol', 'p' ]
-    )
-
-    data['content'] = sanitized_content
-
-    return data
-
   def create(self, validated_data):
     title = json.dumps(validated_data['title'])
 
@@ -34,6 +23,12 @@ class NoteSerializer(serializers.ModelSerializer):
     content = validated_data['content']
     if content.startswith('<ul') or content.startswith('<ol'):
       content = '<p></p>' + content
+
+    # Keeps people from using my VPS to mine crypto
+    content = bleach.clean(
+      content,
+      tags=[ 'strong', 'em', 'code', 'blockquote', 'ul', 'h1', 'h2', 'li', 'ol', 'p' ]
+    )
 
     response_data = {
       'title': title,
@@ -49,6 +44,12 @@ class NoteSerializer(serializers.ModelSerializer):
     content = validated_data['content']
     if content.startswith('<ul') or content.startswith('<ol'):
       content = '<p></p>' + content
+    
+    # Ibid
+    content = bleach.clean(
+      content,
+      tags=[ 'strong', 'em', 'code', 'blockquote', 'ul', 'h1', 'h2', 'li', 'ol', 'p' ]
+    )
     
     instance.content = content
 
