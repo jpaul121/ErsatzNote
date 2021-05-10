@@ -12,7 +12,7 @@ class Note(models.Model):
   title = JSONField(null=True)
   content = models.TextField(null=True)
   notebook = models.ForeignKey('Notebook', related_name='notes', on_delete=models.CASCADE, null=True, blank=True)
-  user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
   date_created = models.DateField(auto_now_add=True)
   date_modified = models.DateField(auto_now=True)
   
@@ -22,8 +22,6 @@ class Note(models.Model):
     # Temporary expedients for the sake of development
     if not self.notebook:
       self.notebook = Notebook.objects.get(id='X5POEuPFnvTVsnY')
-    if not self.user:
-      self.user = User.objects.get(id=1)
     super(Note, self).save(*args, **kwargs)
   
   def __str__(self):
@@ -37,7 +35,7 @@ class Notebook(models.Model):
   
   id = models.SlugField(max_length=settings.MAX_SLUG_LENGTH, primary_key=True)
   name = models.CharField(max_length=64, default='')
-  user = models.ForeignKey(User, on_delete=models.CASCADE)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
   date_created = models.DateField(auto_now_add=True)
   date_modified = models.DateField(auto_now=True)
 
