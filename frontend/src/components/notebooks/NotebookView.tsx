@@ -7,6 +7,7 @@ import { RouteComponentProps, withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
 import Note from '../notes/Note'
 import axios from 'axios'
+import { axiosInstance } from '../../axiosAPI'
 import styles from './NotebookView.module.css'
 
 function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {  
@@ -22,7 +23,7 @@ function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {
   useEffect(() => {
     async function getNotebook(): Promise<[ string, NoteDataObject[] ] | undefined> {
       try {
-        const response = await axios.get(
+        const response = await axiosInstance.get(
           `/api/notebooks/${notebookID}`, {
             cancelToken: signal.token,
           }
@@ -33,7 +34,7 @@ function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {
         let noteData = []
         
         for (let noteID of noteIDs) {
-          const noteObject = await axios.get(
+          const noteObject = await axiosInstance.get(
             `/api/notes/${noteID}`, {
               cancelToken: signal.token,
             }
@@ -55,8 +56,6 @@ function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {
 
       if (notebookContents) {
         const [ name, noteData ] = notebookContents
-
-        console.log(noteData)
   
         if (_isMounted.current) setNotebookName(name)
         if (_isMounted.current) setNoteList(noteData.map(item => {

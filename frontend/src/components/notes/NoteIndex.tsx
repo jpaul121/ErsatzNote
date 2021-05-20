@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 
 import NoteIndexItem from './NoteIndexItem'
 import axios from 'axios'
+import { axiosInstance } from '../../axiosAPI'
 
 interface NoteIndexState {
   isLoading: boolean,
@@ -25,7 +26,7 @@ class NoteIndex extends Component<{}, NoteIndexState> {
   }
 
   async getNotes() {
-    axios
+    axiosInstance
       .get(`/api/notes/`)
       .then(res => this.setState({ noteIDs: res.data.notes }))
       .catch(err => console.log(err))
@@ -33,7 +34,7 @@ class NoteIndex extends Component<{}, NoteIndexState> {
     let notes: Array<NoteDataObject> = []
 
     for (const noteID of this.state.noteIDs) {
-      axios
+      axiosInstance
         .get(`/api/notes/${noteID}`)
         .then(res => notes.push(res.data))
         .catch(err => console.log(err))

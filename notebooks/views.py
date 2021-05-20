@@ -10,7 +10,7 @@ from .models import Note, Notebook
 class NoteViewSet(viewsets.ModelViewSet):
   queryset = Note.objects.all()
   serializer_class = NoteSerializer
-
+  
   def retrieve(self, request, *args, **kwargs):
     instance = self.get_object()
     serializer = NoteSerializer(instance)
@@ -37,7 +37,7 @@ class NoteViewSet(viewsets.ModelViewSet):
       return self.get_paginated_response(serializer.data)
 
     serializer = self.get_serializer(queryset, many=True)
-    print('notebooks/views.py\n', 'line 43\n', serializer.data)
+    
     return Response(serializer.data)
 
 

@@ -21,7 +21,7 @@ class Note(models.Model):
       self.id = generate_slug(self, settings.MAX_SLUG_LENGTH)
     # Temporary expedients for the sake of development
     if not self.notebook:
-      self.notebook = Notebook.objects.get(id='X5POEuPFnvTVsnY')
+      self.notebook = Notebook.objects.get(id='YyOzNhMFMPtN8HM')
     super(Note, self).save(*args, **kwargs)
   
   def __str__(self):
@@ -44,8 +44,6 @@ class Notebook(models.Model):
       self.id = generate_slug(self, settings.MAX_SLUG_LENGTH)
     super(Notebook, self).save(*args, **kwargs)
 
-  # Note: this needs plaintext, so Slate outputs need to be converted
-  # or this will throw an error. 
   def __str__(self):
     return self.name
   

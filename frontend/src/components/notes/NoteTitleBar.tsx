@@ -6,6 +6,7 @@ import { Editable, Slate, withReact } from 'slate-react'
 import React, { useEffect, useMemo, useRef } from 'react'
 
 import axios from 'axios'
+import { axiosInstance } from '../../axiosAPI'
 import { createEditor } from 'slate'
 import { emptyValue } from './Serialization'
 import { withRouter } from 'react-router'
@@ -18,7 +19,7 @@ function NoteTitleBar({ match, title, setTitle }) {
   useEffect(() => {
     async function getTitle() {
       if (match.params.note_id) {
-        const response = await axios.get(
+        const response = await axiosInstance.get(
           `/api/notes/${match.params.note_id}`,
         )
         

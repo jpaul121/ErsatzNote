@@ -4,3 +4,10 @@ from django.db import models
 # Note: create user IDs so that they can change their emails
 class ErsatzNoteUser(AbstractUser):
   email = models.EmailField(primary_key=True)
+  username = None
+
+  USERNAME_FIELD = 'email'
+  REQUIRED_FIELDS = []
+
+  def __str__(self):
+    return self.email

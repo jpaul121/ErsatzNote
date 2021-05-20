@@ -10,7 +10,6 @@ class NotebookIndexContainer extends Component {
   }
 
   render() {
-    console.log(window.location.pathname)
     return (
       <div className={styles['notebook-index-container']}>
         <SideBar />

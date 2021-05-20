@@ -18,13 +18,15 @@ class NoteSerializer(serializers.ModelSerializer):
   def create(self, validated_data):
     title = json.dumps(validated_data['title'])
 
+    print(validated_data)
+
     # Workaround to fix a currently unpatched bug in Slate
     # that occurs when an editor's contents begin with a list
     content = validated_data['content']
     if content.startswith('<ul') or content.startswith('<ol'):
       content = '<p></p>' + content
 
-    # Keeps people from using my VPS to mine crypto
+    # Helps keep people from using my VPS to mine crypto
     content = bleach.clean(
       content,
       tags=[ 'strong', 'em', 'code', 'blockquote', 'ul', 'h1', 'h2', 'li', 'ol', 'p' ]

@@ -34,7 +34,7 @@ export function Login() {
         </label>
         <label>
           Password:
-          <input name='password' value={password} onChange={e => setPassword(e.target.value)} />
+          <input name='password' type='password' value={password} onChange={e => setPassword(e.target.value)} />
         </label>
         <input type='submit' value='Submit' />
       </form>

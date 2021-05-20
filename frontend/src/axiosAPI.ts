@@ -11,3 +11,26 @@ export const axiosInstance = axios.create({
     'accept': 'application/json'
   }
 })
+
+axiosInstance.interceptors.response.use(
+  response => response,
+  error => {
+    const originalRequest = error.config
+    
+    if (error.response.status === 401 && error.response.statusText === 'Unauthorized') {
+      const refreshToken = localStorage.getItem('refresh_token')
+      
+      return axiosInstance
+        .post('/auth/token/refresh/', { refresh: refreshToken })
+        .then(response => {
+          localStorage.setItem('access_token', response.data.access)
+          localStorage.setItem('refresh_token', response.data.refresh)
+          
+          axiosInstance.defaults.headers['Authorization'] = 'JWT ' + response.data.access
+          originalRequest.headers['Authorization'] = 'JWT ' + response.data.access
+
+          return axiosInstance(originalRequest)
+        })
+    }
+  }
+)

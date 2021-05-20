@@ -8,6 +8,7 @@ import React, { MutableRefObject, useCallback, useEffect, useMemo, useRef } from
 import { deserialize, emptyValue, serialize } from './Serialization'
 
 import axios from 'axios'
+import { axiosInstance } from '../../axiosAPI'
 import { create } from 'node:domain'
 import { match } from 'react-router-dom'
 import { withHistory } from 'slate-history'
@@ -39,7 +40,7 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
     const editorContent: Node = { children: content }
     
     if (match.params.note_id) {
-      axios.put(
+      axiosInstance.put(
         `/api/notes/${match.params.note_id}/`,
         {
           note_id: match.params.note_id,
@@ -48,7 +49,7 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
         }
       )
     } else {
-      axios.post(
+      axiosInstance.post(
         `/api/notes/`,
         {
           title,
@@ -59,13 +60,12 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
   }, [ match, title, content ])
 
   useEffect(() => {
-    console.log('Mounting NoteEditor')
     _isMounted.current = true
     
     async function getNote() {
       if (match.params.note_id) {
         try {
-          const response = await axios.get(
+          const response = await axiosInstance.get(
             `/api/notes/${match.params.note_id}/`, {
               cancelToken: signal.token,
             }
@@ -87,7 +87,6 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
     getNote()
 
     return () => {
-      console.log('Unmounting NoteEditor')
       signal.cancel('Request is being cancelled.')
     }
   }, [ match ])

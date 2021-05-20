@@ -10,12 +10,6 @@ function NoteEditorContainer() {
   const [ title, setTitle ] = useState<Descendant[] | undefined>(emptyValue)
   const [ content, setContent ] = useState<Descendant[] | undefined>(emptyValue)
 
-  useEffect(() => {
-    console.log('Mounting NoteEditorContainer')
-
-    return () => { console.log('Unmounting NoteEditorContainer') }
-  })
-
   return (
     <div className={styles['note-editor-container']}>
       <div className={styles['editor-proper']}>

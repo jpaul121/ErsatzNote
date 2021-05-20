@@ -5,7 +5,7 @@ import 'regenerator-runtime/runtime.js'
 import React, { Component } from 'react'
 
 import NotebookIndexItem from './NotebookIndexItem'
-import axios from 'axios'
+import { axiosInstance } from '../../axiosAPI'
 import styles from './NotebookIndex.module.css'
 
 class NotebookIndex extends Component {
@@ -22,7 +22,7 @@ class NotebookIndex extends Component {
   }
 
   async getNotebooks() {
-    const response = await axios.get('/api/notebooks/')
+    const response = await axiosInstance.get('/api/notebooks/')
 
     return response.data;
   }

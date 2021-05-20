@@ -4,6 +4,7 @@ import {
   Switch,
 } from 'react-router-dom'
 
+import { Login } from './components/authentication/Login'
 import NewNoteContainer from './components/notes/NewNoteContainer';
 import NotebookIndexContainer from './components/notebooks/NotebookIndexContainer'
 import NotebookViewContainer from './components/notebooks/NotebookViewContainer'
@@ -17,6 +18,9 @@ function App(): JSX.Element {
         <Switch>
           <Route path='/signup'>
             <Signup />
+          </Route>
+          <Route path='/login'>
+            <Login />
           </Route>
           <Route path='/notebooks/:notebook_id/notes/:note_id'>
             <NotebookViewContainer />

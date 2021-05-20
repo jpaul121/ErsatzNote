@@ -21,3 +21,13 @@ class ErsatzNoteUserSerializer(serializers.ModelSerializer):
     instance.save()
     
     return instance
+
+class ErsatzNoteTokenObtainPairSerializer(TokenObtainPairSerializer):
+
+  @classmethod
+  def get_token(cls, user):
+    token = super(ErsatzNoteTokenObtainPairSerializer, cls).get_token(user)
+
+    token['user'] = user.email
+
+    return token
