@@ -5,8 +5,8 @@ from rest_framework.routers import DefaultRouter
 from notebooks import views
 
 router = DefaultRouter()
-router.register(r'notebooks', views.NotebookViewSet)
-router.register(r'notes', views.NoteViewSet)
+router.register(r'notebooks', views.NotebookViewSet, basename='notebooks')
+router.register(r'notes', views.NoteViewSet, basename='notes')
 
 urlpatterns = [
     # auth

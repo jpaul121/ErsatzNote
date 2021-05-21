@@ -35,7 +35,7 @@ class NoteIndex extends Component<{}, NoteIndexState> {
 
     for (const noteID of this.state.noteIDs) {
       axiosInstance
-        .get(`/api/notes/${noteID}`)
+        .get(`/api/notes/${noteID}/`)
         .then(res => notes.push(res.data))
         .catch(err => console.log(err))
     }

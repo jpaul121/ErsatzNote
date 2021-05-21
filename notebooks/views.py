@@ -8,8 +8,10 @@ from .serializers import NoteSerializer, NotebookSerializer
 from .models import Note, Notebook
 
 class NoteViewSet(viewsets.ModelViewSet):
-  queryset = Note.objects.all()
   serializer_class = NoteSerializer
+  
+  def get_queryset(self):
+    return self.request.user.notes.all()
   
   def retrieve(self, request, *args, **kwargs):
     instance = self.get_object()
@@ -27,23 +29,9 @@ class NoteViewSet(viewsets.ModelViewSet):
     }
 
     return Response(response_data)
-  
-  def list(self, request, *args, **kwargs):
-    queryset = self.filter_queryset(self.get_queryset())
-
-    page = self.paginate_queryset(queryset)
-    if page is not None:
-      serializer = self.get_serializer(page, many=True)
-      return self.get_paginated_response(serializer.data)
-
-    serializer = self.get_serializer(queryset, many=True)
-    
-    return Response(serializer.data)
-
-
-
-
 
 class NotebookViewSet(viewsets.ModelViewSet):
-  queryset = Notebook.objects.all()
   serializer_class = NotebookSerializer
+
+  def get_queryset(self):
+    return self.request.user.notebooks.all()
