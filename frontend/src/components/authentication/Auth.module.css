@@ -1,0 +1,106 @@
+body {
+  background-color: #F7FCF9 !important;
+}
+
+.form-container {
+  display: block;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.form-frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.form-wrapper {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 10px 0;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.form-body {
+  background: #ffffff;
+  max-width: 512px;
+  margin: 0px auto 28px auto;
+  padding: 62.12px 99px 48px;
+  width: 314px;
+  box-shadow: 0px 4px 24px rgb(0 0 0 / 10%);
+  border-radius: 2px;
+  text-align: left;
+}
+
+.heading {
+  text-align: center;
+  color: #aaaaaa;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.tagline {
+  color: #333333;
+  font-size: 2rem;
+  font-style: normal;
+  font-weight: 400;
+  margin-bottom: 44px;
+}
+
+.form-proper form {
+  margin: 0;
+}
+
+form ol, form ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.row {
+  margin-bottom: 6px;
+}
+
+.form-proper li {
+  display: list-item;
+  text-align: -webkit-match-parent;
+}
+
+.form-input {
+  border-radius: 7px;
+  color: #333333;
+  border: 1px solid #e6e6e6;
+  padding: 12px 16px;
+  box-shadow: 0px 0px 3px 0px rgb(0 0 0 / 20%);
+  line-height: 1.1875;
+  font-size: 1.33333rem;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  background-color: -internal-light-dark(rgb(255, 255, 255), rgb(59, 59, 59));
+}
+
+.form-submit {
+  cursor: pointer;
+  margin-top: 7px;
+  margin-bottom: 14px;
+  background-color: #00a82d;
+  border-radius: 7px;
+  font-style: normal;
+  font-weight: 400;
+  width: 100%;
+  line-height: 2.75;
+  font-size: 1.33333rem;
+  min-width: 12.833333rem;
+  min-height: 3.66666rem;
+  padding: 0 1.333333rem;
+  color: #ffffff;
+  border-color: #00a82d;
+  text-align: center;
+  float: none;
+  transition: all .2 ease;
+  margin: 0;
+  vertical-align: baseline;
+}
