@@ -43,7 +43,18 @@ module.exports = {
           'url-loader?limit=100000',
           'file-loader'
         ]
-    }
+      },
+      {
+        test: /\.(png)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10000
+            }
+          }
+        ]
+      }
     ]
   },
   mode: 'development',

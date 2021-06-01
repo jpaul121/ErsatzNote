@@ -10,32 +10,20 @@ import NotebookIndexContainer from './components/notebooks/NotebookIndexContaine
 import NotebookViewContainer from './components/notebooks/NotebookViewContainer'
 import React from 'react'
 import { Signup } from './components/authentication/Signup'
+import { Splash } from './components/other/Splash'
 
 function App(): JSX.Element {
   return (
     <Router>
-      <div>
-        <Switch>
-          <Route path='/signup'>
-            <Signup />
-          </Route>
-          <Route path='/login'>
-            <Login />
-          </Route>
-          <Route path='/notebooks/:notebook_id/notes/:note_id'>
-            <NotebookViewContainer />
-          </Route>
-          <Route path='/notebooks/:notebook_id'>
-            <NotebookViewContainer />
-          </Route>
-          <Route path='/notebooks'>
-            <NotebookIndexContainer />
-          </Route>
-          <Route path='/new-note'>
-            <NewNoteContainer />
-          </Route>
-        </Switch>
-      </div>
+      <Switch>
+        <Route exact path='/' component={Splash} />
+        <Route path='/notebooks/:notebook_id/notes/:note_id' component={NotebookViewContainer} />
+        <Route path='/notebooks/:notebook_id' component={NotebookViewContainer} />
+        <Route path='/notebooks' component={NotebookIndexContainer} />
+        <Route path='/new-note' component={NewNoteContainer} />
+        <Route path='/signup' component={Signup} />
+        <Route path='/login' component={Login} />
+      </Switch>
     </Router>
   );
 }
