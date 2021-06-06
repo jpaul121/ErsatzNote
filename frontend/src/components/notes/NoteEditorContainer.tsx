@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 
 import { Descendant } from 'slate'
 import NoteEditor from './NoteEditor'
 import NoteTitleBar from './NoteTitleBar'
-import { emptyValue } from './Serialization'
-import styles from './NoteEditorContainer.module.css'
+import { emptyValue } from '../other/Serialization'
+import styles from '../../stylesheets/notes/NoteEditorContainer.module.css'
 
 function NoteEditorContainer() {
   const [ title, setTitle ] = useState<Descendant[] | undefined>(emptyValue)

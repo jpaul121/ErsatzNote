@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 
 import { Link } from 'react-router-dom'
 import SearchBar from './SearchBar'
-import styles from './Sidebar.module.css'
+import styles from '../../stylesheets/sidebar/SideBar.module.css'
 
 class SideBar extends Component {
   constructor(props: any) {

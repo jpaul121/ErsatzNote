@@ -2,7 +2,7 @@ import { css, cx } from '@emotion/css'
 
 import React from 'react'
 import preview from '../../../src/preview.png'
-import styles from './Splash.module.css'
+import styles from '../../stylesheets/other/Splash.module.css'
 import { useHistory } from 'react-router-dom'
 
 export function Splash() {

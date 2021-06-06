@@ -1,6 +1,6 @@
 import 'regenerator-runtime/runtime.js'
 
-import { NoteDataObject, getContentPreview, getTitlePreview } from '../notes/Serialization'
+import { NoteDataObject, getContentPreview, getTitlePreview } from '../other/Serialization'
 import React, { useEffect, useRef, useState } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router'
 
@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 import Note from '../notes/Note'
 import axios from 'axios'
 import { axiosInstance } from '../../axiosAPI'
-import styles from './NotebookView.module.css'
+import styles from '../../stylesheets/notebooks/NotebookView.module.css'
 
 function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {  
   const [ notebookName, setNotebookName ] = useState('')

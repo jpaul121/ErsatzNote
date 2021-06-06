@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import { Editor, Element as SlateElement, Transforms } from 'slate'
-import React, { PropsWithChildren, Ref, forwardRef, useRef } from 'react'
+import React, { PropsWithChildren, forwardRef, useRef } from 'react'
 import { css, cx } from '@emotion/css'
 
 import { ReactEditor } from 'slate-react'

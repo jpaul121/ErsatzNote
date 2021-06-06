@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { NoteDataObject } from './Serialization'
+import { NoteDataObject } from '../other/Serialization'
 
 class Note extends Component<NoteDataObject> {
   constructor(props: NoteDataObject) {

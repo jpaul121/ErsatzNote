@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import NotebookIndex from './NotebookIndex'
 import SideBar from '../sidebar/SideBar'
-import styles from './NotebookIndexContainer.module.css'
+import styles from '../../stylesheets/notebooks/NotebookIndexContainer.module.css'
 
 class NotebookIndexContainer extends Component {
   constructor(props: any) {

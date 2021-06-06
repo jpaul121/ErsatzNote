@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import { axiosInstance } from '../../axiosAPI'
-import styles from './Auth.module.css'
+import styles from '../../stylesheets/authentication/Auth.module.css'
 
 export function Login() {
   const [ email, setEmail ] = useState('')

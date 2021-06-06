@@ -5,10 +5,9 @@ import 'regenerator-runtime/runtime.js'
 import { Editable, Slate, withReact } from 'slate-react'
 import React, { useEffect, useMemo, useRef } from 'react'
 
-import axios from 'axios'
 import { axiosInstance } from '../../axiosAPI'
 import { createEditor } from 'slate'
-import { emptyValue } from './Serialization'
+import { emptyValue } from '../other/Serialization'
 import { withRouter } from 'react-router'
 
 function NoteTitleBar({ match, title, setTitle }) {

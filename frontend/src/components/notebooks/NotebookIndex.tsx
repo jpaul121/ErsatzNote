@@ -6,7 +6,7 @@ import React, { Component } from 'react'
 
 import NotebookIndexItem from './NotebookIndexItem'
 import { axiosInstance } from '../../axiosAPI'
-import styles from './NotebookIndex.module.css'
+import styles from '../../stylesheets/notebooks/NotebookIndex.module.css'
 
 class NotebookIndex extends Component {
   constructor(props) {

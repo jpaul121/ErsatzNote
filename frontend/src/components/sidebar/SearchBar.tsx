@@ -2,7 +2,7 @@ import '@fortawesome/fontawesome-free/js/all.js'
 
 import React, { Component } from 'react'
 
-import styles from './SearchBar.module.css'
+import styles from '../../stylesheets/sidebar/SearchBar.module.css'
 
 class SearchBar extends Component {
   constructor(props: any) {

@@ -1,8 +1,7 @@
-import { NoteDataObject, deserialize } from './Serialization'
+import { NoteDataObject, deserialize } from '../other/Serialization'
 import React, { Component } from 'react'
 
 import NoteIndexItem from './NoteIndexItem'
-import axios from 'axios'
 import { axiosInstance } from '../../axiosAPI'
 
 interface NoteIndexState {
