@@ -3,8 +3,11 @@ import { css, cx } from '@emotion/css'
 import React from 'react'
 import preview from '../../../src/preview.png'
 import styles from './Splash.module.css'
+import { useHistory } from 'react-router-dom'
 
 export function Splash() {
+  const history = useHistory()
+  
   return (
     <div className={styles['splash']}>
       <div className={styles['home']}>
@@ -102,7 +105,7 @@ export function Splash() {
                   grid-template-columns: auto auto auto;
                 `
               )}>
-                <button className={styles['signup-btn']}>Sign up</button>
+                <button className={styles['signup-btn']} type='button' onClick={() => history.push('/signup')}>Sign up</button>
                 <h5 className={cx(
                   'or',
                   css`
@@ -110,7 +113,7 @@ export function Splash() {
                     font-weight: 400;
                   `
                 )}>or</h5>
-                <button className={styles['login-btn']}>Log in</button>
+                <button className={styles['login-btn']} type='button' onClick={() => history.push('/login')}>Log in</button>
               </div>
             </div>
           </div>
