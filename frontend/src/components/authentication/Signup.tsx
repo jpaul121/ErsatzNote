@@ -18,7 +18,7 @@ export function Signup() {
         }
       )
 
-      return response;
+      return response.data;
     } catch(err) { throw err; }
   }
   

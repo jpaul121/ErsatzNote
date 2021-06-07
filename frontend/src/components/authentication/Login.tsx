@@ -1,11 +1,16 @@
 import React, { useState } from 'react'
+import { css, cx } from '@emotion/css'
 
 import { axiosInstance } from '../../axiosAPI'
 import styles from '../../stylesheets/authentication/Auth.module.css'
+import { useHistory } from 'react-router-dom'
 
 export function Login() {
   const [ email, setEmail ] = useState('')
   const [ password, setPassword ] = useState('')
+  const [ error, setError ] = useState(false)
+
+  const history = useHistory()
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -18,12 +23,20 @@ export function Login() {
         }
       )
 
+      if (response.data.detail === 'No active account found with the given credentials') {
+        setError(true)
+      }
+
       axiosInstance.defaults.headers['Authorization'] = 'JWT ' + response.data.access
       localStorage.setItem('access_token', response.data.access)
       localStorage.setItem('refresh_token', response.data.refresh)
 
-      return response.data;
-    } catch(err) { throw err; }
+      history.push('/notebooks')
+    } catch(err) {
+      setError(true)
+      
+      throw err;
+    }
   }
   
   return (
@@ -45,6 +58,12 @@ export function Login() {
                   <li className={styles['row']}>
                     <input className={styles['form-input']} name='password' type='password' value={password} placeholder='Password' onChange={e => setPassword(e.target.value)} />
                   </li>
+                  {
+                    error &&
+                    <li className={styles['row']}>
+                      <p className={cx(css`color: red;`)}>Invalid email and/or password.</p>
+                    </li>
+                  }
                   <li className={styles['row']}>
                     <input className={styles['form-submit']} type='submit' value='Submit' />
                   </li>
