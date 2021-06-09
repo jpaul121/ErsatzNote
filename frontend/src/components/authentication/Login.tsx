@@ -5,7 +5,7 @@ import { axiosInstance } from '../../axiosAPI'
 import styles from '../../stylesheets/authentication/Auth.module.css'
 import { useHistory } from 'react-router-dom'
 
-export function Login() {
+function Login() {
   const [ email, setEmail ] = useState('')
   const [ password, setPassword ] = useState('')
   const [ error, setError ] = useState(false)
@@ -61,7 +61,7 @@ export function Login() {
                   {
                     error &&
                     <li className={styles['row']}>
-                      <p className={cx(css`color: red;`)}>Invalid email and/or password.</p>
+                      <p className={cx(css`color: red;`)}>Invalid login credentials.</p>
                     </li>
                   }
                   <li className={styles['row']}>
@@ -76,3 +76,5 @@ export function Login() {
     </div>
   );
 }
+
+export default Login

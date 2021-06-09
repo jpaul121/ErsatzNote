@@ -5,7 +5,7 @@ import preview from '../../../src/preview.png'
 import styles from '../../stylesheets/other/Splash.module.css'
 import { useHistory } from 'react-router-dom'
 
-export function Splash() {
+function Splash() {
   const history = useHistory()
   
   return (
@@ -139,7 +139,7 @@ export function Splash() {
                 <a>CHECK IT OUT</a>
               </button>
             </ul>
-            <img className={styles['comp']} src={preview} />
+            <img src={preview} />
           </div>
         </div>
       </div>
@@ -151,3 +151,5 @@ export function Splash() {
     </div>
   );
 }
+
+export default Splash

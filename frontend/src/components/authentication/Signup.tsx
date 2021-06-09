@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { axiosInstance } from '../../axiosAPI'
 import styles from '../../stylesheets/authentication/Auth.module.css'
 
-export function Signup() {
+function Signup() {
   const [ email, setEmail ] = useState('')
   const [ password, setPassword ] = useState('')
 
@@ -51,3 +51,5 @@ export function Signup() {
     </div>
   );
 }
+
+export default Signup
