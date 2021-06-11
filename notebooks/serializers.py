@@ -1,10 +1,10 @@
 import bleach
 import json
 
-from django.core.files.base import ContentFile
 from rest_framework import serializers
 
-from .models import Note, Notebook, User
+from authentication.models import ErsatzNoteUser
+from .models import Note, Notebook
 
 class NoteSerializer(serializers.ModelSerializer):
   note_id = serializers.SlugField(source='id', read_only=True, required=False)
@@ -18,19 +18,11 @@ class NoteSerializer(serializers.ModelSerializer):
   def create(self, validated_data):
     title = json.dumps(validated_data['title'])
 
-    print(validated_data)
-
     # Workaround to fix a currently unpatched bug in Slate
     # that occurs when an editor's contents begin with a list
     content = validated_data['content']
     if content.startswith('<ul') or content.startswith('<ol'):
       content = '<p></p>' + content
-
-    # Helps keep people from using my VPS to mine crypto
-    content = bleach.clean(
-      content,
-      tags=[ 'strong', 'em', 'code', 'blockquote', 'ul', 'h1', 'h2', 'li', 'ol', 'p' ]
-    )
 
     response_data = {
       'title': title,
@@ -47,12 +39,6 @@ class NoteSerializer(serializers.ModelSerializer):
     if content.startswith('<ul') or content.startswith('<ol'):
       content = '<p></p>' + content
     
-    # Ibid
-    content = bleach.clean(
-      content,
-      tags=[ 'strong', 'em', 'code', 'blockquote', 'ul', 'h1', 'h2', 'li', 'ol', 'p' ]
-    )
-    
     instance.content = content
 
     instance.save()
@@ -64,8 +50,17 @@ class NoteSerializer(serializers.ModelSerializer):
     fields = [ 'note_id', 'title', 'content', 'notebook', 'date_modified', 'date_created' ]
 
 class NotebookSerializer(serializers.ModelSerializer):
-  notebook_id = serializers.SlugField(source='id')
+  notebook_id = serializers.SlugField(source='id', read_only=True, required=False)
+  name = serializers.CharField(max_length=64, default='')
   notes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
+  def create(self, validated_data):
+    # notebook_data = {
+    #   'name': validated_data['name'],
+    #   'user': ErsatzNoteUser.objects.get(email=validated_data['user']),
+    # }
+    
+    return Notebook.objects.create(name=validated_data['name'], user=ErsatzNoteUser.objects.get(email=validated_data['user']))
   
   class Meta:
     model = Notebook

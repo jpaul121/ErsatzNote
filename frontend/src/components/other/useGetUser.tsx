@@ -34,8 +34,6 @@ function useGetUser() {
         }
       }
 
-      // Later, make it so that if the access token
-      // isn't there, you have to log in again. 
       return <Redirect to={'/login'} />;
     }
 

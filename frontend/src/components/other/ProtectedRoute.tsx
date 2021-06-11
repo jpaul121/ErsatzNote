@@ -20,7 +20,7 @@ function ProtectedRoute(props: any) {
     );
   }
 
-  return <Redirect to={'/login'} />;
+  return <Redirect to={'/login/'} />;
 }
 
 export default ProtectedRoute

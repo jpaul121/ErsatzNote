@@ -11,6 +11,7 @@ notebook_detail = NotebookViewSet.as_view({
   'put': 'update',
   'patch': 'partial_update',
   'delete': 'destroy',
+  'post': 'create',
 })
 
 note_detail = NoteViewSet.as_view({
