@@ -55,12 +55,10 @@ class NotebookSerializer(serializers.ModelSerializer):
   notes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
   def create(self, validated_data):
-    # notebook_data = {
-    #   'name': validated_data['name'],
-    #   'user': ErsatzNoteUser.objects.get(email=validated_data['user']),
-    # }
-    
-    return Notebook.objects.create(name=validated_data['name'], user=ErsatzNoteUser.objects.get(email=validated_data['user']))
+    return Notebook.objects.create(
+      user=ErsatzNoteUser.objects.get(email=self.context['request'].user),
+      **validated_data
+    )
   
   class Meta:
     model = Notebook

@@ -10,7 +10,7 @@ export const axiosInstance = axios.create({
     'xrsfCookieName': 'csrftoken',
     'Authorization': localStorage.getItem('access_token') ? 'JWT ' + localStorage.getItem('access_token') : null,
     'Content-Type': 'application/json',
-    'accept': 'application/json'
+    'accept': 'application/json',
   }
 })
 

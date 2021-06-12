@@ -18,11 +18,13 @@ function NotebookIndex() {
 
   function createNewNotebook(e) {
     e.preventDefault()
+    const currentUser: string = user!.split('@')[0]
+    console.log(currentUser)
     axiosInstance.post(
       `/api/notebooks/`,
       {
-        name: newNotebookName,
-        user,
+        'name': newNotebookName,
+        'user': currentUser,
       }
     )
     toggleModal(e)
