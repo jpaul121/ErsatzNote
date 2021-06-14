@@ -18,22 +18,38 @@ function NotebookIndex() {
 
   function createNewNotebook(e) {
     e.preventDefault()
-    const currentUser: string = user!.split('@')[0]
-    console.log(currentUser)
     axiosInstance.post(
       `/api/notebooks/`,
       {
-        'name': newNotebookName,
-        'user': currentUser,
+        name: newNotebookName,
+        user,
       }
     )
     toggleModal(e)
+    renderNotebookItems()
   }
 
   async function getNotebooks() {
     const response = await axiosInstance.get(`/api/notebooks/`)
 
     return response.data;
+  }
+
+  async function renderNotebookItems() {
+    const notebookList = await getNotebooks()
+
+    setIndexLoading(false)
+    setNotebooks(notebookList.map(item => {
+      return (
+        <NotebookIndexItem
+          key={item.notebook_id}
+          id={item.notebook_id}
+          name={item.name}
+          date_modified={item.date_modified}
+          date_created={item.date_created}
+        />
+      );
+    }))
   }
   
   function toggleModal(e) {
@@ -42,25 +58,8 @@ function NotebookIndex() {
   }
 
   useEffect(() => {
-    async function renderNotebookItems() {
-      const notebookList = await getNotebooks()
-
-      setIndexLoading(false)
-      setNotebooks(notebookList.map(item => {
-        return (
-          <NotebookIndexItem
-            key={item.notebook_id}
-            id={item.notebook_id}
-            name={item.name}
-            date_modified={item.date_modified}
-            date_created={item.date_created}
-          />
-        );
-      }))
-    }
-
     renderNotebookItems()
-  }, [])
+  }, [ notebooks ])
 
   return !indexLoading && (
     <div className={styles['notebook-index']}>
@@ -93,11 +92,7 @@ function NotebookIndex() {
         <form className={styles['create-notebook-form']}>
           <h1 className={styles['notebook-title']}>
             Create new notebook&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <i id={styles['close-modal']} className='fas fa-times'></i>
           </h1>
-          <p className={styles['.notebook-tagline']}>
-            Notebooks are useful for grouping notes around a common topic.
-          </p>
           <input type='text' placeholder='Name' name='name' onChange={e => setNewNotebookName(e.target.value)} />
           <div className={styles['new-notebook-buttons']}>
             <span>
