@@ -24,7 +24,7 @@ function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {
     async function getNotebook(): Promise<[ string, NoteDataObject[] ] | undefined> {
       try {
         const response = await axiosInstance.get(
-          `/api/notebooks/${notebookID}`, {
+          `/api/notebooks/${notebookID}/`, {
             cancelToken: signal.token,
           }
         )
@@ -35,7 +35,7 @@ function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {
         
         for (let noteID of noteIDs) {
           const noteObject = await axiosInstance.get(
-            `/api/notes/${noteID}`, {
+            `/api/notes/${noteID}/`, {
               cancelToken: signal.token,
             }
           )
@@ -60,7 +60,7 @@ function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {
         if (_isMounted.current) setNotebookName(name)
         if (_isMounted.current) setNoteList(noteData.map(item => {
           return (
-            <Link key={item.note_id} to={`/notebooks/${notebookID}/notes/${item.note_id}`}>
+            <Link key={item.note_id} to={`/notebooks/${notebookID}/notes/${item.note_id}/`}>
               <Note 
                 title={getTitlePreview(item)}
                 content={getContentPreview(item)}
@@ -77,6 +77,7 @@ function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {
     loadNotes()
 
     return () => {
+      _isMounted.current = false
       signal.cancel('Request is being cancelled.')
     };
   }, [ notebookID ])

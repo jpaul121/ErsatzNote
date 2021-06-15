@@ -2,54 +2,72 @@
 
 import 'regenerator-runtime/runtime.js'
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 
 import NotebookIndexItem from './NotebookIndexItem'
 import UserContext from '../other/UserContext'
+import axios from 'axios'
 import { axiosInstance } from '../../axiosAPI'
 import styles from '../../stylesheets/notebooks/NotebookIndex.module.css'
 
 function NotebookIndex() {
-  const { user } = useContext(UserContext)
   const [ newNotebookName, setNewNotebookName ] = useState('')
   const [ notebooks, setNotebooks ] = useState(null)
   const [ modalOpen, setModal ] = useState(false)
   const [ indexLoading, setIndexLoading ] = useState(true)
+  const [ renderCount, rerender ] = useState(0)
+  
+  const { user } = useContext(UserContext)
+
+  const _isMounted = useRef(false)
+  const signal = axios.CancelToken.source()
 
   function createNewNotebook(e) {
     e.preventDefault()
     axiosInstance.post(
-      `/api/notebooks/`,
-      {
+      `/api/notebooks/`, {
         name: newNotebookName,
         user,
+      }, {
+        cancelToken: signal.token,
       }
     )
     toggleModal(e)
-    renderNotebookItems()
+    rerender(renderCount + 1)
   }
 
   async function getNotebooks() {
-    const response = await axiosInstance.get(`/api/notebooks/`)
-
-    return response.data;
+    try {
+      const response = await axiosInstance.get(
+        `/api/notebooks/`, {
+          cancelToken: signal.token,
+        }
+      )
+      return response.data;
+    } catch(err) {
+      if (axios.isCancel(err)) {
+        console.log('Error: ', err.message)
+      }
+    }
   }
 
   async function renderNotebookItems() {
     const notebookList = await getNotebooks()
-
-    setIndexLoading(false)
-    setNotebooks(notebookList.map(item => {
-      return (
-        <NotebookIndexItem
-          key={item.notebook_id}
-          id={item.notebook_id}
-          name={item.name}
-          date_modified={item.date_modified}
-          date_created={item.date_created}
-        />
-      );
-    }))
+    
+    if (_isMounted.current && notebookList) {
+      setIndexLoading(false)
+      setNotebooks(notebookList.map(item => {
+        return (
+          <NotebookIndexItem
+            key={item.notebook_id}
+            id={item.notebook_id}
+            name={item.name}
+            date_modified={item.date_modified}
+            date_created={item.date_created}
+          />
+        );
+      }))
+    }
   }
   
   function toggleModal(e) {
@@ -58,10 +76,16 @@ function NotebookIndex() {
   }
 
   useEffect(() => {
-    renderNotebookItems()
-  }, [ notebooks ])
+    _isMounted.current = true
+    if (_isMounted.current) renderNotebookItems()
 
-  return !indexLoading && (
+    return () => {
+      _isMounted.current = false
+      signal.cancel('Request is being cancelled.')
+    }
+  }, [ renderCount ])
+
+  return !indexLoading as ReactElement<any> && (
     <div className={styles['notebook-index']}>
       <div className={styles['notebook-table']}>
         <div className={styles['table-top']}>

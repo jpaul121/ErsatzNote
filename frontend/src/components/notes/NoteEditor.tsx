@@ -32,7 +32,6 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
   const _isMounted = useRef<boolean>(false)
 
   const editor = editorRef.current
-
   const signal = axios.CancelToken.source()
 
   const saveNote = useCallback(() => {
@@ -86,6 +85,7 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
     getNote()
 
     return () => {
+      _isMounted.current = false
       signal.cancel('Request is being cancelled.')
     }
   }, [ match ])
