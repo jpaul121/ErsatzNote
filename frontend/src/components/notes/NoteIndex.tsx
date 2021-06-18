@@ -1,52 +1,52 @@
 import { NoteDataObject, deserialize } from '../other/Serialization'
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import NoteIndexItem from './NoteIndexItem'
+import axios from 'axios'
 import { axiosInstance } from '../../axiosAPI'
 
-interface NoteIndexState {
-  isLoading: boolean,
-  noteIDs: Array<string>,
-  notes: Array<NoteDataObject>,
-}
+function NoteIndex() {
+  const [ isLoading, setLoading ] = useState(true)
+  const [ noteIDs, setNoteIDs ] = useState([])
 
-class NoteIndex extends Component<{}, NoteIndexState> {
-  constructor(props: any) {
-    super(props)
-    this.state = {
-      isLoading: true,
-      noteIDs: [],
-      notes: [],
+  const signal = axios.CancelToken.source()
+
+  async function getNotes() {
+    try {
+      const response = await axiosInstance.get(
+        `/api/notes/`, {
+          cancelToken: signal.token,
+        }
+      )
+      
+      setNoteIDs(response.data.notes)
+
+      let notes: NoteDataObject[] = []
+
+      for (const noteID of noteIDs) {
+        axiosInstance
+          .get(`/api/notes/${noteID}/`)
+          .then(res => notes.push(res.data))
+          .catch(err => console.log(err))
+      }
+
+      return notes;
+    } catch(err) {
+      if (axios.isCancel(err)) {
+        console.log(err)
+      }
     }
   }
 
-  componentDidMount() {
-    this.getNotes()
-  }
+  useEffect(() => {
+    getNotes()
+  }, [])
 
-  async getNotes() {
-    axiosInstance
-      .get(`/api/notes/`)
-      .then(res => this.setState({ noteIDs: res.data.notes }))
-      .catch(err => console.log(err))
+  async function renderNoteItems() {
+    const notesList: NoteDataObject[] | undefined = await getNotes()
 
-    let notes: Array<NoteDataObject> = []
-
-    for (const noteID of this.state.noteIDs) {
-      axiosInstance
-        .get(`/api/notes/${noteID}/`)
-        .then(res => notes.push(res.data))
-        .catch(err => console.log(err))
-    }
-
-    return notes;
-  }
-
-  async renderNoteItems() {
-    const notesList = await this.getNotes()
-    
-    return notesList.map(item => (
-      <NoteIndexItem 
+    if (notesList) return notesList.map(item => (
+      <NoteIndexItem
         key={item.note_id}
         // @ts-ignore
         title={deserialize(item.title)}
@@ -54,15 +54,15 @@ class NoteIndex extends Component<{}, NoteIndexState> {
         date_created={item.date_created}
       />
     ));
+    
+    setLoading(false)
   }
   
-  render() {
-    return !this.state.isLoading && (
-        <ul>
-          {this.renderNoteItems()}
-        </ul>
-    );
-  }
+  return !isLoading && (
+      <ul>
+        {renderNoteItems()}
+      </ul>
+  );
 }
 
 export default NoteIndex
