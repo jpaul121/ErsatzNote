@@ -1,10 +1,14 @@
 // @ts-nocheck
 
 import { Editor, Element as SlateElement, Transforms } from 'slate'
-import React, { PropsWithChildren, forwardRef, useRef } from 'react'
+import React, { PropsWithChildren, forwardRef, useEffect, useRef, useState } from 'react'
 import { css, cx } from '@emotion/css'
 
 import { ReactEditor } from 'slate-react'
+import Select from 'react-select'
+import axios from 'axios'
+import { axiosInstance } from '../../axiosAPI'
+import { defaultCoreCipherList } from 'node:constants'
 import { useSlate } from 'slate-react'
 
 const LIST_TYPES = [ 'numbered-list', 'bulleted-list' ]
@@ -28,6 +32,8 @@ const Icon = forwardRef(
       css`
         font-size: 18px;
         vertical-align: text-bottom;
+        margin-top: 10px;
+        margin-right: 1px;
       `
     )}
   />
@@ -102,6 +108,7 @@ export function SaveButton({ saveNote }) {
           cursor: pointer;
           color: black;
           float: right;
+          margin-bottom: 5px;
         `
       )}
     >
@@ -240,4 +247,28 @@ export function useLazyRef<T>(init: () => T): MutableRefObject<T> {
 	}
 
 	return ref as MutableRefObject<T>;
+}
+
+export interface NotebookData {
+  notebook_id: string,
+  name: string,
+  notes: Array<string | null>,
+  date_modified: string,
+  date_created: string,
+}
+
+export function SelectNotebook({ currentNotebook, notebookOptions, setCurrentNotebook }) {
+  const customStyles = {
+    control: base => ({
+      ...base,
+      width: 300,
+      minWidth: 300,
+    })
+  }
+
+  return (
+    <div>
+      <Select options={notebookOptions} value={currentNotebook} onChange={option => setCurrentNotebook(option)} placeholder='Select Notebook...' styles={customStyles} />
+    </div>
+  );
 }

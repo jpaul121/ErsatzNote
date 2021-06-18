@@ -4,6 +4,7 @@ import 'regenerator-runtime/runtime.js'
 
 import React, { useContext, useEffect, useRef, useState } from 'react'
 
+import NotebookData from '../notes/BaseComponents'
 import NotebookIndexItem from './NotebookIndexItem'
 import UserContext from '../other/UserContext'
 import axios from 'axios'
@@ -43,7 +44,7 @@ function NotebookIndex() {
           cancelToken: signal.token,
         }
       )
-      return response.data;
+      return response.data as NotebookData;
     } catch(err) {
       if (axios.isCancel(err)) {
         console.log('Error: ', err.message)
