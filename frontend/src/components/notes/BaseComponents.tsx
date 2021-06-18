@@ -267,8 +267,12 @@ export function SelectNotebook({ currentNotebook, notebookOptions, setCurrentNot
   }
 
   return (
-    <div>
-      <Select options={notebookOptions} value={currentNotebook} onChange={option => setCurrentNotebook(option)} placeholder='Select Notebook...' styles={customStyles} />
-    </div>
+    <Select
+      options={notebookOptions}
+      value={currentNotebook}
+      onChange={option => setCurrentNotebook(option)}
+      placeholder='Select Notebook...'
+      styles={customStyles}
+    />
   );
 }
