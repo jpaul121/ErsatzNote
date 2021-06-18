@@ -27,6 +27,7 @@ class NoteSerializer(serializers.ModelSerializer):
       'title': title,
       'content': content,
       'notebook': Notebook.objects.get(id=self.context['request'].data['notebook']),
+      'user': ErsatzNoteUser.objects.get(email=self.context['request'].data['user']),
     }
 
     return Note.objects.create(**response_data)
@@ -40,7 +41,6 @@ class NoteSerializer(serializers.ModelSerializer):
       content = '<p></p>' + content
     
     instance.content = content
-    print(self.context['request'].data)
     instance.notebook = Notebook.objects.get(id=self.context['request'].data['notebook'])
 
     instance.save()
@@ -58,7 +58,7 @@ class NotebookSerializer(serializers.ModelSerializer):
 
   def create(self, validated_data):
     return Notebook.objects.create(
-      user=ErsatzNoteUser.objects.get(email=self.context['request'].user),
+      user=ErsatzNoteUser.objects.get(email=self.context['request'].data['user']),
       **validated_data
     )
   

@@ -3,10 +3,11 @@ import 'regenerator-runtime/runtime.js'
 import { BlockButton, Element, Leaf, MarkButton, NotebookData, SaveButton, SelectNotebook, Toolbar, useLazyRef } from './BaseComponents'
 import { Editable, ReactEditor, Slate, withReact } from 'slate-react'
 import { Editor, createEditor } from 'slate'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { deserialize, emptyValue, serialize } from '../other/Serialization'
 
 import { Node } from 'slate'
+import UserContext from '../other/UserContext'
 import axios from 'axios'
 import { axiosInstance } from '../../axiosAPI'
 import { match } from 'react-router-dom'
@@ -33,6 +34,7 @@ interface NotebookOptions {
 function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
   const [ notebookOptions, setNotebookOptions ] = useState<NotebookOptions[] | null>(null)
   const [ currentNotebook, setCurrentNotebook ] = useState(match.params.notebook_id ? { value: match.params.notebook_id, label: 'Select notebook...' } : null)
+  const { user } = useContext(UserContext)
   
   const renderElement = useCallback(props => <Element {...props} />, [])
   const renderLeaf = useCallback(props => <Leaf {...props} />, [])
@@ -104,6 +106,7 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
           notebook: currentNotebook?.value,
           title,
           content: serialize(editorContent),
+          user,
         }
       )
     } else {
@@ -113,6 +116,7 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
           title,
           content: serialize(editorContent),
           notebook: currentNotebook?.value,
+          user,
         }
       )
     }
