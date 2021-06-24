@@ -69,8 +69,8 @@ export function MarkButton({ format, icon }) {
   return (
     <Button
       active={isMarkActive(editor, format)}
-      onMouseDown={event => {
-        event.preventDefault()
+      onMouseDown={e => {
+        e.preventDefault()
         toggleMark(editor, format)
       }}
     >
@@ -85,8 +85,8 @@ export function BlockButton({ format, icon }) {
   return (
     <Button
       active={isBlockActive(editor, format)}
-      onMouseDown={event => {
-        event.preventDefault()
+      onMouseDown={e => {
+        e.preventDefault()
         toggleBlock(editor, format)
       }}
     >
@@ -98,8 +98,8 @@ export function BlockButton({ format, icon }) {
 export function SaveButton({ saveNote }) {
   return (
     <span
-      onMouseDown={event => {
-        event.preventDefault()
+      onMouseDown={e => {
+        e.preventDefault()
         saveNote()
       }}
       className={cx(

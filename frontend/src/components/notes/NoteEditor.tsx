@@ -11,6 +11,7 @@ import UserContext from '../other/UserContext'
 import axios from 'axios'
 import { axiosInstance } from '../../axiosAPI'
 import { match } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { withHistory } from 'slate-history'
 import { withRouter } from 'react-router'
 
@@ -34,7 +35,7 @@ interface NotebookOptions {
 function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
   const [ notebookOptions, setNotebookOptions ] = useState<NotebookOptions[] | null>(null)
   const [ currentNotebook, setCurrentNotebook ] = useState(match.params.notebook_id ? { value: match.params.notebook_id, label: 'Select notebook...' } : null)
-  const { user } = useContext(UserContext)
+  const { user, renderCount, rerender } = useContext(UserContext)
   
   const renderElement = useCallback(props => <Element {...props} />, [])
   const renderLeaf = useCallback(props => <Leaf {...props} />, [])
@@ -44,6 +45,7 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
 
   const editor = editorRef.current
   const signal = axios.CancelToken.source()
+  const history = useHistory()
 
   async function getNote() {
     if (match.params.note_id) {
@@ -109,6 +111,7 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
           user,
         }
       )
+      rerender!(renderCount! + 1)
     } else {
       axiosInstance.post(
         `/api/notes/`,
@@ -119,8 +122,11 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
           user,
         }
       )
+
+      if (currentNotebook?.value) history.push(`/notebooks/${currentNotebook.value}`)
+      rerender!(renderCount! + 1)
     }
-  }, [ match, title, content, currentNotebook ])
+  }, [ match, title, content, currentNotebook, rerender, renderCount ])
   
   useEffect(() => {
     _isMounted.current = true

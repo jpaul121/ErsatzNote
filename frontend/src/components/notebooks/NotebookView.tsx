@@ -1,11 +1,12 @@
 import 'regenerator-runtime/runtime.js'
 
 import { NoteDataObject, getContentPreview, getTitlePreview } from '../other/Serialization'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router'
 
 import { Link } from 'react-router-dom'
 import Note from '../notes/Note'
+import UserContext from '../other/UserContext'
 import axios from 'axios'
 import { axiosInstance } from '../../axiosAPI'
 import styles from '../../stylesheets/notebooks/NotebookView.module.css'
@@ -17,6 +18,7 @@ function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {
   
   const [ _isLoading, _setLoadingStatus ] = useState(true)
   const _isMounted = useRef(false)
+  const { renderCount } = useContext(UserContext)
 
   const signal = axios.CancelToken.source()
 
@@ -80,7 +82,7 @@ function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {
       _isMounted.current = false
       signal.cancel('Request is being cancelled.')
     };
-  }, [ notebookID ])
+  }, [ notebookID, renderCount ])
 
   return (
     <div className={styles['notebook-view']}>
