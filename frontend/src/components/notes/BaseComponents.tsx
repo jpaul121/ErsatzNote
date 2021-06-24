@@ -276,3 +276,23 @@ export function SelectNotebook({ currentNotebook, notebookOptions, setCurrentNot
     />
   );
 }
+
+export function useDetectOutsideClick(el, initialState) {
+  const [ isActive, setIsActive ] = useState(initialState)
+
+  useEffect(() => {
+    function onClick(e) {
+      if (el.current !== null && !el.current.contains(e.target)) {
+        setIsActive(!isActive)
+      }
+    }
+
+    if (isActive) window.addEventListener('click', onClick)
+
+    return () => {
+      window.removeEventListener('click', onClick)
+    }
+  }, [ isActive, el ])
+
+  return [ isActive, setIsActive ];
+}

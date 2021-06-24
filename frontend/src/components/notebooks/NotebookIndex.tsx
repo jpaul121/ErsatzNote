@@ -3,6 +3,7 @@
 import 'regenerator-runtime/runtime.js'
 
 import React, { useContext, useEffect, useRef, useState } from 'react'
+import { css, cx } from '@emotion/css'
 
 import NotebookData from '../notes/BaseComponents'
 import NotebookIndexItem from './NotebookIndexItem'
@@ -14,9 +15,12 @@ import styles from '../../stylesheets/notebooks/NotebookIndex.module.css'
 function NotebookIndex() {
   const [ newNotebookName, setNewNotebookName ] = useState('')
   const [ notebooks, setNotebooks ] = useState(null)
-  const [ modalOpen, setModal ] = useState(false)
+  const [ newNotebookModal, setNewNotebookModal ] = useState(false)
   const [ indexLoading, setIndexLoading ] = useState(true)
   const [ renderCount, rerender ] = useState(0)
+  const [ deleteNotebookModal, setDeleteNotebookModal ] = useState(false)
+  const [ editNotebookModal, setEditNotebookModal ] = useState(false)
+  const [ toAlter, setToAlter ] = useState('')
   
   const { user } = useContext(UserContext)
 
@@ -33,7 +37,22 @@ function NotebookIndex() {
         cancelToken: signal.token,
       }
     )
-    toggleModal(e)
+    toggleNewNotebookModal(e)
+    rerender(renderCount + 1)
+  }
+
+  function editNotebookName(e, id) {
+    e.preventDefault()
+    axiosInstance.put(
+      `/api/notebooks/`, {
+        notebook_id: id,
+        name: newNotebookName,
+        user,
+      }, {
+        cancelToken: signal.token,
+      }
+    )
+    toggleEditNotebookModal(e)
     rerender(renderCount + 1)
   }
 
@@ -61,19 +80,42 @@ function NotebookIndex() {
         return (
           <NotebookIndexItem
             key={item.notebook_id}
-            id={item.notebook_id}
+            notebookID={item.notebook_id}
             name={item.name}
-            date_modified={item.date_modified}
-            date_created={item.date_created}
+            dateModified={item.date_modified}
+            dateCreated={item.date_created}
+            toggleDeleteNotebookModal={toggleDeleteNotebookModal}
+            toggleEditNotebookModal={toggleEditNotebookModal}
           />
         );
       }))
     }
   }
   
-  function toggleModal(e) {
+  function toggleNewNotebookModal(e) {
     e.preventDefault()
-    setModal(!modalOpen)
+    if (_isMounted.current) setNewNotebookModal(!newNotebookModal)
+  }
+
+  function toggleEditNotebookModal(e) {
+    e.preventDefault()
+    if (_isMounted.current && id !== '') setToAlter(id)
+    if (_isMounted.current) setEditNotebookModal(!editNotebookModal)
+  }
+  
+  function toggleDeleteNotebookModal(e, id='') {
+    e.preventDefault()
+    if (_isMounted.current && id !== '') setToAlter(id)
+    if (_isMounted.current) setDeleteNotebookModal(!deleteNotebookModal)
+  }
+
+  function deleteNotebook(e, id) {
+    e.preventDefault()
+    axiosInstance.delete(
+      `/api/notebooks/`, {
+        notebook_id: id,
+      }
+    )
   }
 
   useEffect(() => {
@@ -93,7 +135,7 @@ function NotebookIndex() {
           <h3 className={styles['table-header']}>
             Notebooks
           </h3>
-          <button className={styles['new-notebook']} onClick={e => toggleModal(e)}>
+          <button className={styles['new-notebook']} onClick={e => toggleNewNotebookModal(e)}>
             <i className={'fas fa-book-medical'}></i>
             &nbsp;&nbsp;New Notebook
           </button>
@@ -105,6 +147,8 @@ function NotebookIndex() {
               <th>TITLE</th>
               <th>LAST UPDATED</th>
               <th>CREATED</th>
+              <th style={{ textAlign: 'right' }}>OPTIONS</th>
+              <th></th>
             </tr>
           </thead>
           <tbody className={styles['table-body']}>
@@ -113,7 +157,7 @@ function NotebookIndex() {
         </table>
       </div>
       {
-        modalOpen &&
+        newNotebookModal &&
         <form className={styles['create-notebook-form']}>
           <h1 className={styles['notebook-title']}>
             Create new notebook&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -121,11 +165,50 @@ function NotebookIndex() {
           <input type='text' placeholder='Name' name='name' onChange={e => setNewNotebookName(e.target.value)} />
           <div className={styles['new-notebook-buttons']}>
             <span>
-              <button className={styles['cancel']} onClick={e => toggleModal(e)}>
+              <button className={styles['cancel']} onClick={e => toggleNewNotebookModal(e)}>
                 Cancel
               </button>
               &nbsp;&nbsp;&nbsp;
               <button className={styles['continue']} onClick={e => createNewNotebook(e)}>
+                Continue
+              </button>
+            </span>
+          </div>
+        </form>
+      }
+      {
+        editNotebookModal &&
+        <form className={styles['create-notebook-form']}>
+          <h1 className={styles['notebook-title']}>
+            Edit notebook name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </h1>
+          <input type='text' placeholder='Name' name='name' onChange={e => setNewNotebookName(e.target.value)} />
+          <div className={styles['new-notebook-buttons']}>
+            <span>
+              <button className={styles['cancel']} onClick={e => toggleEditNotebookModal(e)}>
+                Cancel
+              </button>
+              &nbsp;&nbsp;&nbsp;
+              <button className={styles['continue']} onClick={e => editNotebookName(e, toAlter)}>
+                Continue
+              </button>
+            </span>
+          </div>
+        </form>
+      }
+      {
+        deleteNotebookModal &&
+        <form className={styles['create-notebook-form']}>
+          <h1 className={styles['notebook-title']}>
+            Are you sure you'd like to delete this notebook?
+          </h1>
+          <div className={styles['new-notebook-buttons']}>
+            <span>
+              <button className={styles['cancel']} onClick={e => toggleDeleteNotebookModal(e)}>
+                Cancel
+              </button>
+              &nbsp;&nbsp;&nbsp;
+              <button className={styles['continue']} onClick={e => deleteNotebook(e, toAlter)}>
                 Continue
               </button>
             </span>

@@ -1,12 +1,26 @@
 import { css, cx } from '@emotion/css'
 
 import React from 'react'
+import { axiosInstance } from '../../axiosAPI'
 import preview from '../../../src/preview.png'
 import styles from '../../stylesheets/other/Splash.module.css'
 import { useHistory } from 'react-router-dom'
 
 function Splash() {
   const history = useHistory()
+
+  function loginAnonymousUser() {
+    try{
+      axiosInstance.post(
+        `/auth/token/obtain/`, {
+          email: '',
+          password: '',
+        }
+      )
+    } catch(err) {
+      console.log(err)
+    }
+  }
   
   return (
     <div className={styles['splash']}>
@@ -136,7 +150,7 @@ function Splash() {
                 </p>
               </li>
               <button className={styles['center-button']}>
-                <a>CHECK IT OUT</a>
+                <a onClick={loginAnonymousUser}>CHECK IT OUT</a>
               </button>
             </ul>
             <img src={preview} />

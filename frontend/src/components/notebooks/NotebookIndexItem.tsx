@@ -1,26 +1,53 @@
 // @ts-nocheck
 
-import React, { Component } from 'react'
+import React, { useRef } from 'react'
+import { css, cx } from '@emotion/css'
 
 import { Link } from 'react-router-dom'
+import styles from '../../stylesheets/notebooks/NotebookIndex.module.css'
+import { useDetectOutsideClick } from '../notes/BaseComponents'
 
-class NotebookIndexItem extends Component {
-  constructor(props) {
-    super(props)
-  }
-
-  render() {
-    const notebook_id = this.props.id
-    
-    return (
-      <tr>
-        <th></th>
-        <th><Link to={`/notebooks/${notebook_id}`}>{this.props.name}</Link></th>
-        <th>{this.props.date_modified}</th>
-        <th>{this.props.date_created}</th>
-      </tr>
-    );
-  }
+function NotebookIndexItem({ notebookID, name, dateModified, dateCreated, toggleDeleteNotebookModal, toggleEditNotebookModal }) {  
+  const dropdownRef = useRef(null)
+  const [ isActive, setIsActive ] = useDetectOutsideClick(dropdownRef, false)
+  
+  return (
+    <tr>
+      <th></th>
+      <th><Link to={`/notebooks/${notebookID}`}>{name}</Link></th>
+      <th>{dateModified}</th>
+      <th>{dateCreated}</th>
+      <th>
+        <div className={styles['dropdown-menu']}>
+          <button onClick={() => setIsActive(!isActive)}>
+            <i className='fas fa-align-justify'></i>
+          </button>
+          {
+            isActive &&
+            <nav
+              ref={dropdownRef}
+            >
+              <ul>
+                <li>
+                  <a className={styles['deleteNotebook']} onClick={e => toggleDeleteNotebookModal(e, notebookID)}>
+                    <i className='fa fa-trash'></i>&nbsp;
+                    Delete
+                  </a>
+                </li>
+                <li>
+                  <a className={styles['editNotebookName']} onClick={e => toggleEditNotebookModal(e, notebookID)}>
+                    <i className='fas fa-pencil-alt'></i>&nbsp;
+                    Rename
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          }
+        </div>
+      </th>
+      <th></th>
+    </tr>
+  );
 }
 
 export default NotebookIndexItem

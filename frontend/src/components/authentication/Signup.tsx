@@ -2,23 +2,26 @@ import React, { useState } from 'react'
 
 import { axiosInstance } from '../../axiosAPI'
 import styles from '../../stylesheets/authentication/Auth.module.css'
+import { useHistory } from 'react-router-dom'
 
 function Signup() {
   const [ email, setEmail ] = useState('')
   const [ password, setPassword ] = useState('')
 
+  const history = useHistory()
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     try {
-      const response = await axiosInstance.post(
+      axiosInstance.post(
         '/auth/user/create/',
         {
           email,
-          password
+          password,
         }
       )
 
-      return response.data;
+      history.push('/login/')
     } catch(err) { throw err; }
   }
   
