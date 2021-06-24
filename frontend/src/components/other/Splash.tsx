@@ -9,17 +9,23 @@ import { useHistory } from 'react-router-dom'
 function Splash() {
   const history = useHistory()
 
-  function loginAnonymousUser() {
-    try{
-      axiosInstance.post(
-        `/auth/token/obtain/`, {
-          email: '',
-          password: '',
+  async function loginAnonymousUser() {
+    try {
+      const response = await axiosInstance.post(
+        '/auth/token/obtain/', {
+          email: 'otherguest@fakeuser.com',
+          password: 'loremipsum',
         }
       )
+
+      axiosInstance.defaults.headers['Authorization'] = 'JWT ' + response.data.access
+      localStorage.setItem('access_token', response.data.access)
+      localStorage.setItem('refresh_token', response.data.refresh)
     } catch(err) {
       console.log(err)
     }
+
+    history.push('/notebooks/')
   }
   
   return (

@@ -31,7 +31,7 @@ function Login() {
       localStorage.setItem('access_token', response.data.access)
       localStorage.setItem('refresh_token', response.data.refresh)
 
-      history.push('/notebooks')
+      history.push('/notebooks/')
     } catch(err) {
       setError(true)
       
