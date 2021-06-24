@@ -167,7 +167,7 @@ button {
   font-family: sans-serif;
   color: grey;
   font-size: 14px;
-  padding-top: 58px;
+  padding-top: 24px;
   padding-bottom: 5px;
   padding-left: 20px;
   padding-right: 20px;
@@ -176,7 +176,7 @@ button {
   border-top: solid 1px grey;
   text-align: center;
   align-content: center;
-  min-height: 76px;
+  min-height: 34px;
   position: absolute;
   left: 0;
   bottom: 0;

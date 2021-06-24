@@ -29,13 +29,13 @@ function NotebookIndexItem({ notebookID, name, dateModified, dateCreated, toggle
             >
               <ul>
                 <li>
-                  <a className={styles['deleteNotebook']} onClick={e => toggleDeleteNotebookModal(e, notebookID)}>
+                  <a className={styles['deleteNotebook']} onClick={() => toggleDeleteNotebookModal(notebookID)}>
                     <i className='fa fa-trash'></i>&nbsp;
                     Delete
                   </a>
                 </li>
                 <li>
-                  <a className={styles['editNotebookName']} onClick={e => toggleEditNotebookModal(e, notebookID)}>
+                  <a className={styles['editNotebookName']} onClick={() => toggleEditNotebookModal(notebookID)}>
                     <i className='fas fa-pencil-alt'></i>&nbsp;
                     Rename
                   </a>

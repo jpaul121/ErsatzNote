@@ -37,23 +37,46 @@ function NotebookIndex() {
         cancelToken: signal.token,
       }
     )
-    toggleNewNotebookModal(e)
+    toggleNewNotebookModal()
+    rerender(renderCount + 1)
+  }
+
+  function deleteNotebook(e, id) {
+    e.preventDefault()
+    axiosInstance.delete(
+      `/api/notebooks/${id}/`, {
+        cancelToken: signal.token,
+      }
+    )
+    toggleDeleteNotebookModal()
     rerender(renderCount + 1)
   }
 
   function editNotebookName(e, id) {
     e.preventDefault()
     axiosInstance.put(
-      `/api/notebooks/`, {
-        notebook_id: id,
+      `/api/notebooks/${id}/`, {
         name: newNotebookName,
-        user,
       }, {
         cancelToken: signal.token,
       }
     )
-    toggleEditNotebookModal(e)
+    toggleEditNotebookModal()
     rerender(renderCount + 1)
+  }
+
+  function toggleNewNotebookModal() {
+    if (_isMounted.current) setNewNotebookModal(!newNotebookModal)
+  }
+
+  function toggleEditNotebookModal(id='') {
+    if (_isMounted.current && id !== '') setToAlter(id)
+    if (_isMounted.current) setEditNotebookModal(!editNotebookModal)
+  }
+  
+  function toggleDeleteNotebookModal(id='') {
+    if (_isMounted.current && id !== '') setToAlter(id)
+    if (_isMounted.current) setDeleteNotebookModal(!deleteNotebookModal)
   }
 
   async function getNotebooks() {
@@ -91,32 +114,6 @@ function NotebookIndex() {
       }))
     }
   }
-  
-  function toggleNewNotebookModal(e) {
-    e.preventDefault()
-    if (_isMounted.current) setNewNotebookModal(!newNotebookModal)
-  }
-
-  function toggleEditNotebookModal(e) {
-    e.preventDefault()
-    if (_isMounted.current && id !== '') setToAlter(id)
-    if (_isMounted.current) setEditNotebookModal(!editNotebookModal)
-  }
-  
-  function toggleDeleteNotebookModal(e, id='') {
-    e.preventDefault()
-    if (_isMounted.current && id !== '') setToAlter(id)
-    if (_isMounted.current) setDeleteNotebookModal(!deleteNotebookModal)
-  }
-
-  function deleteNotebook(e, id) {
-    e.preventDefault()
-    axiosInstance.delete(
-      `/api/notebooks/`, {
-        notebook_id: id,
-      }
-    )
-  }
 
   useEffect(() => {
     _isMounted.current = true
@@ -135,7 +132,7 @@ function NotebookIndex() {
           <h3 className={styles['table-header']}>
             Notebooks
           </h3>
-          <button className={styles['new-notebook']} onClick={e => toggleNewNotebookModal(e)}>
+          <button className={styles['new-notebook']} onClick={() => toggleNewNotebookModal()}>
             <i className={'fas fa-book-medical'}></i>
             &nbsp;&nbsp;New Notebook
           </button>
@@ -204,7 +201,7 @@ function NotebookIndex() {
           </h1>
           <div className={styles['new-notebook-buttons']}>
             <span>
-              <button className={styles['cancel']} onClick={e => toggleDeleteNotebookModal(e)}>
+              <button className={styles['cancel']} onClick={() => toggleDeleteNotebookModal()}>
                 Cancel
               </button>
               &nbsp;&nbsp;&nbsp;
