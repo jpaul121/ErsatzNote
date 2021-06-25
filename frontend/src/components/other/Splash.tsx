@@ -13,7 +13,7 @@ function Splash() {
     try {
       const response = await axiosInstance.post(
         '/auth/token/obtain/', {
-          email: 'otherguest@fakeuser.com',
+          email: 'guest_user@ersatznote.com',
           password: 'loremipsum',
         }
       )

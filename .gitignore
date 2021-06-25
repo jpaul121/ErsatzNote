@@ -11,5 +11,9 @@
 
 # Miscellaneous
 .DS_Store
+.env
+datadump.json
+.vscode
+db.sqlite3
 
 npm-debug.log*

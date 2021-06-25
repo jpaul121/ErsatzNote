@@ -6,9 +6,6 @@ import { css, cx } from '@emotion/css'
 
 import { ReactEditor } from 'slate-react'
 import Select from 'react-select'
-import axios from 'axios'
-import { axiosInstance } from '../../axiosAPI'
-import { defaultCoreCipherList } from 'node:constants'
 import { useSlate } from 'slate-react'
 
 const LIST_TYPES = [ 'numbered-list', 'bulleted-list' ]
