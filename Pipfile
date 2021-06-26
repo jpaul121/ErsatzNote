@@ -7,13 +7,14 @@ name = "pypi"
 django = "==2.2"
 djangorestframework = "*"
 django-cors-headers = "*"
-psycopg2 = "*"
+psycopg2 = "==2.8.6"
 jsonfield = "*"
 bleach = "*"
 djangorestframework-simplejwt = "*"
 gunicorn = "*"
 django-heroku = "*"
 whitenoise = "*"
+dj-database-url = "*"
 
 [dev-packages]
 

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseURL = 'http://localhost:8000/'
+const baseURL = 'https://ersatznote.com/'
 
 export const axiosInstance = axios.create({
   baseURL: baseURL,

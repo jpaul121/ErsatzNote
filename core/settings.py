@@ -1,5 +1,7 @@
 import django_heroku
+import dj_database_url
 import os
+import subprocess
 
 from datetime import timedelta
 
@@ -7,10 +9,42 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.environ['SECRET_KEY']
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+ALLOWED_HOSTS = [ 'localhost' ]
 
-ALLOWED_HOSTS = [ 'localhost', 'ersatznote.herokuapp.com', 'ersatznote.com' ]
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+    'http://localhost:8000',
+    'http://localhost:8080',
+    'http://localhost:5432',
+]
+
+CORS_ALLOW_HEADERS = (
+        'x-requested-with',
+        'content-type',
+        'accept',
+        'origin',
+        'authorization',
+        'x-csrftoken'
+)
+
+REACT_APP_API_ENDPOINT = 'http://localhost:8000/'
+
+DEBUG = True
+
+if os.environ['IS_PRODUCTION']:
+    DEBUG = False
+
+    REACT_APP_API_ENDPOINT = 'http://ersatznote.com/'
+
+    ALLOWED_HOSTS = [ '.herokuapp.com', 'ersatznote.com' ]
+
+    CORS_ORIGIN_WHITELIST = [
+        'https://ersatznote.com/',
+        'https://ersatznote.herokuapp.com/',
+        'https://*.herokuapp.com/',
+    ]
+
+
 
 # Application definition
 
@@ -29,9 +63,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     # 'whitenoise.middleware.WhiteNoiseMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -61,19 +95,30 @@ TEMPLATES = [
 WSGI_APPLICATION = 'core.wsgi.application'
 
 
+
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ersatznote',
+        'NAME': os.environ['DATABASE_NAME'],
         'USER': os.environ['DB_OWNER_USERNAME'],
         'PASSWORD': os.environ['DB_OWNER_PASSWORD'],
-        'HOST': 'localhost',
+        'HOST': os.environ['DATABASE_URL'],
         'PORT': os.environ['DB_PORT'],
     }
 }
+
+if os.environ['IS_PRODUCTION']:
+    credentials = subprocess.check_output([
+        '/bin/bash',
+        '-c',
+        'heroku config:get DATABASE_URL -a ersatznote',
+    ], shell=True).decode('utf-8')
+
+    DATABASES['default'] = dj_database_url.config(default=credentials)
+
 
 
 # Password validation
@@ -95,6 +140,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -107,6 +153,7 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
 
 
 # Static files (CSS, JavaScript, Images)
@@ -124,18 +171,9 @@ STATICFILES_DIRS = (
 
 
 
-# Custom settings
+# Miscellaneous
 
 MAX_SLUG_LENGTH = 15
-
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000',
-    'http://localhost:8000',
-    'http://localhost:8080',
-    'http://localhost:5432',
-]
-
-REACT_APP_API_ENDPOINT = 'http://localhost:8000'
 
 APPEND_SLASH = True
 
