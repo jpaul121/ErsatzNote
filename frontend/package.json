@@ -15,7 +15,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "create": "webpack",
     "dev": "webpack --mode development --entry ./src/index.tsx --output-path ./static/frontend",
-    "build": "webpack --mode development --entry ./src/index.js --output-path ./static/frontend"
+    "build": "webpack --mode production --entry ./src/index.tsx --output-path ./static/frontend"
   },
   "repository": {
     "type": "git",
