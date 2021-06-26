@@ -12,6 +12,7 @@ jsonfield = "*"
 bleach = "*"
 djangorestframework-simplejwt = "*"
 gunicorn = "*"
+django-heroku = "*"
 
 [dev-packages]
 
