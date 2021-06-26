@@ -13,6 +13,7 @@ bleach = "*"
 djangorestframework-simplejwt = "*"
 gunicorn = "*"
 django-heroku = "*"
+whitenoise = "*"
 
 [dev-packages]
 
