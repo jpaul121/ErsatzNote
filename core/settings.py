@@ -7,7 +7,7 @@ from datetime import timedelta
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 ALLOWED_HOSTS = [ 'localhost' ]
 
@@ -31,7 +31,7 @@ REACT_APP_API_ENDPOINT = 'http://localhost:8000/'
 
 DEBUG = True
 
-if os.environ['IS_PRODUCTION']:
+if os.environ.get('IS_PRODUCTION'):
     DEBUG = False
 
     REACT_APP_API_ENDPOINT = 'http://ersatznote.com/'
@@ -102,15 +102,15 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ['DATABASE_NAME'],
-        'USER': os.environ['DB_OWNER_USERNAME'],
-        'PASSWORD': os.environ['DB_OWNER_PASSWORD'],
-        'HOST': os.environ['DATABASE_URL'],
-        'PORT': os.environ['DB_PORT'],
+        'NAME': os.environ.get('DATABASE_NAME'),
+        'USER': os.environ.get('DB_OWNER_USERNAME'),
+        'PASSWORD': os.environ.get('DB_OWNER_PASSWORD'),
+        'HOST': os.environ.get('DATABASE_URL'),
+        'PORT': os.environ.get('DB_PORT'),
     }
 }
 
-if os.environ['IS_PRODUCTION']:
+if os.environ.get('IS_PRODUCTION'):
     credentials = subprocess.check_output([
         '/bin/bash',
         '-c',

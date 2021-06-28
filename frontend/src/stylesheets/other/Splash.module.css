@@ -2,7 +2,7 @@ body, html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-image: url('/static/frontend/223f714365600179a96941456608b596.png') !important;
+  background-image: url('../../background-img.png') !important;
   background-color: #04a82e !important;
 }
 

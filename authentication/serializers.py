@@ -27,7 +27,7 @@ class ErsatzNoteTokenObtainPairSerializer(TokenObtainPairSerializer):
 
   @classmethod
   def get_token(cls, user):
-    token = super(ErsatzNoteTokenObtainPairSerializer, cls).get_token(user)
+    token = super().get_token(user)
 
     token['user'] = user.email
 

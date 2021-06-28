@@ -5,6 +5,7 @@ import 'regenerator-runtime/runtime.js'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { css, cx } from '@emotion/css'
 
+import Modal from '../other/Modal'
 import NotebookData from '../notes/BaseComponents'
 import NotebookIndexItem from './NotebookIndexItem'
 import UserContext from '../other/UserContext'
@@ -154,63 +155,31 @@ function NotebookIndex() {
         </table>
       </div>
       {
-        newNotebookModal &&
-        <form className={styles['create-notebook-form']}>
-          <h1 className={styles['notebook-title']}>
-            Create new notebook&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          </h1>
-          <input type='text' placeholder='Name' name='name' onChange={e => setNewNotebookName(e.target.value)} />
-          <div className={styles['new-notebook-buttons']}>
-            <span>
-              <button className={styles['cancel']} onClick={e => toggleNewNotebookModal(e)}>
-                Cancel
-              </button>
-              &nbsp;&nbsp;&nbsp;
-              <button className={styles['continue']} onClick={e => createNewNotebook(e)}>
-                Continue
-              </button>
-            </span>
-          </div>
-        </form>
-      }
-      {
-        editNotebookModal &&
-        <form className={styles['create-notebook-form']}>
-          <h1 className={styles['notebook-title']}>
-            Edit notebook name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          </h1>
-          <input type='text' placeholder='Name' name='name' onChange={e => setNewNotebookName(e.target.value)} />
-          <div className={styles['new-notebook-buttons']}>
-            <span>
-              <button className={styles['cancel']} onClick={e => toggleEditNotebookModal(e)}>
-                Cancel
-              </button>
-              &nbsp;&nbsp;&nbsp;
-              <button className={styles['continue']} onClick={e => editNotebookName(e, toAlter)}>
-                Continue
-              </button>
-            </span>
-          </div>
-        </form>
-      }
-      {
-        deleteNotebookModal &&
-        <form className={styles['create-notebook-form']}>
-          <h1 className={styles['notebook-title']}>
-            Are you sure you'd like to delete this notebook?
-          </h1>
-          <div className={styles['new-notebook-buttons']}>
-            <span>
-              <button className={styles['cancel']} onClick={() => toggleDeleteNotebookModal()}>
-                Cancel
-              </button>
-              &nbsp;&nbsp;&nbsp;
-              <button className={styles['continue']} onClick={e => deleteNotebook(e, toAlter)}>
-                Continue
-              </button>
-            </span>
-          </div>
-        </form>
+        (function renderModals() {
+          switch (true) {
+          case (newNotebookModal && !editNotebookModal && !deleteNotebookModal):
+            return <Modal 
+              changeValue={setNewNotebookName}
+              setValue={createNewNotebook}
+              toggleModal={toggleNewNotebookModal}
+            />;
+          case (!newNotebookModal && editNotebookModal && !deleteNotebookModal):
+            return <Modal 
+              changeValue={setNewNotebookName}
+              setValue={editNotebookName}
+              toAlter={toAlter}
+              toggleModal={toggleEditNotebookModal}
+            />;
+          case (!newNotebookModal && !editNotebookModal && deleteNotebookModal):
+            return <Modal 
+              setValue={deleteNotebook}
+              toAlter={toAlter}
+              toggleModal={toggleDeleteNotebookModal}
+            />;
+          default:
+            break;
+        }
+      })()
       }
     </div>
   );

@@ -23,7 +23,7 @@ function Login() {
         }
       )
 
-      if (response.data.detail === 'No active account found with the given credentials') {
+      if (!response.data) {
         setError(true)
       }
 
