@@ -2,6 +2,7 @@ import django_heroku
 import dj_database_url
 import os
 import subprocess
+import whitenoise
 
 from datetime import timedelta
 
@@ -24,14 +25,14 @@ CORS_ALLOW_HEADERS = (
         'accept',
         'origin',
         'authorization',
-        'x-csrftoken'
+        'x-csrftoken',
 )
 
 REACT_APP_API_ENDPOINT = 'http://localhost:8000/'
 
 DEBUG = True
 
-if os.environ.get('IS_PRODUCTION'):
+if os.environ.get('NODE_ENV'):
     DEBUG = False
 
     REACT_APP_API_ENDPOINT = 'http://ersatznote.com/'
@@ -39,9 +40,9 @@ if os.environ.get('IS_PRODUCTION'):
     ALLOWED_HOSTS = [ '.herokuapp.com', 'ersatznote.com' ]
 
     CORS_ORIGIN_WHITELIST = [
-        'https://ersatznote.com/',
-        'https://ersatznote.herokuapp.com/',
-        'https://*.herokuapp.com/',
+        'http://ersatznote.com',
+        'http://ersatznote.herokuapp.com',
+        'http://*.herokuapp.com',
     ]
 
 
@@ -65,7 +66,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    # 'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -110,7 +111,7 @@ DATABASES = {
     }
 }
 
-if os.environ.get('IS_PRODUCTION'):
+if os.environ.get('NODE_ENV'):
     credentials = subprocess.check_output([
         '/bin/bash',
         '-c',
@@ -161,13 +162,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, 'frontend', 'static', 'frontend'),
+# )
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'frontend', 'static', 'frontend'),
-)
-
-# STATICFILES_STORAGE = 'whitenoise.django.CompressedStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 
@@ -207,29 +208,41 @@ SIMPLE_JWT = {
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
+    'disable_existing_loggers': False,
     'formatters': {
-        'standard': {
-            'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+        'verbose': {
+            'format': ('%(asctime)s [%(process)d] [%(levelname)s] '
+                       'pathname=%(pathname)s lineno=%(lineno)s '
+                       'funcname=%(funcName)s %(message)s'),
+            'datefmt': '%Y-%m-%d %H:%M:%S'
         },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        }
     },
     'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
         'console': {
+            'level': 'INFO',
             'class': 'logging.StreamHandler',
-            'formatter': 'standard',
-        },
-        'file': {
-            'class': 'logging.FileHandler',
-            'filename': os.path.normpath(os.path.join(BASE_DIR, './logs/django.log')),
-            'formatter': 'standard',
-        },
+            'formatter': 'verbose'
+        }
     },
     'loggers': {
         'django': {
-            'handlers': [ 'console', 'file' ],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
         },
-    },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    }
 }
 
 django_heroku.settings(locals(), logging=False, databases=False)
