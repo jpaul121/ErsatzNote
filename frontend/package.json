@@ -15,7 +15,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "create": "webpack",
     "dev": "webpack --mode development --entry ./src/index.tsx --output-path ./static/frontend",
-    "build": "webpack --mode production --entry ./src/index.tsx --output-path ./static/frontend"
+    "build": "webpack --mode production --entry ./src/index.tsx --output-path ./static/frontend --config ./webpack.config.production.js",
+    "heroku-prebuild": "npm install --dev"
   },
   "repository": {
     "type": "git",

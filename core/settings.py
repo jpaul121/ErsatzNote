@@ -117,7 +117,7 @@ if os.environ.get('IS_PRODUCTION'):
         'heroku config:get DATABASE_URL -a ersatznote',
     ], shell=True).decode('utf-8')
 
-    DATABASES['default'] = dj_database_url.config(default=credentials)
+    DATABASES['default'] = dj_database_url.config(default=credentials, conn_max_age=600)
 
 
 
@@ -203,4 +203,33 @@ SIMPLE_JWT = {
     'TOKEN_TYPE_CLAIM': 'token_type',
 }
 
-django_heroku.settings(locals())
+# Logging
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': os.path.normpath(os.path.join(BASE_DIR, './logs/django.log')),
+            'formatter': 'standard',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': [ 'console', 'file' ],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
+}
+
+django_heroku.settings(locals(), logging=False, databases=False)

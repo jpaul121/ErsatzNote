@@ -9,6 +9,8 @@
 # Production
 /frontend/static/frontend/*
 !/frontend/static/frontend/.gitkeep
+/logs/*
+!/logs/.gitkeep
 
 # Miscellaneous
 .DS_Store
