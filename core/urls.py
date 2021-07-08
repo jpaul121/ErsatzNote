@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
@@ -23,3 +25,5 @@ urlpatterns = [
     path('notebooks/<slug:notebook_pk>/notes/<slug:note_pk>/', include('frontend.urls')),
     path('new-note/', include('frontend.urls')),
 ]
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
