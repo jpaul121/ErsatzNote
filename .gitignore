@@ -1,5 +1,4 @@
 # Dependencies
-/frontend/node_modules
 /.pnp
 .pnp.js
 
@@ -19,3 +18,4 @@ db.sqlite3
 staticfiles
 
 npm-debug.log*
+node_modules

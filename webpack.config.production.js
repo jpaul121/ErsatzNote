@@ -4,11 +4,11 @@ const webpack = require('webpack')
 
 module.exports = {
   entry: [
-    './src/index.tsx',
+    './frontend/src/index.tsx',
     'webpack-dev-server/client?http://localhost:8080/'
   ],
   output: {
-    path: path.resolve(__dirname, 'static/frontend'),
+    path: path.resolve(__dirname, 'frontend/static/frontend'),
     filename: 'index.js'
   },
   // target: "node",
@@ -60,8 +60,8 @@ module.exports = {
   mode: 'production',
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'src/index.html',
-      favicon: 'src/favicon.ico'
+      template: 'frontend/src/index.html',
+      favicon: 'frontend/src/favicon.ico'
     }),
     new webpack.ProvidePlugin({
       process: 'process/browser',
