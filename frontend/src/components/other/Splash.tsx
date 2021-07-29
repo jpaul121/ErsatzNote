@@ -18,7 +18,7 @@ function Splash() {
         }
       )
 
-      axiosInstance.defaults.headers['Authorization'] = 'JWT ' + response.data.access
+      axiosInstance.defaults.headers['Authorization'] = `JWT ${response.data.access}`
       localStorage.setItem('access_token', response.data.access)
       localStorage.setItem('refresh_token', response.data.refresh)
     } catch(err) {

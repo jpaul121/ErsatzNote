@@ -4,6 +4,7 @@ import os
 import subprocess
 import whitenoise
 
+from corsheaders.defaults import default_headers
 from datetime import timedelta
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -19,14 +20,21 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:5432',
 ]
 
-CORS_ALLOW_HEADERS = (
-        'x-requested-with',
-        'content-type',
-        'accept',
-        'origin',
-        'authorization',
-        'x-csrftoken',
-)
+# CORS_ALLOW_HEADERS = (
+#         'x-requested-with',
+#         'content-type',
+#         'accept',
+#         'origin',
+#         'authorization',
+#         'x-csrftoken',
+# )
+
+CORS_ALLOW_HEADERS = list(default_headers) + [ 'Access-Control-Allow-Origin' ]
+
+ACCESS_CONTROL_RESPONSE_HEADERS = {
+  'Access-Control-Allow-Origin': 'https://ersatznote.com',
+  'Vary': 'Origin',
+}
 
 REACT_APP_API_ENDPOINT = 'http://localhost:8000/'
 
@@ -50,14 +58,14 @@ DEBUG = True
 if os.environ.get('NODE_ENV'):
     DEBUG = False
 
-    REACT_APP_API_ENDPOINT = 'http://ersatznote.com/'
+    REACT_APP_API_ENDPOINT = 'https://ersatznote.com/'
 
     ALLOWED_HOSTS = [ '.herokuapp.com', 'ersatznote.com' ]
 
     CORS_ORIGIN_WHITELIST = [
-        'http://ersatznote.com',
-        'http://ersatznote.herokuapp.com',
-        'http://*.herokuapp.com',
+        'https://ersatznote.com',
+        'https://ersatznote.herokuapp.com',
+        'https://*.herokuapp.com',
     ]
 
 
