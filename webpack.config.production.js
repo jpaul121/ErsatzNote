@@ -5,19 +5,18 @@ const webpack = require('webpack')
 module.exports = {
   entry: [
     './frontend/src/index.tsx',
-    'webpack-dev-server/client?http://localhost:8080/'
+    'webpack-dev-server/client?http://localhost:8080/',
   ],
   output: {
     path: path.resolve(__dirname, 'frontend/static/frontend'),
-    filename: 'index.js'
+    filename: 'index.js',
   },
-  // target: "node",
   devtool: "source-map",
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
     fallback: {
-      fs: false
-    }
+      fs: false,
+    },
   },
   module: {
     rules: [
@@ -28,21 +27,21 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: [
-              ['@babel/preset-typescript']
+              ['@babel/preset-typescript'],
             ],
-          }
-        }
+          },
+        },
       },
       {
         test: /\.(css)$/,
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(svg|eot|woff|ttf|svg|woff2)$/,
         use: [
           'url-loader?limit=100000',
-          'file-loader'
-        ]
+          'file-loader',
+        ],
       },
       {
         test: /\.(png|gif)$/i,
@@ -50,22 +49,25 @@ module.exports = {
           {
             loader: 'url-loader',
             options: {
-              limit: 10000
-            }
-          }
-        ]
-      }
-    ]
+              limit: 10000,
+            },
+          },
+        ],
+      },
+    ],
   },
   mode: 'production',
   plugins: [
     new HtmlWebpackPlugin({
       template: 'frontend/src/index.html',
-      favicon: 'frontend/src/favicon.ico'
+      favicon: 'frontend/src/favicon.ico',
     }),
     new webpack.ProvidePlugin({
       process: 'process/browser',
-      Buffer: ['buffer', 'Buffer']
-    })
+      Buffer: ['buffer', 'Buffer'],
+    }),
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: 'production',
+    }),
   ]
 }

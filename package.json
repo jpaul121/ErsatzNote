@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "proxy": "http://localhost:8000",
   "babel": {
     "presets": [
       "@babel/preset-env",
@@ -14,7 +13,7 @@
     "start": "webpack serve",
     "test": "echo \"Error: no test specified\" && exit 1",
     "create": "webpack",
-    "dev": "webpack --mode development --entry ./frontend/src/index.tsx --output-path ./frontend/static/frontend",
+    "dev": "webpack --mode development --entry ./frontend/src/index.tsx --output-path ./frontend/static/frontend --config ./webpack.config.development.js",
     "build": "webpack --mode production --entry ./frontend/src/index.tsx --output-path ./frontend/static/frontend --config ./webpack.config.production.js",
     "heroku-prebuild": "npm install --dev"
   },

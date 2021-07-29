@@ -1,10 +1,23 @@
+import { css, cx } from '@emotion/css'
+
 import React from 'react'
 import loading from '../../../src/loading.gif'
 
 function Loading() {
   return (
     <div>
-      <img src={loading} />
+      <img
+        className={cx(
+          css`
+            position: absolute;
+            border-radius: 10px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          `
+        )}
+        src={loading}
+      />
     </div>
   );
 }

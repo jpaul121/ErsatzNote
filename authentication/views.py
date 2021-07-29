@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework_simplejwt.views import TokenViewBase
+from django.conf import settings
 
 from .serializers import ErsatzNoteUserSerializer, ErsatzNoteTokenObtainPairSerializer
 
@@ -27,7 +28,11 @@ class ErsatzNoteUserCreate(APIView):
 
         return Response(json, status=status.HTTP_201_CREATED)
     
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(
+      serializer.errors,
+      headers=settings.ACCESS_CONTROL_RESPONSE_HEADERS,
+      status=status.HTTP_400_BAD_REQUEST
+    )
 
 class ObtainRefreshToken(TokenViewBase):
   authentication_classes = []
@@ -44,4 +49,8 @@ class ObtainRefreshToken(TokenViewBase):
     except TokenError as e:
       raise InvalidToken(e.args[0])
     
-    return Response(serializer.validated_data, status=status.HTTP_200_OK)
+    return Response(
+      serializer.validated_data,
+      headers=settings.ACCESS_CONTROL_RESPONSE_HEADERS,
+      status=status.HTTP_200_OK
+    )
