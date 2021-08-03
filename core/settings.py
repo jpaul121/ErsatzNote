@@ -51,7 +51,7 @@ if os.environ.get('NODE_ENV'):
 
     REACT_APP_API_ENDPOINT = 'https://ersatznote.com/'
 
-    ALLOWED_HOSTS = [ '.herokuapp.com', 'ersatznote.com' ]
+    ALLOWED_HOSTS = [ 'ersatznote.herokuapp.com', 'ersatznote.com' ]
 
     CORS_ORIGIN_WHITELIST = [
         'https://ersatznote.com',
@@ -60,7 +60,7 @@ if os.environ.get('NODE_ENV'):
     ]
 
     ACCESS_CONTROL_RESPONSE_HEADERS = {
-        'Access-Control-Allow-Origin': 'https://ersatznote.com',
+        'Access-Control-Allow-Origin': 'https://ersatznote.herokuapp.com',
         'Vary': 'Origin',
     }
 

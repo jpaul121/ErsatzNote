@@ -1,10 +1,11 @@
 import axios from 'axios'
 import process from 'process'
 
-const baseURL = process.env.NODE_ENV === 'production' ? 'https://ersatznote.com' : 'http://localhost:8000'
+const BASE_URL = process.env.NODE_ENV === 'production' ? 'https://ersatznote.herokuapp.com' : 'http://localhost:8000'
+const DEFAULT_HTTPS_PORT = 443
 
 export const axiosInstance = axios.create({
-  baseURL: baseURL,
+  baseURL: BASE_URL,
   timeout: 5000,
   headers: {
     'xsrfHeaderName': 'X-CSRFTOKEN',
@@ -12,7 +13,12 @@ export const axiosInstance = axios.create({
     'Authorization': localStorage.getItem('access_token') ? `JWT ${localStorage.getItem('access_token')}` : null,
     'Content-Type': 'application/json',
     'accept': 'application/json',
-    'Access-Control-Allow-Origin': baseURL,
+    'Access-Control-Allow-Origin': BASE_URL,
+  },
+  proxy: {
+    protocol: process.env.NODE_ENV === 'production' ? 'https' : 'http',
+    host: BASE_URL,
+    port: Number(process.env.PORT) || DEFAULT_HTTPS_PORT,
   }
 })
 
@@ -23,7 +29,7 @@ axiosInstance.interceptors.response.use(
 
     if (error.response) {
       // Prevent infinite loops if login credentials invalid
-      if ((error.response.status === 401 || 406) && originalRequest.url === `${baseURL}/auth/token/refresh/`) {
+      if ((error.response.status === 401 || 406) && originalRequest.url === `${BASE_URL}/auth/token/refresh/`) {
         if (window.location.href !== '/login/') window.location.href = '/login/'
         
         return Promise.reject(error);
