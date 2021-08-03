@@ -20,7 +20,11 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:5432',
 ]
 
-CORS_ALLOW_HEADERS = list(default_headers) + [ 'Access-Control-Allow-Origin' ]
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'Access-Control-Allow-Origin',
+    'Access-Control-Allow-Methods',
+    'Vary',
+]
 
 ACCESS_CONTROL_RESPONSE_HEADERS = {
   'Access-Control-Allow-Origin': 'http://localhost:8000',
@@ -59,8 +63,15 @@ if os.environ.get('NODE_ENV'):
         'https://*.herokuapp.com',
     ]
 
+    CSRF_TRUSTED_ORIGINS = [
+        'https://ersatznote.com',
+        'https://ersatznote.herokuapp.com',
+        'https://*.herokuapp.com',
+    ]
+
     ACCESS_CONTROL_RESPONSE_HEADERS = {
         'Access-Control-Allow-Origin': 'https://ersatznote.herokuapp.com',
+        'Access-Control-Allow-Methods': 'GET, PUT, PATCH, DELETE, POST',
         'Vary': 'Origin',
     }
 
