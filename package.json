@@ -2,7 +2,8 @@
   "name": "ersatznote",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "staticfiles/index.js",
+  "types": "frontend/types/index.d.ts",
   "babel": {
     "presets": [
       "@babel/preset-env",
@@ -11,7 +12,6 @@
   },
   "scripts": {
     "start": "webpack serve",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "create": "webpack",
     "dev": "webpack --mode development --entry ./frontend/src/index.tsx --output-path ./frontend/static/frontend --config ./webpack.config.development.js",
     "build": "webpack --mode production --entry ./frontend/src/index.tsx --output-path ./frontend/static/frontend --config ./webpack.config.production.js",

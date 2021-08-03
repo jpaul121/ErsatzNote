@@ -1,4 +1,5 @@
 import NoteEditorContainer from './NoteEditorContainer'
+import { NoteEditorSize } from './NoteEditorContainer'
 import React from 'react'
 import SideBar from '../sidebar/SideBar'
 import styles from '../../stylesheets/notes/NewNoteContainer.module.css'
@@ -7,7 +8,7 @@ function NewNoteContainer(): JSX.Element {
   return (
     <div className={styles['new-note-container']}>
       <SideBar />
-      <NoteEditorContainer />
+      <NoteEditorContainer size={NoteEditorSize.FullScreen} />
     </div>
   );
 }

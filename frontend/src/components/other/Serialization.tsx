@@ -12,7 +12,6 @@ export interface NoteDataObject {
   date_modified: string,
 }
 
-
 export function getTitlePreview(note: NoteDataObject): string {
   const title = note.title[0].children[0]
 

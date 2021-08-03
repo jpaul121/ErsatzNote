@@ -6,13 +6,27 @@ import NoteTitleBar from './NoteTitleBar'
 import { emptyValue } from '../other/Serialization'
 import styles from '../../stylesheets/notes/NoteEditorContainer.module.css'
 
-function NoteEditorContainer() {
+export enum NoteEditorSize {
+  FullScreen = '65em',
+  Medium = '42em',
+}
+
+interface NoteEditorContainerProps {
+  size: NoteEditorSize,
+}
+
+function NoteEditorContainer({ size }: NoteEditorContainerProps) {
   const [ title, setTitle ] = useState<Descendant[] | undefined>(emptyValue)
   const [ content, setContent ] = useState<Descendant[] | undefined>(emptyValue)
 
   return (
     <div className={styles['note-editor-container']}>
-      <div className={styles['editor-proper']}>
+      <div
+        className={styles['editor-proper']}
+        style={{
+          maxWidth: size,
+        }}
+      >
         <NoteTitleBar
           // @ts-ignore
           title={title}
