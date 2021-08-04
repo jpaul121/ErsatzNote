@@ -12,6 +12,15 @@ export interface NoteDataObject {
   date_modified: string,
 }
 
+export function clearEditor(editor, isMountedRef, setContent) {
+  editor.selection = {
+    anchor: { path: [ 0, 0 ], offset: 0 },
+    focus: { path: [ 0, 0 ], offset: 0 },
+  }
+
+  if (isMountedRef.current) setContent(emptyValue)
+}
+
 export function getTitlePreview(note: NoteDataObject): string {
   const title = note.title[0].children[0]
 
@@ -24,8 +33,11 @@ export function getContentPreview(note: NoteDataObject): string {
 
   let preview = ''
   for (const node of formattedContent) {
-    preview += Node.string(node)
-    preview += '\n'
+    if (node.type === 'bulleted-list' || 'numbered-list') {
+      for (const listItem of node.children) {
+        preview += `${Node.string(listItem)},\n`
+      }
+    } else preview += `${Node.string(node)}\n`
   }
 
   return preview;

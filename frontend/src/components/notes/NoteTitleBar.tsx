@@ -6,8 +6,8 @@ import { Editable, Slate, withReact } from 'slate-react'
 import React, { useEffect, useMemo, useRef } from 'react'
 
 import { axiosInstance } from '../../axiosAPI'
+import { clearEditor } from '../other/Serialization'
 import { createEditor } from 'slate'
-import { emptyValue } from '../other/Serialization'
 import { withRouter } from 'react-router'
 
 function NoteTitleBar({ match, title, setTitle }) {
@@ -23,10 +23,7 @@ function NoteTitleBar({ match, title, setTitle }) {
         )
         
         if (_isMounted.current) setTitle(response.data.title)
-      } else {
-        if (_isMounted.current) setTitle(emptyValue)
-      }
-
+      } else clearEditor(titleBar, _isMounted, setTitle)
     }
 
     _isMounted.current = true

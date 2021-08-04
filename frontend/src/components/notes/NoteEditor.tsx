@@ -4,7 +4,7 @@ import { BlockButton, Element, Leaf, MarkButton, NotebookData, SaveButton, Selec
 import { Editable, ReactEditor, Slate, withReact } from 'slate-react'
 import { Editor, createEditor } from 'slate'
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { deserialize, emptyValue, serialize } from '../other/Serialization'
+import { clearEditor, deserialize, emptyValue, serialize } from '../other/Serialization'
 
 import { Node } from 'slate'
 import UserContext from '../other/UserContext'
@@ -46,7 +46,7 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
   const editor = editorRef.current
   const signal = axios.CancelToken.source()
   const history = useHistory()
-
+  
   async function getNote() {
     if (match.params.note_id) {
       try {
@@ -65,7 +65,7 @@ function NoteEditor({ match, content, setContent, title }: NoteEditorProps) {
         }
       }
     } else {
-      if (_isMounted.current) setContent(emptyValue)
+      clearEditor(editor, _isMounted, setContent)
     }
   }
 

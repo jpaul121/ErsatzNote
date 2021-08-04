@@ -1,7 +1,7 @@
 // @ts-nocheck
 
-import NoteEditorContainer from '../notes/NoteEditorContainer'
-import { NoteEditorSize } from '../notes/NoteEditorContainer'
+import NoteEditorContainer, { NoteEditorSize } from '../notes/NoteEditorContainer'
+
 import NotebookView from './NotebookView'
 import React from 'react'
 import SideBar from '../sidebar/SideBar'
