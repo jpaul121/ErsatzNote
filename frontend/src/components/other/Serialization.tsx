@@ -2,6 +2,7 @@
 
 import { Descendant, Node, Text } from 'slate'
 
+import React from 'react'
 import escapeHtml from 'escape-html'
 
 export interface NoteDataObject {
@@ -12,12 +13,29 @@ export interface NoteDataObject {
   date_modified: string,
 }
 
-export function clearEditor(editor, isMountedRef, setContent) {
-  editor.selection = {
+export function clearTitle(
+  isMountedRef: React.MutableObjectRef<boolean>,
+  titleEditor: ReactEditor,
+  setTitle: React.Dispatch<React.SetStateAction<Descendant[]>>,
+): void {
+  titleEditor.selection = {
     anchor: { path: [ 0, 0 ], offset: 0 },
     focus: { path: [ 0, 0 ], offset: 0 },
   }
+  
+  if (isMountedRef.current) setTitle(emptyValue)
+}
 
+export function clearContent(
+  isMountedRef: React.MutableObjectRef<boolean>,
+  contentEditor: ReactEditor,
+  setContent: React.Dispatch<React.SetStateAction<Node[]>>,
+): void {
+  contentEditor.selection = {
+    anchor: { path: [ 0, 0 ], offset: 0 },
+    focus: { path: [ 0, 0 ], offset: 0 },
+  }
+  
   if (isMountedRef.current) setContent(emptyValue)
 }
 
@@ -141,4 +159,4 @@ export function deserialize(el: HTMLElement): Node[] {
   }
 }
 
-export const emptyValue: Descendant[] = [ { type: 'paragraph', children: [ { text: '' } ] } ]
+export const emptyValue: Node[] = [ { type: 'paragraph', children: [ { text: '' } ] } ]

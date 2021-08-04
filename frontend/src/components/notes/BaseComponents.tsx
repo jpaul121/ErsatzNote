@@ -38,7 +38,7 @@ const Icon = forwardRef(
 
 const Button = forwardRef(
   (
-    { className, active, reversed, ...props }: PropsWithChildren<BaseProps>,
+    { className, active, reversed, title, ...props }: PropsWithChildren<BaseProps>,
     ref: any,
   ) => (
   <span
@@ -46,8 +46,12 @@ const Button = forwardRef(
     ref={ref}
     className={cx(
       className,
+      // This span needs to have a higher z-index than
+      // all the other layers that make up this component
+      // so that the 'title' tooltip actually shows up on hover
       css`
         cursor: pointer;
+        z-index: 20;
         color: ${reversed
           ? active
             ? 'white'
@@ -57,10 +61,11 @@ const Button = forwardRef(
           : '#ccc'};
       `
     )}
+    title={title}
   />
 ))
 
-export function MarkButton({ format, icon }) {
+export function MarkButton({ format, icon, title }) {
   const editor = useSlate()
 
   return (
@@ -70,13 +75,14 @@ export function MarkButton({ format, icon }) {
         e.preventDefault()
         toggleMark(editor, format)
       }}
+      title={title}
     >
       <Icon>{icon}</Icon>
     </Button>
   );
 }
 
-export function BlockButton({ format, icon }) {
+export function BlockButton({ format, icon, title }) {
   const editor = useSlate()
   
   return (
@@ -86,6 +92,7 @@ export function BlockButton({ format, icon }) {
         e.preventDefault()
         toggleBlock(editor, format)
       }}
+      title={title}
     >
       <Icon>{icon}</Icon>
     </Button>
@@ -108,8 +115,32 @@ export function SaveButton({ saveNote }) {
           margin-bottom: 5px;
         `
       )}
+      title='Save'
     >
       <Icon>save</Icon>
+    </span>
+  );
+}
+
+export function DeleteButton({ deleteNote }) {
+  return (
+    <span
+      onMouseDown={e => {
+        e.preventDefault()
+        deleteNote()
+      }}
+      className={cx(
+        'material-icons-outlined',
+        css`
+          cursor: pointer;
+          color: black;
+          float: right;
+          margin-bottom: 5px;
+        `
+      )}
+      title='Delete'
+    >
+      <Icon>delete</Icon>
     </span>
   );
 }

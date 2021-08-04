@@ -5,10 +5,10 @@ import Loading from './Loading'
 import UserContext from './UserContext'
 
 function ProtectedRoute(props: any) {
-  const { user, isLoading } = useContext(UserContext)
+  const { user, isLoadingUser } = useContext(UserContext)
   const { component: Component, ...other } = props
 
-  if (isLoading) {
+  if (isLoadingUser) {
     return <Loading />;
   }
 
@@ -20,7 +20,7 @@ function ProtectedRoute(props: any) {
     );
   }
 
-  return <Redirect to={'/login/'} />;
+  return <Redirect to={'/login'} />;
 }
 
 export default ProtectedRoute

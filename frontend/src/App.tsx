@@ -1,3 +1,4 @@
+import React, { useState } from 'react'
 import {
   Route,
   BrowserRouter as Router,
@@ -5,24 +6,22 @@ import {
 } from 'react-router-dom'
 
 import Login from './components/authentication/Login'
-import NewNoteContainer from './components/notes/NewNoteContainer';
+import NewNoteContainer from './components/notes/NewNoteContainer'
 import NotebookIndexContainer from './components/notebooks/NotebookIndexContainer'
 import NotebookViewContainer from './components/notebooks/NotebookViewContainer'
 import ProtectedRoute from './components/other/ProtectedRoute'
-import React from 'react'
 import Signup from './components/authentication/Signup'
 import Splash from './components/other/Splash'
 import UserContext from './components/other/UserContext'
 import useGetUser from './components/other/useGetUser'
-import { useState } from 'react'
 
-function App(): JSX.Element {
-  const { user, setUser, isLoading } = useGetUser()
-  const [ renderCount, rerender ] = useState(0)
+function App() {
+  const { user, setUser, isLoadingUser } = useGetUser()
+  const [ renderCount, setRenderCount ] = useState(0)
   
   return (
     <Router>
-      <UserContext.Provider value={{ user, setUser, isLoading, renderCount, rerender }}>
+      <UserContext.Provider value={{ user, setUser, isLoadingUser, renderCount, setRenderCount }}>
         <Switch>
           <Route exact path='/' component={Splash} />
           <ProtectedRoute path='/notebooks/:notebook_id/notes/:note_id' component={NotebookViewContainer} />

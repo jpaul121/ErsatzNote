@@ -1,17 +1,17 @@
-import { createContext } from 'react'
+import React, { createContext } from 'react'
 
 interface ErsatzNoteContext {
   user: string | null,
   setUser: React.Dispatch<React.SetStateAction<string | null>> | null,
-  isLoading: boolean,
+  isLoadingUser: boolean,
   renderCount?: number,
-  rerender?: React.Dispatch<React.SetStateAction<number>>,
+  setRenderCount?: React.Dispatch<React.SetStateAction<number>>,
 }
 
 const initialValue: ErsatzNoteContext = {
   user: null,
   setUser: null,
-  isLoading: false,
+  isLoadingUser: false,
 }
 
 const UserContext = createContext<ErsatzNoteContext>(initialValue)

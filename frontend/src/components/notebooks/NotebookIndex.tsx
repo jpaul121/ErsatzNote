@@ -18,12 +18,11 @@ function NotebookIndex() {
   const [ notebooks, setNotebooks ] = useState(null)
   const [ newNotebookModal, setNewNotebookModal ] = useState(false)
   const [ indexLoading, setIndexLoading ] = useState(true)
-  const [ renderCount, rerender ] = useState(0)
   const [ deleteNotebookModal, setDeleteNotebookModal ] = useState(false)
   const [ editNotebookModal, setEditNotebookModal ] = useState(false)
   const [ toAlter, setToAlter ] = useState('')
   
-  const { user } = useContext(UserContext)
+  const { user, renderCount, setRenderCount } = useContext(UserContext)
 
   const _isMounted = useRef(false)
   const signal = axios.CancelToken.source()
@@ -39,7 +38,7 @@ function NotebookIndex() {
       }
     )
     toggleNewNotebookModal()
-    rerender(renderCount + 1)
+    setRenderCount!(renderCount! + 1)
   }
 
   function deleteNotebook(e, id) {
@@ -50,7 +49,7 @@ function NotebookIndex() {
       }
     )
     toggleDeleteNotebookModal()
-    rerender(renderCount + 1)
+    setRenderCount!(renderCount! + 1)
   }
 
   function editNotebookName(e, id) {
@@ -63,7 +62,7 @@ function NotebookIndex() {
       }
     )
     toggleEditNotebookModal()
-    rerender(renderCount + 1)
+    setRenderCount!(renderCount! + 1)
   }
 
   function toggleNewNotebookModal() {

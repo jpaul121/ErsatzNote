@@ -1,23 +1,55 @@
-import React, { useState } from 'react'
+import { Editable, Slate, withReact } from 'slate-react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { RouteComponentProps, withRouter } from 'react-router'
+import { clearTitle, emptyValue } from '../other/Serialization'
 
 import { Descendant } from 'slate'
 import NoteEditor from './NoteEditor'
 import NoteTitleBar from './NoteTitleBar'
-import { emptyValue } from '../other/Serialization'
+import { axiosInstance } from '../../axiosAPI'
+import { createEditor } from 'slate'
 import styles from '../../stylesheets/notes/NoteEditorContainer.module.css'
+
+interface MatchProps {
+  note_id: string,
+  notebook_id: string,
+}
 
 export enum NoteEditorSize {
   FullScreen = '65em',
-  Medium = '42em',
+  Medium = '44em',
 }
 
 interface NoteEditorContainerProps {
   size: NoteEditorSize,
 }
 
-function NoteEditorContainer({ size }: NoteEditorContainerProps) {
-  const [ title, setTitle ] = useState<Descendant[] | undefined>(emptyValue)
+function NoteEditorContainer({ match, size }: NoteEditorContainerProps & RouteComponentProps<MatchProps>) {
+  const [ title, setTitle ] = useState(emptyValue)
   const [ content, setContent ] = useState<Descendant[] | undefined>(emptyValue)
+
+  const titleBar = useMemo(() => withReact(createEditor()), [])
+
+  const _isMounted = useRef(false)
+
+  async function getTitle() {
+    if (match.params.note_id) {
+      const response = await axiosInstance.get(
+        `/api/notes/${match.params.note_id}`,
+      )
+      
+      if (_isMounted.current) setTitle(response.data.title)
+    } else clearTitle(_isMounted, titleBar, setTitle)
+  }
+  
+  useEffect(() => {
+    _isMounted.current = true
+    getTitle()
+
+    return () => {
+      _isMounted.current = false
+    };
+  }, [ match ])
 
   return (
     <div className={styles['note-editor-container']}>
@@ -27,20 +59,28 @@ function NoteEditorContainer({ size }: NoteEditorContainerProps) {
           maxWidth: size,
         }}
       >
-        <NoteTitleBar
-          // @ts-ignore
-          title={title}
-          setTitle={setTitle}
-        />
+        <Slate
+          editor={titleBar}
+          value={title}
+          onChange={newTitle => setTitle(newTitle)}
+        >
+          <Editable
+            placeholder='Title'
+          />
+        </Slate>
         <NoteEditor
           // @ts-ignore
-          title={title}
           content={content}
-          setContent={setContent}
+          setContent={setContent}          
+          setTitle={setTitle}
+          title={title}
+          titleBar={titleBar}
         />
       </div>
     </div>
   );
 }
 
-export default NoteEditorContainer
+const finishedNoteEditorContainer = withRouter(NoteEditorContainer)
+
+export default finishedNoteEditorContainer

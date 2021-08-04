@@ -16,65 +16,66 @@ function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {
   const [ noteList, setNoteList ] = useState<NoteDataObject[]>()
   const notebookID = props.match.params.notebook_id
   
-  const [ _isLoading, _setLoadingStatus ] = useState(true)
-  const _isMounted = useRef(false)
+  const [ isLoading, setLoadingStatus ] = useState(true)
   const { renderCount } = useContext(UserContext)
+
+  const _isMounted = useRef(false)
 
   const signal = axios.CancelToken.source()
 
-  useEffect(() => {
-    async function getNotebook(): Promise<[ string, NoteDataObject[] ] | undefined> {
-      try {
-        const response = await axiosInstance.get(
-          `/api/notebooks/${notebookID}/`, {
+  async function getNotebook(): Promise<[ string, NoteDataObject[] ] | undefined> {
+    try {
+      const response = await axiosInstance.get(
+        `/api/notebooks/${notebookID}/`, {
+          cancelToken: signal.token,
+        }
+      )
+      const name = response.data.name
+      const noteIDs = response.data.notes
+      
+      let noteData = []
+      
+      for (let noteID of noteIDs) {
+        const noteObject = await axiosInstance.get(
+          `/api/notes/${noteID}/`, {
             cancelToken: signal.token,
           }
         )
-        const name = response.data.name
-        const noteIDs = response.data.notes
-        
-        let noteData = []
-        
-        for (let noteID of noteIDs) {
-          const noteObject = await axiosInstance.get(
-            `/api/notes/${noteID}/`, {
-              cancelToken: signal.token,
-            }
-          )
-    
-          noteData.push(noteObject.data)
-        }
-        
-        return [ name, noteData ];
-      } catch (err) {
-        if (axios.isCancel(err)) {
-          console.log('Error: ', err)
-        }
-      }
-    }
-    
-    async function loadNotes() {
-      const notebookContents = await getNotebook()
-
-      if (notebookContents) {
-        const [ name, noteData ] = notebookContents
   
-        if (_isMounted.current) setNotebookName(name)
-        if (_isMounted.current) setNoteList(noteData.map(item => {
-          return (
-            <Link key={item.note_id} to={`/notebooks/${notebookID}/notes/${item.note_id}/`}>
-              <Note 
-                title={getTitlePreview(item)}
-                content={getContentPreview(item)}
-                date_modified={item.date_modified}
-              />
-            </Link>
-          );
-        }) as unknown as NoteDataObject[])
-        if (_isMounted.current) _setLoadingStatus(false)
+        noteData.push(noteObject.data)
+      }
+      
+      return [ name, noteData ];
+    } catch (err) {
+      if (axios.isCancel(err)) {
+        console.log(`Error: ${err.message}`)
       }
     }
+  }
+  
+  async function loadNotes(): Promise<void> {
+    const notebookContents = await getNotebook()
 
+    if (notebookContents) {
+      const [ name, noteData ] = notebookContents
+
+      if (_isMounted.current) setNotebookName(name)
+      if (_isMounted.current) setNoteList(noteData.map(item => {
+        return (
+          <Link key={item.note_id} to={`/notebooks/${notebookID}/notes/${item.note_id}/`}>
+            <Note
+              title={getTitlePreview(item)}
+              content={getContentPreview(item)}
+              date_modified={item.date_modified}
+            />
+          </Link>
+        );
+      }) as unknown as NoteDataObject[])
+      if (_isMounted.current) setLoadingStatus(false)
+    }
+  }
+  
+  useEffect(() => {
     _isMounted.current = true
     loadNotes()
 
@@ -89,7 +90,7 @@ function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {
       <div className={styles['notebook-header']}>
         <h1 className={styles['notebook-title']}>{notebookName}</h1>
         {
-          !_isLoading &&
+          !isLoading &&
           <p className={styles['note-count']}>
             {
               noteList?.length == 1
@@ -100,7 +101,7 @@ function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {
         }
       </div>
       {
-        !_isLoading &&
+        !isLoading &&
         <ul className={styles['note-list']}>
           {noteList}
         </ul>
