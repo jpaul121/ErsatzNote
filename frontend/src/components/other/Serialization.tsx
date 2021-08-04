@@ -35,7 +35,7 @@ export function getContentPreview(note: NoteDataObject): string {
   for (const node of formattedContent) {
     if (node.type === 'bulleted-list' || 'numbered-list') {
       for (const listItem of node.children) {
-        preview += `${Node.string(listItem)},\n`
+        preview += `${Node.string(listItem)}\n`
       }
     } else preview += `${Node.string(node)}\n`
   }
