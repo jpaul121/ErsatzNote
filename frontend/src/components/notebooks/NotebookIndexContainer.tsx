@@ -1,12 +1,12 @@
 import NotebookIndex from './NotebookIndex'
 import React from 'react'
-import SideBar from '../sidebar/SideBar'
+import Sidebar from '../sidebar/Sidebar'
 import styles from '../../stylesheets/notebooks/NotebookIndexContainer.module.css'
 
 function NotebookIndexContainer() {
   return (
     <div className={styles['notebook-index-container']}>
-      <SideBar />
+      <Sidebar />
       <NotebookIndex />
     </div>
   );

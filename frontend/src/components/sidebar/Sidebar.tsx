@@ -9,15 +9,15 @@ import styles from '../../stylesheets/sidebar/Sidebar.module.css'
 
 function Sidebar({ match }: RouteComponentProps<{ notebook_id: string }>) {
   return (
-    <div className={styles['nav-bar']}>
+    <div className={styles['sidebar']}>
       <h1 className={styles['user']}>
         <i className={'fas fa-user-circle fa-2x'}></i>
         &nbsp;
         Guest User
       </h1>
       <SearchBar />
-      <div className={styles['buttons']}>
-        <button className={styles['new-note']}>
+      <div className={styles['new-note-container']}>
+        <button className={styles['new-note-button']}>
           <Link to={
             match.params.notebook_id
             ? `/notebooks/${match.params.notebook_id}`
@@ -29,8 +29,8 @@ function Sidebar({ match }: RouteComponentProps<{ notebook_id: string }>) {
           </Link>
         </button>
       </div>
-      <div className={styles['notebooks']}>
-        <div className={styles['row']}>
+      <div className={styles['navigation']}>
+        <div className={styles['nav-button']}>
           <Link to={`/notebooks`}>
             <i className={'fas fa-book'}></i>
             <h3>

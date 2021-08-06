@@ -16,7 +16,7 @@ interface MatchProps {
 
 export enum NoteEditorSize {
   FullScreen = '65em',
-  Medium = '44em',
+  Medium = '42em',
 }
 
 interface NoteEditorContainerProps {
@@ -55,7 +55,7 @@ function NoteEditorContainer({ match, size }: NoteEditorContainerProps & RouteCo
       <div
         className={styles['editor-proper']}
         style={{
-          maxWidth: size,
+          width: size,
         }}
       >
         <Slate
@@ -70,7 +70,7 @@ function NoteEditorContainer({ match, size }: NoteEditorContainerProps & RouteCo
         <NoteEditor
           // @ts-ignore
           content={content}
-          setContent={setContent}          
+          setContent={setContent}
           setTitle={setTitle}
           title={title}
           titleBar={titleBar}

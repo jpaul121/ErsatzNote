@@ -1,16 +1,24 @@
-.nav-bar {
+.sidebar {
   background-color: #1a1a1a;
   box-sizing: border-box;
   color: #a6a6a6;
   display: flex;
+  flex-grow: 0;
   flex-direction: column;
   font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 14px;
-  height: 100%;
+  height: 100vh;
   overflow-x: hidden;
-  padding-top: 5px;
-  width: 241px;
-  z-index: 1;
+  flex-basis: 15vw;
+  justify-content: start;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  padding: .555555vh .3125vw;
+}
+
+.sidebar > * {
+  margin-top: 1.5vh;
+  margin-bottom: 1.5vh;
 }
 
 .user {
@@ -18,69 +26,75 @@
   flex-direction: row;
   align-items: center;
   color: #a9a9a9;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 200;
-  margin-left: 16px;
-  margin-top: 10px;
-  width: 100%;
+  margin-left: .5vw;
+  margin-top: 2vh;
 }
 
-.buttons {
-  display: grid;
-  margin-top: 54px;
+.new-note-container {
   width: 100%;
+  margin: 5px;
+  box-sizing: border-box;
 }
 
-.new-note {
+.new-note-button {
   background-color: #00a82d;
   border-radius: 20px;
   border: none;
   color: #f8fcf9;
   cursor: pointer;
   font-size: 14px;
-  height: 35px;
-  margin-left: 12px;
-  margin-right: 6px;
-  padding-bottom: 4px;
-  padding-left: 25px;
-  padding-right: 73px;
-  padding-top: 4px;
+  height: 5vh;
+  padding-left: 1.56vw;
   text-align: left;
   vertical-align: middle;
-  width: 214px;
+  width: 90%;
+  box-sizing: border-box;
 }
 
-.new-note:hover {
+.new-note-button:hover {
   background-color: #008f25;
 }
 
-.notebooks {
-  margin-top: 12px;
-  padding-left: 34px;
+.navigation {
+  width: 15vw;
+  box-sizing: content-box;
+  align-self: stretch;
+  margin-left: -.3vw;
+  min-height: 5vh;
 }
 
-.notebooks:hover {
+.navigation:hover {
   background-color: #404040;
   color: #e6e6e6;
 }
 
-.notebooks a {
+.navigation a {
   align-items: center;
   color: inherit;
   display: flex;
   height: 32px;
   text-decoration: none;
-  width: 241px;
+  justify-self: start;
 }
 
-.buttons a {
+/* FontAwesome icons compile to 'svg' tags */
+.navigation h3,
+.navigation svg {
+  padding-top: 1vh;
+}
+
+.new-note-container a {
   text-decoration: none;
   color: inherit;
 }
 
-.row {
-  align-items: center;
+.nav-button {
+  justify-self: start;
   display: flex;
+  padding-left: 2.2em;
+  align-items: center;
 }
 
 .fa, .fas {

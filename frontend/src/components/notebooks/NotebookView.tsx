@@ -88,7 +88,9 @@ function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {
   return (
     <div className={styles['notebook-view']}>
       <div className={styles['notebook-header']}>
-        <h1 className={styles['notebook-title']}>{notebookName}</h1>
+        <h1 className={styles['notebook-title']}>
+          {notebookName}
+        </h1>
         {
           !isLoading &&
           <p className={styles['note-count']}>

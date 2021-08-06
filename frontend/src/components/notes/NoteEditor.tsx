@@ -199,7 +199,7 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
       </Toolbar>
       <Editable
         placeholder='Write something...'
-        style={{ minHeight: 600 }}
+        style={{ minHeight: '75vh' }}
         renderElement={renderElement}
         renderLeaf={renderLeaf}
         spellCheck

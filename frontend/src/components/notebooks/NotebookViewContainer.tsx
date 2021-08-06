@@ -4,13 +4,13 @@ import NoteEditorContainer, { NoteEditorSize } from '../notes/NoteEditorContaine
 
 import NotebookView from './NotebookView'
 import React from 'react'
-import SideBar from '../sidebar/SideBar'
+import Sidebar from '../sidebar/Sidebar'
 import styles from '../../stylesheets/notebooks/NotebookViewContainer.module.css'
 
 function NotebookViewContainer() {
   return (
     <div className={styles['notebook-view-container']}>
-      <SideBar />
+      <Sidebar />
       <NotebookView />
       <NoteEditorContainer size={NoteEditorSize.Medium} />
     </div>

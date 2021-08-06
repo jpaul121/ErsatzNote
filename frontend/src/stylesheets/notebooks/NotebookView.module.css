@@ -1,6 +1,11 @@
 .notebook-view {
-  width: 362px;
-  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-items: stretch;
+  align-items: stretch;
+  flex-basis: 20vw;
+  flex-grow: 0;
+  max-height: 100% !important;
   font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   background-color: #f5f5f5;
   color: #333333;
@@ -8,13 +13,18 @@
   border-right: 1px solid #e6e6e6;
 }
 
+.notebook-view a {
+  display: block;
+}
+
 .notebook-header {
   display: flex;
   flex-direction: column;
   padding-top: 22px;
   padding-right: 18px;
-  width: 344px;
-  height: 128px;
+  width: 100%;
+  flex-basis: 20vh;
+  box-sizing: border-box;
   border: 1px solid #e6e6e6;
   border-left: none;
   border-right: none;
@@ -34,13 +44,14 @@
   letter-spacing: 0.03em;
   overflow: hidden;
   text-overflow: ellipsis;
+  box-sizing: border-box;
 }
 
 .note-count {
   flex: 1;
   align-items: flex-end;
   font-size: 13px;
-  min-width: 50px;
+  min-width: 4vw;
   font-weight: 300;
   color: #a9a9a9;
   padding-left: 25px;
@@ -48,19 +59,28 @@
 
 .note-list {
   box-sizing: border-box;
-  overflow: scroll;
-  width: 362px;
+  overflow: auto;
+  width: 100%;
+  flex-basis: auto;
+  display: flex;
+  flex-direction: column;
+  justify-items: flex-start;
+  flex: 1 1 0;
 }
 
 .note-list li {
-  height: 120px;
-  width: 362px;
+  flex-basis: 15vh;
+  align-self: stretch;
   font-weight: 300;
   border: 1px solid #e6e6e6;
   border-left: none;
   padding-left: 27px;
   padding-top: 17px;
-  padding-bottom: 30px;
+  padding-bottom: 17px;
+  display: flex;
+  flex-direction: column;
+  justify-items: flex-start;
+  min-height: 15vh;
 }
 
 .note-list li:hover {
@@ -80,21 +100,23 @@
 }
 
 .note-list li p {
-  height: 90px;
-  width: 320px;
   margin-bottom: 5px;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 13px;
   color: #333333;
+  flex-basis: auto;
+  flex-grow: 1;
 }
 
 .note-list li h4 {
-  margin-top: 10px;
+  margin-top: auto;
   font-size: 12px;
   color: #a9a9a9;
+  justify-self: flex-end;
 }
 
 .note-list a {
   text-decoration: none;
+  display: block;
 }
