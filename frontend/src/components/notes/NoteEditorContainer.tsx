@@ -5,7 +5,6 @@ import { clearTitle, emptyValue } from '../other/Serialization'
 
 import { Descendant } from 'slate'
 import NoteEditor from './NoteEditor'
-import NoteTitleBar from './NoteTitleBar'
 import { axiosInstance } from '../../axiosAPI'
 import { createEditor } from 'slate'
 import styles from '../../stylesheets/notes/NoteEditorContainer.module.css'
@@ -26,7 +25,7 @@ interface NoteEditorContainerProps {
 
 function NoteEditorContainer({ match, size }: NoteEditorContainerProps & RouteComponentProps<MatchProps>) {
   const [ title, setTitle ] = useState(emptyValue)
-  const [ content, setContent ] = useState<Descendant[] | undefined>(emptyValue)
+  const [ content, setContent ] = useState<Descendant[] | null>(emptyValue)
 
   const titleBar = useMemo(() => withReact(createEditor()), [])
 
@@ -35,7 +34,7 @@ function NoteEditorContainer({ match, size }: NoteEditorContainerProps & RouteCo
   async function getTitle() {
     if (match.params.note_id) {
       const response = await axiosInstance.get(
-        `/api/notes/${match.params.note_id}`,
+        `/api/notes/${match.params.note_id}/`,
       )
       
       if (_isMounted.current) setTitle(response.data.title)

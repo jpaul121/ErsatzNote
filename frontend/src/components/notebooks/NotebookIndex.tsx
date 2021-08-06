@@ -38,7 +38,7 @@ function NotebookIndex() {
       }
     )
     toggleNewNotebookModal()
-    setRenderCount!(renderCount! + 1)
+    if (renderCount && setRenderCount) setRenderCount(renderCount + 1)
   }
 
   function deleteNotebook(e, id) {
@@ -49,7 +49,7 @@ function NotebookIndex() {
       }
     )
     toggleDeleteNotebookModal()
-    setRenderCount!(renderCount! + 1)
+    if (renderCount && setRenderCount) setRenderCount(renderCount + 1)
   }
 
   function editNotebookName(e, id) {
@@ -62,7 +62,7 @@ function NotebookIndex() {
       }
     )
     toggleEditNotebookModal()
-    setRenderCount!(renderCount! + 1)
+    if (renderCount && setRenderCount) setRenderCount(renderCount + 1)
   }
 
   function toggleNewNotebookModal() {

@@ -12,9 +12,9 @@ class NoteViewSet(viewsets.ModelViewSet):
   
   def get_queryset(self):
     return self.request.user.notes.all()
-
+  
   def create(self, request, *args, **kwargs):
-    serializer = NoteSerializer(data=request.data, context={ 'request': request })
+    serializer = self.get_serializer(data=request.data, context={ 'request': request })
     serializer.is_valid(raise_exception=True)
     self.perform_create(serializer)
     headers = self.get_success_headers(serializer.data)

@@ -29,7 +29,7 @@ export function clearTitle(
 export function clearContent(
   isMountedRef: React.MutableObjectRef<boolean>,
   contentEditor: ReactEditor,
-  setContent: React.Dispatch<React.SetStateAction<Node[]>>,
+  setContent: React.Dispatch<React.SetStateAction<Node[] | null>>,
 ): void {
   contentEditor.selection = {
     anchor: { path: [ 0, 0 ], offset: 0 },

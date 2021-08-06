@@ -1,43 +1,42 @@
 import 'regenerator-runtime/runtime.js'
 
-import { BlockButton, DeleteButton, Element, Leaf, MarkButton, NotebookData, SaveButton, SelectNotebook, Toolbar, useLazyRef } from './BaseComponents'
+import { BlockButton, DeleteButton, Element, Leaf, MarkButton, NotebookData, SaveButton, Toolbar, useLazyRef } from './BaseComponents'
 import { Descendant, Node } from 'slate'
 import { Editable, ReactEditor, Slate, withReact } from 'slate-react'
 import { Editor, createEditor } from 'slate'
 import { NoteDataObject, clearContent, clearTitle, deserialize, serialize } from '../other/Serialization'
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { RouteComponentProps, withRouter } from 'react-router'
 
+import ChangeNotebook from './ChangeNotebook'
 import UserContext from '../other/UserContext'
 import axios from 'axios'
 import { axiosInstance } from '../../axiosAPI'
 import { match } from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
 import { withHistory } from 'slate-history'
-import { withRouter } from 'react-router'
 
-interface MatchParams {
+export interface MatchProps {
   note_id?: string,
   notebook_id?: string,
 }
 
 interface NoteEditorProps {
   content: Node[],
-  match: match<MatchParams>,
-  setContent: React.Dispatch<React.SetStateAction<Node[]>>,
+  setContent: React.Dispatch<React.SetStateAction<Node[] | null>>,
   setTitle: React.Dispatch<React.SetStateAction<Descendant[]>>,
   title: Node[],
   titleBar: Editor & ReactEditor,
 }
 
-interface NotebookOptions {
+export interface NotebookOption {
   label: string,
   value: string,
 }
 
-function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: NoteEditorProps) {
-  const [ notebookOptions, setNotebookOptions ] = useState<NotebookOptions[] | null>(null)
+function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: NoteEditorProps & RouteComponentProps<MatchProps>) {
   const [ notebookData, setNotebookData ] = useState<NoteDataObject[] | null>(null)
-  const [ currentNotebook, setCurrentNotebook ] = useState(match.params.notebook_id ? { value: match.params.notebook_id, label: 'Select notebook...' } : null)
+  const [ currentNotebook, setCurrentNotebook ] = useState<NotebookOption | null>(null)
   const { renderCount, setRenderCount, user } = useContext(UserContext)
   
   const renderElement = useCallback(props => <Element {...props} />, [])
@@ -62,11 +61,11 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
       clearContent(_isMounted, editor, setContent)
       if (notebookData && notebookData.length > 0) history.push(`/notebooks/${match.params.notebook_id}/`)
       // else...
-      setRenderCount!(renderCount! + 1)
+      if (renderCount && setRenderCount) setRenderCount(renderCount + 1)
     } else {
       clearTitle(_isMounted, titleBar, setTitle)
       clearContent(_isMounted, editor, setContent)
-      setRenderCount!(renderCount! + 1)
+      if (renderCount && setRenderCount) setRenderCount(renderCount + 1)
     }
   }, [ match, title, content, currentNotebook ])
   
@@ -109,6 +108,9 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
       }
       
       setNotebookData(noteData)
+      setCurrentNotebook(
+        noteData.filter(notebook => notebook.value === match.params.notebook_id)[0]
+      )
     } catch (err) {
       if (axios.isCancel(err)) {
         console.log(`Error: ${err.message}`)
@@ -116,70 +118,54 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
     }
   }
 
-  async function getNotebookOptions() {
-    try {
-      const response = await axiosInstance.get(
-        `/api/notebooks/`, {
-          cancelToken: signal.token,
-        }
-      )
-      
-      const notebookList: NotebookData[] = response.data
-      let options = []
-
-      for (let notebook of notebookList) {
-        options.push(
-          {
-            label: notebook.name,
-            value: notebook.notebook_id,
-          }
-        )
-      }
-  
-      if (_isMounted.current) setNotebookOptions(options)
-    } catch(err) {
-      if (axios.isCancel(err)) {
-        console.log(`Error: ${err.message}`)
-      }
-    }
-  }
-
-  const saveNote = useCallback(() => {
+  const saveNote = useCallback(async () => {
     const editorContent: Node = { children: content }
+    const destinationNotebook = currentNotebook ? currentNotebook.value : match.params.notebook_id
     
     if (match.params.note_id) {
       axiosInstance.put(
         `/api/notes/${match.params.note_id}/`,
         {
           note_id: match.params.note_id,
-          notebook: match.params.notebook_id,
+          notebook: destinationNotebook,
           title,
           content: serialize(editorContent),
           user,
         }
       )
-      setRenderCount!(renderCount! + 1)
+      if (renderCount && setRenderCount) setRenderCount(renderCount + 1)
+    } else if (match.params.notebook_id) {
+      axiosInstance.post(
+        `/api/notes/`,
+        {
+          title,
+          content: serialize(editorContent),
+          notebook: destinationNotebook,
+          user,
+        }
+      ).then(response => {
+        history.push(`/notebooks/${destinationNotebook}/notes/${response.data.note_id}`)
+        if (renderCount && setRenderCount) setRenderCount(renderCount + 1)
+      })
     } else {
       axiosInstance.post(
         `/api/notes/`,
         {
           title,
           content: serialize(editorContent),
-          notebook: currentNotebook?.value,
+          notebook: destinationNotebook,
           user,
         }
       )
 
       if (currentNotebook) history.push(`/notebooks/${currentNotebook.value}`)
-      setRenderCount!(renderCount! + 1)
+      if (renderCount && setRenderCount) setRenderCount(renderCount + 1)
     }
   }, [ match, title, content, currentNotebook ])
   
   useEffect(() => {
     _isMounted.current = true
-
     getNote()
-    getNotebookOptions()
     if (match.params.notebook_id) getCurrentNotebook()
 
     return () => {
@@ -204,9 +190,8 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
         <BlockButton format='block-quote' icon='format_quote' title='Block Quote' />
         <BlockButton format='bulleted-list' icon='format_list_bulleted' title='Bulleted List' />
         <BlockButton format='numbered-list' icon='format_list_numbered' title='Numbered List' />
-        <SelectNotebook
+        <ChangeNotebook
           currentNotebook={currentNotebook}
-          notebookOptions={notebookOptions}
           setCurrentNotebook={setCurrentNotebook}
         />
         <SaveButton saveNote={saveNote} />

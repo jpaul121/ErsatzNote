@@ -5,7 +5,6 @@ import React, { PropsWithChildren, forwardRef, useEffect, useRef, useState } fro
 import { css, cx } from '@emotion/css'
 
 import { ReactEditor } from 'slate-react'
-import Select from 'react-select'
 import { useSlate } from 'slate-react'
 
 const LIST_TYPES = [ 'numbered-list', 'bulleted-list' ]
@@ -283,26 +282,6 @@ export interface NotebookData {
   notes: Array<string | null>,
   date_modified: string,
   date_created: string,
-}
-
-export function SelectNotebook({ currentNotebook, notebookOptions, setCurrentNotebook }) {
-  const customStyles = {
-    control: base => ({
-      ...base,
-      width: 300,
-      minWidth: 300,
-    })
-  }
-
-  return (
-    <Select
-      options={notebookOptions}
-      value={currentNotebook}
-      onChange={option => setCurrentNotebook(option)}
-      placeholder='Select Notebook...'
-      styles={customStyles}
-    />
-  );
 }
 
 export function useDetectOutsideClick(el, initialState) {

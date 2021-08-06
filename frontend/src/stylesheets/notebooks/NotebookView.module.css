@@ -48,7 +48,7 @@
 
 .note-list {
   box-sizing: border-box;
-  overflow: hidden auto;
+  overflow: scroll;
   width: 362px;
 }
 
