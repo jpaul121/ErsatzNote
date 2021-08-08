@@ -107,6 +107,7 @@
   color: #333333;
   flex-basis: auto;
   flex-grow: 1;
+  white-space: pre-wrap;
 }
 
 .note-list li h4 {
