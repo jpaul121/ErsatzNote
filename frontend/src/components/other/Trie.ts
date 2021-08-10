@@ -3,25 +3,33 @@ import TrieNode from './TrieNode'
 const ROOT_CHARACTER = '*'
 
 class Trie {
-  public root: TrieNode
+  private root: TrieNode
   
   constructor() {
     this.root = new TrieNode(ROOT_CHARACTER, false)
   }
 
-  addWord(word: string): Trie {
+  public addWord(word: string): Trie {
     const characters: Array<string> = Array.from(word)
     let currentNode = this.root
 
     for (const [ index, character ] of characters.entries()) {
-      const isCompleteWord = index === characters.length - 1
+      const isCompleteWord = index === (characters.length - 1)
       currentNode = currentNode.addChild(character, isCompleteWord)
     }
 
     return this;
   }
 
-  deleteWord(word: string): Trie | void {
+  public addWords(words: Set<string>): Trie {
+    for (const word of words) {
+      this.addWord(word)
+    }
+
+    return this;
+  }
+
+  public deleteWord(word: string): Trie | void {
     function depthFirstDelete(currentNode: TrieNode, index=0) {
       if (index >= word.length) return;
       
@@ -42,13 +50,13 @@ class Trie {
     return this;
   }
 
-  doesWordExist(word: string): boolean {
+  public doesWordExist(word: string): boolean {
     const lastCharacter = this.getLastCharacterNode(word)
 
     return !!lastCharacter && lastCharacter.isCompleteWord;
   }
 
-  getLastCharacterNode(word: string): TrieNode | null {
+  public getLastCharacterNode(word: string): TrieNode | null {
     const characters = Array.from(word)
     let currentNode = this.root
 
@@ -60,11 +68,17 @@ class Trie {
     return currentNode;
   }
 
-  suggestNextCharacters(word: string): Array<string> | null {
+  public includesPossibleMatch(word: string): boolean {
+    // Returns true if the last character in the given
+    // search term completes a word or if it has any children
     const lastCharacter = this.getLastCharacterNode(word)
+    if (!lastCharacter) return false;
+    return (lastCharacter.isCompleteWord || !!(Object.keys(lastCharacter.children).length));
+  }
 
+  public suggestNextCharacters(word: string): Array<string> | null {
+    const lastCharacter = this.getLastCharacterNode(word)
     if (!lastCharacter) return null;
-
     return lastCharacter.suggestChildren();
   }
 }

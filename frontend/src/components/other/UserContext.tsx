@@ -1,15 +1,19 @@
 import React, { createContext } from 'react'
 
 interface ErsatzNoteContext {
-  user: string | null,
-  setUser: React.Dispatch<React.SetStateAction<string | null>> | null,
   isLoadingUser: boolean,
   renderCount?: number,
   setRenderCount?: React.Dispatch<React.SetStateAction<number>>,
+  setSearchQuery: React.Dispatch<React.SetStateAction<string>>,
+  setUser: React.Dispatch<React.SetStateAction<string | null>> | null,
+  searchQuery: string,
+  user: string | null,
 }
 
 const initialValue: ErsatzNoteContext = {
   user: null,
+  searchQuery: '',
+  setSearchQuery: () => {},
   setUser: null,
   isLoadingUser: false,
 }

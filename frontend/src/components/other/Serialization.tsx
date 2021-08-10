@@ -6,7 +6,7 @@ import React from 'react'
 import escapeHtml from 'escape-html'
 
 export interface NoteDataObject {
-  note_id?: string,
+  note_id: string,
   title: Node[] | string,
   content: string,
   date_created?: string,
