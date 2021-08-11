@@ -68,6 +68,8 @@ module.exports = {
     }),
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'development',
+      GUEST_EMAIL: 'guest_user@ersatznote.com',
+      GUEST_EMAIL: 'loremipsum',
     }),
   ],
 }

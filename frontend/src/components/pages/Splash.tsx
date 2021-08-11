@@ -5,7 +5,8 @@ import { css, cx } from '@emotion/css'
 import React from 'react'
 import { axiosInstance } from '../../axiosAPI'
 import preview from '../../../src/preview.png'
-import styles from '../../stylesheets/other/Splash.module.css'
+import process from 'process'
+import styles from '../../stylesheets/pages/Splash.module.css'
 import { useHistory } from 'react-router-dom'
 
 function Splash() {
@@ -15,10 +16,13 @@ function Splash() {
     try {
       const response = await axiosInstance.post(
         '/auth/token/obtain/', {
-          email: 'guest_user@ersatznote.com',
-          password: 'loremipsum',
+          email: process.env.GUEST_EMAIL,
+          password: process.env.GUEST_PASSWORD,
         }
       )
+
+      console.log('email: ', process.env.GUEST_EMAIL)
+      console.log('password: ', process.env.GUEST_PASSWORD)
 
       axiosInstance.defaults.headers['Authorization'] = `JWT ${response.data.access}`
       localStorage.setItem('access_token', response.data.access)

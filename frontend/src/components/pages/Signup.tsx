@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import { axiosInstance } from '../../axiosAPI'
-import styles from '../../stylesheets/authentication/Auth.module.css'
+import styles from '../../stylesheets/pages/Auth.module.css'
 import { useHistory } from 'react-router-dom'
 
 function Signup() {

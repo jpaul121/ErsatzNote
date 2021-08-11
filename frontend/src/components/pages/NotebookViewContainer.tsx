@@ -5,7 +5,7 @@ import NoteEditorContainer, { NoteEditorSize } from '../notes/NoteEditorContaine
 import NotePreview from '../notes/NotePreview'
 import React from 'react'
 import Sidebar from '../sidebar/Sidebar'
-import styles from '../../stylesheets/notebooks/NotebookViewContainer.module.css'
+import styles from '../../stylesheets/pages/NotebookViewContainer.module.css'
 
 function NotebookViewContainer() {
   return (
