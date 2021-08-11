@@ -17,6 +17,7 @@
   align-self: stretch;
   margin-bottom: .3vh !important;
   transform: translateX(.5vh);
+  min-height: 33px;
 }
 
 .search-bar:focus {

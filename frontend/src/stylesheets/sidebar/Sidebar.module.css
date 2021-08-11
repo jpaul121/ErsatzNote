@@ -51,6 +51,7 @@
   vertical-align: middle;
   width: 90%;
   box-sizing: border-box;
+  min-height: 41.34px;
 }
 
 .new-note-button:hover {
@@ -90,6 +91,7 @@
   padding-left: 2.2em;
   align-items: center;
   height: 5vh;
+  min-height: 41.34px;
 }
 
 .fa, .fas {

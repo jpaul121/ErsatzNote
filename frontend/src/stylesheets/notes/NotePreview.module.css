@@ -29,6 +29,7 @@
   border-left: none;
   border-right: none;
   align-items: flex-start;
+  min-height: 165.39px;
 }
 
 .notebook-title {
@@ -80,7 +81,8 @@
   display: flex;
   flex-direction: column;
   justify-items: flex-start;
-  min-height: 15vh;
+  min-height: 125.05px;
+  height: 15vh;
 }
 
 .note-list li:hover {
