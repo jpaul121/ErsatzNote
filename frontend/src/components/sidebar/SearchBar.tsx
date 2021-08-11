@@ -23,7 +23,7 @@ function SearchBar() {
           value={searchQuery}
         />
         <span>
-          <button className={styles['search-btn']} type='submit'>
+          <button className={styles['search-btn']} type='submit' onClick={e => e.preventDefault()}>
             <i className={'fas fa-search'}></i>
           </button>
         </span>
