@@ -33,6 +33,17 @@ ACCESS_CONTROL_RESPONSE_HEADERS = {
 
 REACT_APP_API_ENDPOINT = 'http://localhost:8000'
 
+GUEST_USER_CREDENTIALS = {
+    'EMAIL': os.environ.get('GUEST_EMAIL'),
+    'PASSWORD': os.environ.get('GUEST_PASSWORD'),
+}
+
+COMPILE_TIME_SETTING = {
+    'NODE_ENV': os.environ.get('NODE_ENV'),
+}
+
+PORT = os.environ.get('PORT')
+
 
 
 # Static files (CSS, JavaScript, Images)
@@ -50,7 +61,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEBUG = True
 
-if os.environ.get('NODE_ENV'):
+if os.environ.get('NODE_ENV') == 'production':
     DEBUG = False
 
     REACT_APP_API_ENDPOINT = 'https://ersatznote.com/'
@@ -74,6 +85,15 @@ if os.environ.get('NODE_ENV'):
         'Access-Control-Allow-Methods': 'GET, PUT, PATCH, DELETE, POST',
         'Vary': 'Origin',
     }
+
+    credentials = subprocess.check_output([
+        '/bin/bash',
+        '-c',
+        'heroku config:get DATABASE_URL -a ersatznote',
+    ], shell=True).decode('utf-8')
+
+    DATABASES['default'] = dj_database_url.config(default=credentials, conn_max_age=600)
+
 
 
 # Application definition
@@ -139,15 +159,6 @@ DATABASES = {
         'PORT': os.environ.get('DB_PORT'),
     }
 }
-
-if os.environ.get('NODE_ENV'):
-    credentials = subprocess.check_output([
-        '/bin/bash',
-        '-c',
-        'heroku config:get DATABASE_URL -a ersatznote',
-    ], shell=True).decode('utf-8')
-
-    DATABASES['default'] = dj_database_url.config(default=credentials, conn_max_age=600)
 
 
 

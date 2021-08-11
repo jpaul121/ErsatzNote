@@ -12,6 +12,8 @@
   <!-- React goes here. -->
 </div>
 </body>
-<!-- Make sure you're calling the webpack bundle below. -->
+{{ COMPILE_TIME_SETTING|json_script:"compileTimeSetting" }}
+{{ GUEST_USER_CREDENTIALS|json_script:"guestUserCredentials" }}
+{{ PORT|json_script:"port" }}
 <script src='{% static "frontend/index.js" %}'></script>
 </html>

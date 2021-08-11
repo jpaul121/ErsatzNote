@@ -66,8 +66,5 @@ module.exports = {
       process: 'process/browser',
       Buffer: ['buffer', 'Buffer'],
     }),
-    new webpack.EnvironmentPlugin({
-      NODE_ENV: 'production',
-    }),
   ]
 }

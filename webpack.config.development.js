@@ -66,10 +66,5 @@ module.exports = {
       process: 'process/browser',
       Buffer: ['buffer', 'Buffer']
     }),
-    new webpack.EnvironmentPlugin({
-      NODE_ENV: 'development',
-      GUEST_EMAIL: 'guest_user@ersatznote.com',
-      GUEST_EMAIL: 'loremipsum',
-    }),
   ],
 }
