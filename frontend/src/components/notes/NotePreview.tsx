@@ -51,62 +51,80 @@ function NotePreview(props: RouteComponentProps<{ notebook_id?: string, note_id?
     return new Set(wordList);
   }
   
-  async function getNoteData(): Promise<void> {
+  async function getAllNotes(): Promise<Array<NoteDataObject> | undefined> {
     try {
       let noteData: Array<NoteDataObject> = []
+      
+      const response = await axiosInstance.get(
+        `/api/notes/`, {
+          cancelToken: signal.token,
+        }
+      )
 
-      if (props.match.params.notebook_id) {
-        const response = await axiosInstance.get(
-          `/api/notebooks/${notebookID}/`, {
+      for (const note of response.data) {
+        const noteObject = await axiosInstance.get(
+          `/api/notes/${note.note_id}`, {
             cancelToken: signal.token,
           }
         )
-        
-        if (_isMounted.current) setNotebookName(response.data.name)
-        
-        const noteIDs = response.data.notes
-        for (let noteID of noteIDs) {
-          const noteObject = await axiosInstance.get(
-            `/api/notes/${noteID}/`, {
-              cancelToken: signal.token,
-            }
-          )
-          noteData.push(noteObject.data)
-        }
-      } else {
-        const response = await axiosInstance.get(
-          `/api/notes/`, {
-            cancelToken: signal.token,
-          }
-        )
-
-        for (const note of response.data) {
-          const noteObject = await axiosInstance.get(
-            `/api/notes/${note.note_id}`, {
-              cancelToken: signal.token,
-            }
-          )
-          noteData.push(noteObject.data)
-        }
+        noteData.push(noteObject.data)
       }
 
-      let processedNotes: NotePreviewData = {}
-      for (const note of noteData) {
-        const tokens = await generateTokens(note)
-        const noteTrie = new Trie().addWords(tokens)
-        processedNotes[note.note_id] = {
-          note,
-          trie: noteTrie,
-        }
-      }
-
-      if (_isMounted.current) setNotes(processedNotes)
-      if (_isMounted.current) setLoadingStatus(false)
+      return noteData;
     } catch (err) {
       if (axios.isCancel(err)) {
         console.log(`Error: ${err.message}`)
       }
     }
+  }
+  
+  async function getNotesFromNotebook(): Promise<Array<NoteDataObject> | undefined> {
+    try {
+      let noteData: Array<NoteDataObject> = []
+
+      const response = await axiosInstance.get(
+        `/api/notebooks/${notebookID}/`, {
+          cancelToken: signal.token,
+        }
+      )
+      
+      if (_isMounted.current) setNotebookName(response.data.name)
+        
+      const noteIDs = response.data.notes
+      for (let noteID of noteIDs) {
+        const noteObject = await axiosInstance.get(
+          `/api/notes/${noteID}/`, {
+            cancelToken: signal.token,
+          }
+        )
+        noteData.push(noteObject.data)
+      }
+
+      return noteData;
+    } catch (err) {
+      if (axios.isCancel(err)) {
+        console.log(`Error: ${err.message}`)
+      }
+    }
+  }
+  
+  async function getNoteData(): Promise<void> {
+    const noteData = props.match.params.notebook_id
+      ? await getNotesFromNotebook()
+      : await getAllNotes()
+
+    let processedNotes: NotePreviewData = {}
+    for (const note of noteData!) {
+      const tokens = await generateTokens(note)
+      const noteTrie = new Trie().addWords(tokens)
+      processedNotes[note.note_id] = {
+        note,
+        trie: noteTrie,
+      }
+    }
+
+    if (_isMounted.current) setNotes(processedNotes)
+    if (_isMounted.current) setLoadingStatus(false)
   }
   
   useEffect(() => {
