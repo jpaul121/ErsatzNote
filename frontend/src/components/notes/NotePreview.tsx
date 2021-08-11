@@ -11,7 +11,7 @@ import axios from 'axios'
 import { axiosInstance } from '../../axiosAPI'
 import Trie from '../other/Trie'
 
-import styles from '../../stylesheets/notebooks/NotebookView.module.css'
+import styles from '../../stylesheets/notes/NotePreview.module.css'
 
 interface NotePreviewData {
   [ noteID: string ]: {
@@ -20,10 +20,10 @@ interface NotePreviewData {
   },
 }
 
-function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {  
-  const [ notebookName, setNotebookName ] = useState('')
+function NotePreview(props: RouteComponentProps<{ notebook_id?: string, note_id?: string }>) {  
+  const [ notebookName, setNotebookName ] = useState()
   const [ notes, setNotes ] = useState<NotePreviewData>()
-  const [ filteredNotes, setFilteredNotes ] = useState<Array<NoteDataObject>>()
+  const [ filteredNotes, setFilteredNotes ] = useState<NotePreviewData>()
   const notebookID = props.match.params.notebook_id
   
   const [ isLoading, setLoadingStatus ] = useState(true)
@@ -51,28 +51,45 @@ function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {
     return new Set(wordList);
   }
   
-  async function getNotebookData(): Promise<void> {
+  async function getNoteData(): Promise<void> {
     try {
-      const response = await axiosInstance.get(
-        `/api/notebooks/${notebookID}/`, {
-          cancelToken: signal.token,
-        }
-      )
-      const name = response.data.name
-      const noteIDs = response.data.notes
-      
       let noteData: Array<NoteDataObject> = []
-      for (let noteID of noteIDs) {
-        const noteObject = await axiosInstance.get(
-          `/api/notes/${noteID}/`, {
+
+      if (props.match.params.notebook_id) {
+        const response = await axiosInstance.get(
+          `/api/notebooks/${notebookID}/`, {
             cancelToken: signal.token,
           }
         )
-        noteData.push(noteObject.data)
+        
+        if (_isMounted.current) setNotebookName(response.data.name)
+        
+        const noteIDs = response.data.notes
+        for (let noteID of noteIDs) {
+          const noteObject = await axiosInstance.get(
+            `/api/notes/${noteID}/`, {
+              cancelToken: signal.token,
+            }
+          )
+          noteData.push(noteObject.data)
+        }
+      } else {
+        const response = await axiosInstance.get(
+          `/api/notes/`, {
+            cancelToken: signal.token,
+          }
+        )
+
+        for (const note of response.data) {
+          const noteObject = await axiosInstance.get(
+            `/api/notes/${note.note_id}`, {
+              cancelToken: signal.token,
+            }
+          )
+          noteData.push(noteObject.data)
+        }
       }
-      
-      if (_isMounted.current) setNotebookName(name)
-      
+
       let processedNotes: NotePreviewData = {}
       for (const note of noteData) {
         const tokens = await generateTokens(note)
@@ -94,21 +111,21 @@ function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {
   
   useEffect(() => {
     _isMounted.current = true
-    getNotebookData()
+    getNoteData()
 
     return () => {
       _isMounted.current = false
       signal.cancel('Request is being cancelled.')
     };
-  }, [ notebookID, renderCount ])
+  }, [ props.match.params.note_id, renderCount ])
 
   useEffect(() => {
     // If the user has input a search query, create a filtered group of
     // notes such that only notes that include possible matches will be included
-    if (_isMounted.current && searchQuery && !isLoading) setFilteredNotes(Array.from(
-      Object.values(notes as Object).filter(value => {
+    if (_isMounted.current && searchQuery && !isLoading) setFilteredNotes(Object.fromEntries(
+      Object.entries(notes as Object).filter(item => {
         return searchQuery.toLowerCase().split(/\s+/).every(token => {
-          return value['trie'].includesPossibleMatch(token);
+          return item[1].trie.includesPossibleMatch(token);
         });
       })
     ))
@@ -118,7 +135,7 @@ function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {
     <div className={styles['notebook-view']}>
       <div className={styles['notebook-header']}>
         <h1 className={styles['notebook-title']}>
-          {notebookName}
+          {notebookName ? notebookName : 'All Notes'}
         </h1>
         {
           !isLoading &&
@@ -135,7 +152,14 @@ function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {
           {
             Object.values(((searchQuery && filteredNotes) ? filteredNotes : notes) as Object).map(item => {
               return (
-                <Link key={item['note'].note_id} to={`/notebooks/${notebookID}/notes/${item['note'].note_id}/`}>
+                <Link
+                  key={item['note'].note_id}
+                  to={
+                    props.match.params.notebook_id
+                    ? `/notebooks/${item['note'].notebook}/notes/${item['note'].note_id}/`
+                    : `/all-notes/${item['note'].note_id}/`
+                  }
+                >
                   <Note
                     note_id={item['note'].note_id}
                     title={getTitlePreview(item['note'])}
@@ -152,6 +176,6 @@ function NotebookView(props: RouteComponentProps<{ notebook_id: string }>) {
   );
 }
 
-const finishedNotebookView = withRouter(NotebookView)
+const finishedNotePreview = withRouter(NotePreview)
 
-export default finishedNotebookView
+export default finishedNotePreview

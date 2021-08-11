@@ -24,6 +24,8 @@ urlpatterns = [
     path('notebooks/<slug:notebook_pk>/', include('frontend.urls')),
     path('notebooks/<slug:notebook_pk>/notes/<slug:note_pk>/', include('frontend.urls')),
     path('new-note/', include('frontend.urls')),
+    path('all-notes/', include('frontend.urls')),
+    path('all-notes/<slug:note_pk>/', include('frontend.urls')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -13,7 +13,7 @@ import UserContext from '../other/UserContext'
 import axios from 'axios'
 import { axiosInstance } from '../../axiosAPI'
 import { match } from 'react-router-dom'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { withHistory } from 'slate-history'
 
 export interface MatchProps {
@@ -48,6 +48,7 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
   const editor = editorRef.current
   const signal = axios.CancelToken.source()
   const history = useHistory()
+  const location = useLocation()
   
   const deleteNote = useCallback(() => {
     // If called from an editor that has an existing note, delete
@@ -148,7 +149,7 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
         if (renderCount && setRenderCount) setRenderCount(renderCount + 1)
       })
     } else {
-      axiosInstance.post(
+      const response = await axiosInstance.post(
         `/api/notes/`,
         {
           title,
@@ -158,7 +159,8 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
         }
       )
 
-      if (currentNotebook) history.push(`/notebooks/${currentNotebook.value}`)
+      if (currentNotebook && location.pathname !== '/all-notes') history.push(`/notebooks/${currentNotebook.value}`)
+      if (location.pathname === '/all-notes') history.push(`/all-notes/${response.data.note_id}`)
       if (renderCount && setRenderCount) setRenderCount(renderCount + 1)
     }
   }, [ match, title, content, currentNotebook ])

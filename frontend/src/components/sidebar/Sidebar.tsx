@@ -30,7 +30,16 @@ function Sidebar({ match }: RouteComponentProps<{ notebook_id: string }>) {
         </button>
       </div>
       <div className={styles['navigation']}>
-        <div className={styles['nav-button']}>
+      <div className={styles['nav-button']}>
+          <Link to={`/all-notes`}>
+            <i className={'fas fa-file-alt'}></i>
+            <h3>
+              &nbsp;&nbsp;&nbsp;
+              All Notes
+            </h3>
+          </Link>
+        </div>
+        <div className={styles['nav-button']} style={{ marginTop: '1.1111vh' }}>
           <Link to={`/notebooks`}>
             <i className={'fas fa-book'}></i>
             <h3>

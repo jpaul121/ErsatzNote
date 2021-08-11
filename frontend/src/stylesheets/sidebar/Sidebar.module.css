@@ -65,7 +65,7 @@
   min-height: 5vh;
 }
 
-.navigation:hover {
+.nav-button:hover {
   background-color: #404040;
   color: #e6e6e6;
 }
@@ -79,12 +79,6 @@
   justify-self: start;
 }
 
-/* FontAwesome icons compile to 'svg' tags */
-.navigation h3,
-.navigation svg {
-  padding-top: 1vh;
-}
-
 .new-note-container a {
   text-decoration: none;
   color: inherit;
@@ -95,6 +89,7 @@
   display: flex;
   padding-left: 2.2em;
   align-items: center;
+  height: 5vh;
 }
 
 .fa, .fas {

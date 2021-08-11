@@ -27,6 +27,8 @@ function App() {
           <Route exact path='/' component={Splash} />
           <ProtectedRoute path='/notebooks/:notebook_id/notes/:note_id' component={NotebookViewContainer} />
           <ProtectedRoute path='/notebooks/:notebook_id' component={NotebookViewContainer} />
+          <ProtectedRoute path='/all-notes/:note_id' component={NotebookViewContainer} />
+          <ProtectedRoute path='/all-notes' component={NotebookViewContainer} />
           <ProtectedRoute path='/notebooks' component={NotebookIndexContainer} />
           <ProtectedRoute path='/new-note' component={NewNoteContainer} />
           <Route path='/signup' component={Signup} />
