@@ -1,8 +1,7 @@
-import NoteEditorContainer from './NoteEditorContainer'
-import { NoteEditorSize } from './NoteEditorContainer'
+import NoteEditorContainer, { NoteEditorSize } from '../notes/NoteEditorContainer'
 import React from 'react'
 import Sidebar from '../sidebar/Sidebar'
-import styles from '../../stylesheets/notes/NewNoteContainer.module.css'
+import styles from '../../stylesheets/pages/NewNoteContainer.module.css'
 
 function NewNoteContainer(): JSX.Element {
   return (

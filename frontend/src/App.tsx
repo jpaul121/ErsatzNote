@@ -5,13 +5,13 @@ import {
   Switch,
 } from 'react-router-dom'
 
-import Login from './components/authentication/Login'
-import NewNoteContainer from './components/notes/NewNoteContainer'
-import NotebookIndexContainer from './components/notebooks/NotebookIndexContainer'
-import NotebookViewContainer from './components/notebooks/NotebookViewContainer'
-import ProtectedRoute from './components/other/ProtectedRoute'
-import Signup from './components/authentication/Signup'
-import Splash from './components/other/Splash'
+import Login from './components/pages/Login'
+import NewNoteContainer from './components/pages/NewNoteContainer'
+import NotebookIndexContainer from './components/pages/NotebookIndexContainer'
+import NotebookViewContainer from './components/pages/NotebookViewContainer'
+import ProtectedRoute from './components/authentication/ProtectedRoute'
+import Signup from './components/pages/Signup'
+import Splash from './components/pages/Splash'
 import UserContext from './components/other/UserContext'
 import useGetUser from './components/other/useGetUser'
 

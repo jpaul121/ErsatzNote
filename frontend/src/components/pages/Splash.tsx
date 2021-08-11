@@ -5,8 +5,9 @@ import { css, cx } from '@emotion/css'
 import React from 'react'
 import { axiosInstance } from '../../axiosAPI'
 import preview from '../../../src/preview.png'
-import styles from '../../stylesheets/other/Splash.module.css'
+import styles from '../../stylesheets/pages/Splash.module.css'
 import { useHistory } from 'react-router-dom'
+import process from 'process'
 
 function Splash() {
   const history = useHistory()
@@ -15,8 +16,8 @@ function Splash() {
     try {
       const response = await axiosInstance.post(
         '/auth/token/obtain/', {
-          email: 'guest_user@ersatznote.com',
-          password: 'loremipsum',
+          email: process.env.GUEST_EMAIL,
+          password: process.env.GUEST_PASSWORD,
         }
       )
 

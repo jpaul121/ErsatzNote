@@ -1,7 +1,7 @@
-import NotebookIndex from './NotebookIndex'
+import NotebookIndex from '../notebooks/NotebookIndex'
 import React from 'react'
 import Sidebar from '../sidebar/Sidebar'
-import styles from '../../stylesheets/notebooks/NotebookIndexContainer.module.css'
+import styles from '../../stylesheets/pages/NotebookIndexContainer.module.css'
 
 function NotebookIndexContainer() {
   return (
