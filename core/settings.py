@@ -86,14 +86,6 @@ if os.environ.get('NODE_ENV') == 'production':
         'Vary': 'Origin',
     }
 
-    credentials = subprocess.check_output([
-        '/bin/bash',
-        '-c',
-        'heroku config:get DATABASE_URL -a ersatznote',
-    ], shell=True).decode('utf-8')
-
-    DATABASES['default'] = dj_database_url.config(default=credentials, conn_max_age=600)
-
 
 
 # Application definition
@@ -159,6 +151,15 @@ DATABASES = {
         'PORT': os.environ.get('DB_PORT'),
     }
 }
+
+if os.environ.get('NODE_ENV') == 'production':
+    credentials = subprocess.check_output([
+        '/bin/bash',
+        '-c',
+        'heroku config:get DATABASE_URL -a ersatznote',
+    ], shell=True).decode('utf-8')
+
+    DATABASES['default'] = dj_database_url.config(default=credentials, conn_max_age=600)
 
 
 

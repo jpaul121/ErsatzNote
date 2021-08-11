@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const COMPILE_TIME_SETTING = JSON.parse(document.getElementById('compileTimeSetting')!.textContent!)['NODE_ENV']
-const PORT = JSON.parse(document.getElementById('port')!.textContent!)
+const PORT = Number(document.getElementById('port')!.textContent!)
 
 const BASE_URL = COMPILE_TIME_SETTING === 'production' ? 'https://ersatznote.herokuapp.com' : 'http://localhost:8000'
 const DEFAULT_HTTPS_PORT = 443
@@ -20,7 +20,7 @@ export const axiosInstance = axios.create({
   proxy: {
     protocol: COMPILE_TIME_SETTING === 'production' ? 'https' : 'http',
     host: BASE_URL,
-    port: Number(PORT) || DEFAULT_HTTPS_PORT,
+    port: PORT || DEFAULT_HTTPS_PORT,
   }
 })
 

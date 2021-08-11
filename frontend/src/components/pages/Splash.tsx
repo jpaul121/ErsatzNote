@@ -8,7 +8,9 @@ import preview from '../../../src/preview.png'
 import styles from '../../stylesheets/pages/Splash.module.css'
 import { useHistory } from 'react-router-dom'
 
-const GUEST_USER_CREDENTIALS = JSON.parse(document.getElementById('compileTimeSetting')!.textContent!)
+const GUEST_USER_CREDENTIALS = JSON.parse(
+  document.getElementById('guestUserCredentials')!.textContent!
+)
 
 function Splash() {
   const history = useHistory()
