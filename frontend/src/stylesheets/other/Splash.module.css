@@ -4,6 +4,7 @@ body, html {
   box-sizing: border-box;
   background-image: url('../../background-img.png') !important;
   background-color: #04a82e !important;
+  height: 100vh;
 }
 
 div {
@@ -43,7 +44,7 @@ button {
 .home {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
 }
 
 .home a {
@@ -109,9 +110,10 @@ button {
 .center {
   height: 60vh;
   align-content: center;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   font-family: sans-serif;
+  margin-top: 5vh;
 }
 
 .center-img {
@@ -167,7 +169,7 @@ button {
   font-family: sans-serif;
   color: grey;
   font-size: 14px;
-  padding-top: 24px;
+  padding-top: 35px;
   padding-bottom: 5px;
   padding-left: 20px;
   padding-right: 20px;
@@ -176,7 +178,7 @@ button {
   border-top: solid 1px grey;
   text-align: center;
   align-content: center;
-  min-height: 34px;
+  min-height: 85px;
   position: absolute;
   left: 0;
   bottom: 0;
@@ -185,4 +187,18 @@ button {
 
 .footer-paragraph {
   margin-top: 0px;
+}
+
+.footer-container a {
+  text-decoration: none;
+  padding: 8px 36px 0px;
+  font-size: 14px;
+  border-radius: 3px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  display: inline-block;
+}
+
+.footer-container svg {
+  color: black;
 }

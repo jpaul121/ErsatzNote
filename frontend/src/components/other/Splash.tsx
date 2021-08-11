@@ -1,3 +1,5 @@
+import '@fortawesome/fontawesome-free/js/all.js'
+
 import { css, cx } from '@emotion/css'
 
 import React from 'react'
@@ -36,7 +38,7 @@ function Splash() {
             'grid-container',
             css`
               display: flex;
-              height: 127px;
+              height: 117px;
               align-items: center;
               justify-content: space-between;
               grid-template-columns: auto auto;
@@ -51,6 +53,7 @@ function Splash() {
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
+                height: 67px;
               `
             )}>
               <div className={cx(
@@ -96,6 +99,7 @@ function Splash() {
                   display: flex;
                   flex-direction: row;
                   justify-content: center;
+                  align-items: center;
                 `
               )}>
                 <a href='mailto:jpaulvalen@gmail.com'>
@@ -152,7 +156,7 @@ function Splash() {
               </li>
               <li>
                 <p>
-                  Take notes anywhere. Find information faster. Share notes with anyone. Meeting notes, web pages, projects, to-do lists—with this shameless copy of EverNote, you can keep track of it all.
+                  Take notes anywhere. Find information faster. Share notes with anyone. Meeting notes, web pages, projects, to-do lists—with ErsatzNote as your productivity app, you can keep track of it all.
                 </p>
               </li>
               <button className={styles['center-button']}>
@@ -162,10 +166,18 @@ function Splash() {
             <img src={preview} />
           </div>
         </div>
-      </div>
-      <div className={styles['footer-container']}>
-        <div className={styles['footer-cw']}>
-          <p className={styles['footer-paragraph']}>© 2021 Jean-Paul Valencia. All allusions to EverNote made under fair use.</p>
+        <div className={styles['footer-container']}>
+          <div className={styles['footer-cw']}>
+            <p className={styles['footer-paragraph']}>© 2021 Jean-Paul Valencia. All rights reserved.</p>
+          </div>
+          <div className={styles['footer-icons']}>
+            <a href='https://github.com/jpaul121'>
+              <i className='fab fa-github fa-2x'></i>
+            </a>
+            <a href='https://linkedin.com/in/jpaulvalen'>
+              <i className='fab fa-linkedin fa-2x'></i>
+            </a>
+          </div>
         </div>
       </div>
     </div>
