@@ -13,7 +13,6 @@ function ChangeNotebook({ currentNotebook, match, setCurrentNotebook }: {
   setCurrentNotebook: React.Dispatch<React.SetStateAction<NotebookOption | null>>,
 } & RouteComponentProps<{ note_id?: string, notebook_id?: string }>) {
   const [ notebookOptions, setNotebookOptions ] = useState<NotebookOption[] | null>(null)
-  const { renderCount, setRenderCount } = useContext(UserContext)
   
   const _isMounted = useRef(false)
   const signal = axios.CancelToken.source()
@@ -51,7 +50,6 @@ function ChangeNotebook({ currentNotebook, match, setCurrentNotebook }: {
       if (_isMounted.current && notebookOptions) setCurrentNotebook(
         notebookOptions[notebookOptions.findIndex(notebook => notebook.value === match.params.notebook_id)]
       )
-      if (renderCount && setRenderCount) setRenderCount(renderCount + 1)
       
       return options;
     } catch(err) {

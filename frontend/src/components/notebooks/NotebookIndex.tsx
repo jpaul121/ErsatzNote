@@ -6,23 +6,28 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { css, cx } from '@emotion/css'
 
 import Modal from '../other/Modal'
-import NotebookData from '../notes/BaseComponents'
+import { NotebookData } from '../notes/BaseComponents'
 import NotebookIndexItem from './NotebookIndexItem'
 import UserContext from '../other/UserContext'
 import axios from 'axios'
 import { axiosInstance } from '../../axiosAPI'
 import styles from '../../stylesheets/notebooks/NotebookIndex.module.css'
 
+enum ModalStatus {
+  HIDDEN,
+  DELETE_NOTEBOOK,
+  EDIT_NOTEBOOK,
+  NEW_NOTEBOOK,
+}
+
 function NotebookIndex() {
   const [ newNotebookName, setNewNotebookName ] = useState('')
-  const [ notebooks, setNotebooks ] = useState(null)
-  const [ newNotebookModal, setNewNotebookModal ] = useState(false)
+  const [ notebooks, setNotebooks ] = useState<Array<NotebookData>>()
   const [ indexLoading, setIndexLoading ] = useState(true)
-  const [ deleteNotebookModal, setDeleteNotebookModal ] = useState(false)
-  const [ editNotebookModal, setEditNotebookModal ] = useState(false)
+  const [ currentModal, setCurrentModal ] = useState<ModalStatus>(ModalStatus.HIDDEN)
   const [ toAlter, setToAlter ] = useState('')
   
-  const { user, renderCount, setRenderCount } = useContext(UserContext)
+  const { user } = useContext(UserContext)
 
   const _isMounted = useRef(false)
   const signal = axios.CancelToken.source()
@@ -38,7 +43,6 @@ function NotebookIndex() {
       }
     )
     toggleNewNotebookModal()
-    if (renderCount && setRenderCount) setRenderCount(renderCount + 1)
   }
 
   function deleteNotebook(e, id) {
@@ -49,7 +53,6 @@ function NotebookIndex() {
       }
     )
     toggleDeleteNotebookModal()
-    if (renderCount && setRenderCount) setRenderCount(renderCount + 1)
   }
 
   function editNotebookName(e, id) {
@@ -62,31 +65,45 @@ function NotebookIndex() {
       }
     )
     toggleEditNotebookModal()
-    if (renderCount && setRenderCount) setRenderCount(renderCount + 1)
   }
 
   function toggleNewNotebookModal() {
-    if (_isMounted.current) setNewNotebookModal(!newNotebookModal)
+    if (_isMounted.current) setCurrentModal(
+      currentModal === ModalStatus.HIDDEN
+      ? ModalStatus.NEW_NOTEBOOK
+      : ModalStatus.HIDDEN
+    )
   }
 
   function toggleEditNotebookModal(id='') {
     if (_isMounted.current && id !== '') setToAlter(id)
-    if (_isMounted.current) setEditNotebookModal(!editNotebookModal)
+    if (_isMounted.current) setCurrentModal(
+      currentModal === ModalStatus.HIDDEN
+      ? ModalStatus.EDIT_NOTEBOOK
+      : ModalStatus.HIDDEN
+    )
   }
   
   function toggleDeleteNotebookModal(id='') {
     if (_isMounted.current && id !== '') setToAlter(id)
-    if (_isMounted.current) setDeleteNotebookModal(!deleteNotebookModal)
+    if (_isMounted.current) setCurrentModal(
+      currentModal === ModalStatus.HIDDEN
+      ? ModalStatus.DELETE_NOTEBOOK
+      : ModalStatus.HIDDEN
+    )
   }
 
-  async function getNotebooks() {
+  async function getNotebooks(): void {
     try {
       const response = await axiosInstance.get(
         `/api/notebooks/`, {
           cancelToken: signal.token,
         }
       )
-      return response.data as NotebookData;
+      if (_isMounted.current) {
+        setNotebooks(response.data as NotebookData)
+        setIndexLoading(false)
+      }
     } catch(err) {
       if (axios.isCancel(err)) {
         console.log('Error: ', err.message)
@@ -94,36 +111,15 @@ function NotebookIndex() {
     }
   }
 
-  async function renderNotebookItems() {
-    const notebookList = await getNotebooks()
-    
-    if (_isMounted.current && notebookList) {
-      setIndexLoading(false)
-      setNotebooks(notebookList.map(item => {
-        return (
-          <NotebookIndexItem
-            key={item.notebook_id}
-            notebookID={item.notebook_id}
-            name={item.name}
-            dateModified={item.date_modified}
-            dateCreated={item.date_created}
-            toggleDeleteNotebookModal={toggleDeleteNotebookModal}
-            toggleEditNotebookModal={toggleEditNotebookModal}
-          />
-        );
-      }))
-    }
-  }
-
   useEffect(() => {
     _isMounted.current = true
-    if (_isMounted.current) renderNotebookItems()
+    if (_isMounted.current) getNotebooks()
 
     return () => {
       _isMounted.current = false
       signal.cancel('Request is being cancelled.')
     }
-  }, [ renderCount ])
+  }, [ notebooks?.length ])
 
   return !indexLoading as ReactElement<any> && (
     <div className={styles['notebook-index']}>
@@ -149,34 +145,48 @@ function NotebookIndex() {
             </tr>
           </thead>
           <tbody className={styles['table-body']}>
-            {notebooks}
+            {
+              !indexLoading && notebooks.map(item => {
+                return (
+                  <NotebookIndexItem
+                    key={item.notebook_id}
+                    notebookID={item.notebook_id}
+                    name={item.name}
+                    dateModified={item.date_modified}
+                    dateCreated={item.date_created}
+                    toggleDeleteNotebookModal={toggleDeleteNotebookModal}
+                    toggleEditNotebookModal={toggleEditNotebookModal}
+                  />
+                );
+              })
+            }
           </tbody>
         </table>
       </div>
       {
         (function renderModals() {
-          switch (true) {
-          case (newNotebookModal && !editNotebookModal && !deleteNotebookModal):
+          switch (currentModal) {
+          case (ModalStatus.NEW_NOTEBOOK):
             return <Modal 
               changeValue={setNewNotebookName}
               setValue={createNewNotebook}
               toggleModal={toggleNewNotebookModal}
             />;
-          case (!newNotebookModal && editNotebookModal && !deleteNotebookModal):
+          case (ModalStatus.EDIT_NOTEBOOK):
             return <Modal 
               changeValue={setNewNotebookName}
               setValue={editNotebookName}
               toAlter={toAlter}
               toggleModal={toggleEditNotebookModal}
             />;
-          case (!newNotebookModal && !editNotebookModal && deleteNotebookModal):
+          case (ModalStatus.DELETE_NOTEBOOK):
             return <Modal 
               setValue={deleteNotebook}
               toAlter={toAlter}
               toggleModal={toggleDeleteNotebookModal}
             />;
           default:
-            break;
+            return null;
         }
       })()
     }

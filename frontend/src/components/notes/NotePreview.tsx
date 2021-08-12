@@ -6,11 +6,10 @@ import { RouteComponentProps, withRouter } from 'react-router'
 
 import { Link } from 'react-router-dom'
 import Note from '../notes/Note'
+import Trie from '../other/Trie'
 import UserContext from '../other/UserContext'
 import axios from 'axios'
 import { axiosInstance } from '../../axiosAPI'
-import Trie from '../other/Trie'
-
 import styles from '../../stylesheets/notes/NotePreview.module.css'
 
 interface NotePreviewData {
@@ -27,7 +26,7 @@ function NotePreview(props: RouteComponentProps<{ notebook_id?: string, note_id?
   const notebookID = props.match.params.notebook_id
   
   const [ isLoading, setLoadingStatus ] = useState(true)
-  const { renderCount, searchQuery } = useContext(UserContext)
+  const { searchQuery } = useContext(UserContext)
 
   const _isMounted = useRef(false)
 
@@ -135,7 +134,7 @@ function NotePreview(props: RouteComponentProps<{ notebook_id?: string, note_id?
       _isMounted.current = false
       signal.cancel('Request is being cancelled.')
     };
-  }, [ props.match.params.note_id, renderCount ])
+  }, [ props.match.params.note_id ])
 
   useEffect(() => {
     // If the user has input a search query, create a filtered group of

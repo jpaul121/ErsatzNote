@@ -7,13 +7,13 @@ import { Editor, createEditor } from 'slate'
 import { NoteDataObject, clearContent, clearTitle, deserialize, serialize } from '../other/Serialization'
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router'
+import { useHistory, useLocation } from 'react-router-dom'
 
 import ChangeNotebook from './ChangeNotebook'
 import UserContext from '../other/UserContext'
 import axios from 'axios'
 import { axiosInstance } from '../../axiosAPI'
 import { match } from 'react-router-dom'
-import { useHistory, useLocation } from 'react-router-dom'
 import { withHistory } from 'slate-history'
 
 export interface MatchProps {
@@ -37,7 +37,7 @@ export interface NotebookOption {
 function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: NoteEditorProps & RouteComponentProps<MatchProps>) {
   const [ notebookData, setNotebookData ] = useState<NoteDataObject[] | null>(null)
   const [ currentNotebook, setCurrentNotebook ] = useState<NotebookOption | null>(null)
-  const { renderCount, setRenderCount, user } = useContext(UserContext)
+  const { user } = useContext(UserContext)
   
   const renderElement = useCallback(props => <Element {...props} />, [])
   const renderLeaf = useCallback(props => <Leaf {...props} />, [])
@@ -62,11 +62,9 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
       clearContent(_isMounted, editor, setContent)
       if (notebookData && notebookData.length > 0) history.push(`/notebooks/${match.params.notebook_id}/`)
       // else...
-      if (renderCount && setRenderCount) setRenderCount(renderCount + 1)
     } else {
       clearTitle(_isMounted, titleBar, setTitle)
       clearContent(_isMounted, editor, setContent)
-      if (renderCount && setRenderCount) setRenderCount(renderCount + 1)
     }
   }, [ match, title, content, currentNotebook ])
   
@@ -134,7 +132,6 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
           user,
         }
       )
-      if (renderCount && setRenderCount) setRenderCount(renderCount + 1)
     } else if (match.params.notebook_id) {
       axiosInstance.post(
         `/api/notes/`,
@@ -146,7 +143,6 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
         }
       ).then(response => {
         history.push(`/notebooks/${destinationNotebook}/notes/${response.data.note_id}`)
-        if (renderCount && setRenderCount) setRenderCount(renderCount + 1)
       })
     } else {
       const response = await axiosInstance.post(
@@ -161,7 +157,6 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
 
       if (currentNotebook && location.pathname !== '/all-notes') history.push(`/notebooks/${currentNotebook.value}`)
       if (location.pathname === '/all-notes') history.push(`/all-notes/${response.data.note_id}`)
-      if (renderCount && setRenderCount) setRenderCount(renderCount + 1)
     }
   }, [ match, title, content, currentNotebook ])
   

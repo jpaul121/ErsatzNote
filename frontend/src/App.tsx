@@ -17,12 +17,11 @@ import useGetUser from './components/other/useGetUser'
 
 function App() {
   const { user, setUser, isLoadingUser } = useGetUser()
-  const [ renderCount, setRenderCount ] = useState(0)
   const [ searchQuery, setSearchQuery ] = useState<string>('')
   
   return (
     <Router>
-      <UserContext.Provider value={{ user, setUser, isLoadingUser, renderCount, setRenderCount, searchQuery, setSearchQuery }}>
+      <UserContext.Provider value={{ isLoadingUser, searchQuery, setSearchQuery, user, setUser }}>
         <Switch>
           <Route exact path='/' component={Splash} />
           <ProtectedRoute path='/notebooks/:notebook_id/notes/:note_id' component={NotebookViewContainer} />

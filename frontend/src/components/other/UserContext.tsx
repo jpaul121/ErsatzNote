@@ -2,8 +2,6 @@ import React, { createContext } from 'react'
 
 interface ErsatzNoteContext {
   isLoadingUser: boolean,
-  renderCount?: number,
-  setRenderCount?: React.Dispatch<React.SetStateAction<number>>,
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>,
   setUser: React.Dispatch<React.SetStateAction<string | null>> | null,
   searchQuery: string,
