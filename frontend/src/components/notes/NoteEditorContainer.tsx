@@ -14,16 +14,7 @@ interface MatchProps {
   notebook_id: string,
 }
 
-export enum NoteEditorSize {
-  FullScreen = '65em',
-  Medium = '42em',
-}
-
-interface NoteEditorContainerProps {
-  size: NoteEditorSize,
-}
-
-function NoteEditorContainer({ match, size }: NoteEditorContainerProps & RouteComponentProps<MatchProps>) {
+function NoteEditorContainer({ match }: RouteComponentProps<MatchProps>) {
   const [ title, setTitle ] = useState(emptyValue)
   const [ content, setContent ] = useState<Descendant[] | null>(emptyValue)
 
@@ -52,12 +43,7 @@ function NoteEditorContainer({ match, size }: NoteEditorContainerProps & RouteCo
 
   return (
     <div className={styles['note-editor-container']}>
-      <div
-        className={styles['editor-proper']}
-        style={{
-          width: size,
-        }}
-      >
+      <div className={styles['editor-proper']}>
         <Slate
           editor={titleBar}
           value={title}

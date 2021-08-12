@@ -1,10 +1,10 @@
 import 'regenerator-runtime/runtime.js'
 
+import { Link, useLocation } from 'react-router-dom'
 import { NoteDataObject, getContentPreview, getTitlePreview } from '../other/Serialization'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router'
 
-import { Link } from 'react-router-dom'
 import Note from '../notes/Note'
 import Trie from '../other/Trie'
 import UserContext from '../other/UserContext'
@@ -27,6 +27,7 @@ function NotePreview(props: RouteComponentProps<{ notebook_id?: string, note_id?
   
   const [ isLoading, setLoadingStatus ] = useState(true)
   const { searchQuery } = useContext(UserContext)
+  const location = useLocation()
 
   const _isMounted = useRef(false)
 
@@ -128,13 +129,14 @@ function NotePreview(props: RouteComponentProps<{ notebook_id?: string, note_id?
   
   useEffect(() => {
     _isMounted.current = true
+    if (location.pathname === '/all-notes') setNotebookName(undefined)
     getNoteData()
 
     return () => {
       _isMounted.current = false
       signal.cancel('Request is being cancelled.')
     };
-  }, [ props.match.params.note_id ])
+  }, [ location.pathname, JSON.stringify(notes) ])
 
   useEffect(() => {
     // If the user has input a search query, create a filtered group of

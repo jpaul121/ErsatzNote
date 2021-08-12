@@ -43,6 +43,7 @@ function NotebookIndex() {
       }
     )
     toggleNewNotebookModal()
+    getNotebooks()
   }
 
   function deleteNotebook(e, id) {
@@ -53,6 +54,7 @@ function NotebookIndex() {
       }
     )
     toggleDeleteNotebookModal()
+    getNotebooks()
   }
 
   function editNotebookName(e, id) {
@@ -65,6 +67,7 @@ function NotebookIndex() {
       }
     )
     toggleEditNotebookModal()
+    getNotebooks()
   }
 
   function toggleNewNotebookModal() {
@@ -94,6 +97,8 @@ function NotebookIndex() {
   }
 
   async function getNotebooks(): void {
+    setIndexLoading(true)
+    
     try {
       const response = await axiosInstance.get(
         `/api/notebooks/`, {
@@ -119,7 +124,7 @@ function NotebookIndex() {
       _isMounted.current = false
       signal.cancel('Request is being cancelled.')
     }
-  }, [ notebooks?.length ])
+  }, [ JSON.stringify(notebooks) ])
 
   return !indexLoading as ReactElement<any> && (
     <div className={styles['notebook-index']}>

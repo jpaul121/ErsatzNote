@@ -1,7 +1,6 @@
 // @ts-nocheck
 
-import NoteEditorContainer, { NoteEditorSize } from '../notes/NoteEditorContainer'
-
+import NoteEditorContainer from '../notes/NoteEditorContainer'
 import NotePreview from '../notes/NotePreview'
 import React from 'react'
 import Sidebar from '../sidebar/Sidebar'
@@ -12,7 +11,7 @@ function NotebookViewContainer() {
     <div className={styles['notebook-view-container']}>
       <Sidebar />
       <NotePreview />
-      <NoteEditorContainer size={NoteEditorSize.Medium} />
+      <NoteEditorContainer />
     </div>
   );
 }
