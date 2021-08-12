@@ -4,9 +4,9 @@ import { BlockButton, DeleteButton, Element, Leaf, MarkButton, NotebookData, Sav
 import { Descendant, Node } from 'slate'
 import { Editable, ReactEditor, Slate, withReact } from 'slate-react'
 import { Editor, createEditor } from 'slate'
-import { NoteDataObject, clearContent, clearTitle, deserialize, serialize } from '../other/Serialization'
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router'
+import { clearContent, clearTitle, deserialize, serialize } from '../other/Serialization'
 import { useHistory, useLocation } from 'react-router-dom'
 
 import ChangeNotebook from './ChangeNotebook'
@@ -35,8 +35,8 @@ export interface NotebookOption {
 }
 
 function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: NoteEditorProps & RouteComponentProps<MatchProps>) {
-  const [ notebookData, setNotebookData ] = useState<NoteDataObject[] | null>(null)
-  const [ currentNotebook, setCurrentNotebook ] = useState<NotebookOption | null>(null)
+  const [ notebookOptions, setNotebookOptions ] = useState<Array<NotebookOption>>()
+  const [ currentNotebook, setCurrentNotebook ] = useState<Array<NotebookOption>>()
   const { user } = useContext(UserContext)
   
   const renderElement = useCallback(props => <Element {...props} />, [])
@@ -52,21 +52,19 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
   
   const deleteNote = useCallback(() => {
     // If called from an editor that has an existing note, delete
-    // the note and move on to another one in the current notebook. 
-    // If there aren't any more, edit an empty note in the current notebook.
+    // the note and edit an empty note in the current notebook.
     if (match.params.note_id) {
       axiosInstance.delete(
         `/api/notes/${match.params.note_id}/`
       )
       clearTitle(_isMounted, titleBar, setTitle)
       clearContent(_isMounted, editor, setContent)
-      if (notebookData && notebookData.length > 0) history.push(`/notebooks/${match.params.notebook_id}/`)
-      // else...
+      if (match.params.notebook_id) history.push(`/notebooks/${match.params.notebook_id}/`)
     } else {
       clearTitle(_isMounted, titleBar, setTitle)
       clearContent(_isMounted, editor, setContent)
     }
-  }, [ match, title, content, currentNotebook ])
+  }, [ match.params.note_id, match.params.notebook_id, title, content ])
   
   async function getNote() {
     if (match.params.note_id) {
@@ -88,28 +86,21 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
     } else clearContent(_isMounted, editor, setContent)
   }
 
-  async function getCurrentNotebook(): Promise<void> {
+  // Apparently, I should try this without async first
+  function getNotebookOptions(inputValue: string | undefined, callback: Function): void {
+    if (!inputValue)
+      return callback([]);
+    
     try {
-      const response = await axiosInstance.get(
-        `/api/notebooks/${match.params.notebook_id}/`, {
-          cancelToken: signal.token,
-        }
-      )
-      
-      let noteData = []
-      for (let noteID of response.data.notes) {
-        const noteObject = await axiosInstance.get(
-          `/api/notes/${noteID}/`, {
-            cancelToken: signal.token,
+      axiosInstance.get(`/api/notebooks/`, { cancelToken: signal.token })
+        .then(response => {
+          let newNotebookOptions = []
+          for (const notebook of response.data) {
+            newNotebookOptions.push({ label: notebook.name, value: notebook.notebook_id })
           }
-        )
-        noteData.push(noteObject.data)
-      }
-      
-      setNotebookData(noteData)
-      setCurrentNotebook(
-        noteData.filter(notebook => notebook.value === match.params.notebook_id)[0]
-      )
+          setNotebookOptions(newNotebookOptions)
+          callback(notebookOptions)
+      })
     } catch (err) {
       if (axios.isCancel(err)) {
         console.log(`Error: ${err.message}`)
@@ -119,7 +110,7 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
 
   const saveNote = useCallback(async () => {
     const editorContent: Node = { children: content }
-    const destinationNotebook = currentNotebook ? currentNotebook.value : match.params.notebook_id
+    const destinationNotebook = currentNotebook ? currentNotebook[0].value : match.params.notebook_id
     
     if (match.params.note_id) {
       axiosInstance.put(
@@ -155,15 +146,20 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
         }
       )
 
-      if (currentNotebook && location.pathname !== '/all-notes') history.push(`/notebooks/${currentNotebook.value}`)
+      if (currentNotebook && location.pathname !== '/all-notes') history.push(`/notebooks/${currentNotebook[0].value}`)
       if (location.pathname === '/all-notes') history.push(`/all-notes/${response.data.note_id}`)
     }
   }, [ match, title, content, currentNotebook ])
+
+  function filterNotebookOptions(notebookName: string) {
+    return notebookOptions?.filter(notebook =>
+      notebook.label === notebookName
+    );
+  }
   
   useEffect(() => {
     _isMounted.current = true
     getNote()
-    if (match.params.notebook_id) getCurrentNotebook()
 
     return () => {
       _isMounted.current = false
@@ -189,6 +185,8 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
         <BlockButton format='numbered-list' icon='format_list_numbered' title='Numbered List' />
         <ChangeNotebook
           currentNotebook={currentNotebook}
+          filterNotebookOptions={filterNotebookOptions}
+          getNotebookOptions={getNotebookOptions}
           setCurrentNotebook={setCurrentNotebook}
         />
         <SaveButton saveNote={saveNote} />

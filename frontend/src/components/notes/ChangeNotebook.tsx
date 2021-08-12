@@ -8,15 +8,12 @@ import UserContext from '../other/UserContext'
 import axios from 'axios'
 import { axiosInstance } from '../../axiosAPI'
 
-function ChangeNotebook({ currentNotebook, match, setCurrentNotebook }: {
-  currentNotebook: NotebookOption | null,
-  setCurrentNotebook: React.Dispatch<React.SetStateAction<NotebookOption | null>>,
+function ChangeNotebook({ filterNotebookOptions, getNotebookOptions, match, setCurrentNotebook, currentNotebook }: {
+  currentNotebook: Array<NotebookOption> | undefined,
+  filterNotebookOptions: (newNotebookName: string) => Array<NotebookOption> | undefined,
+  getNotebookOptions: (inputValue: string | undefined, callback: Function) => void,
+  setCurrentNotebook: React.Dispatch<React.SetStateAction<Array<NotebookOption> | undefined>>,
 } & RouteComponentProps<{ note_id?: string, notebook_id?: string }>) {
-  const [ notebookOptions, setNotebookOptions ] = useState<NotebookOption[] | null>(null)
-  
-  const _isMounted = useRef(false)
-  const signal = axios.CancelToken.source()
-
   
   const customStyles = {
     control: (base: any) => ({
@@ -26,56 +23,20 @@ function ChangeNotebook({ currentNotebook, match, setCurrentNotebook }: {
     })
   }
 
-  async function getNotebookOptions() {
-    try {
-      const response = await axiosInstance.get(
-        `/api/notebooks/`, {
-          cancelToken: signal.token,
-        }
-      )
-      
-      const notebookList: NotebookData[] = response.data
-      let options = []
-
-      for (let notebook of notebookList) {
-        options.push(
-          {
-            label: notebook.name,
-            value: notebook.notebook_id,
-          }
-        )
-      }
-  
-      if (_isMounted.current) setNotebookOptions(options)
-      if (_isMounted.current && notebookOptions) setCurrentNotebook(
-        notebookOptions[notebookOptions.findIndex(notebook => notebook.value === match.params.notebook_id)]
-      )
-      
-      return options;
-    } catch(err) {
-      if (axios.isCancel(err)) {
-        console.log(`Error: ${err.message}`)
-      }
-    }
+  function handleChange(newNotebookName: string) {
+    // Set the new value in state, return newNotebookName.
+    // It will then call the loadOptions function with the 
+    // newNotebookName as a parameter. 
+    setCurrentNotebook(filterNotebookOptions(newNotebookName))
+    return newNotebookName;
   }
-
-  useEffect(() => {
-    if (!notebookOptions) getNotebookOptions()
-  }, [ notebookOptions ])
 
   return (
     <AsyncSelect
       // @ts-ignore
-      loadOptions={getNotebookOptions}
-      cacheOptions
       defaultOptions
-      value={currentNotebook}
-      defaultValue={
-        notebookOptions
-        ? notebookOptions[notebookOptions.findIndex(notebook => notebook.value === match.params.notebook_id)]
-        : null
-      }
-      onChange={option => setCurrentNotebook(option)}
+      loadOptions={getNotebookOptions}
+      onInputChange={handleChange}
       placeholder='Select Notebook...'
       styles={customStyles}
     />
