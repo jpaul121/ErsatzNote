@@ -2,9 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router'
 
 import AsyncSelect from 'react-select/async'
-import { NotebookData } from '../notes/BaseComponents'
+import { NotebookData } from '../other/Serialization'
 import { NotebookOption } from './NoteEditor'
-import UserContext from '../other/UserContext'
 import axios from 'axios'
 import { axiosInstance } from '../../axiosAPI'
 
@@ -17,7 +16,6 @@ function ChangeNotebook({ currentNotebook, match, setCurrentNotebook }: {
   const _isMounted = useRef(false)
   const signal = axios.CancelToken.source()
 
-  
   const customStyles = {
     control: (base: any) => ({
       ...base,

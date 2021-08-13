@@ -20,58 +20,49 @@ interface NotePreviewData {
 }
 
 function NotePreview(props: RouteComponentProps<{ notebook_id?: string, note_id?: string }>) {  
-  const [ notebookName, setNotebookName ] = useState()
   const [ notes, setNotes ] = useState<NotePreviewData>()
   const [ filteredNotes, setFilteredNotes ] = useState<NotePreviewData>()
-  const notebookID = props.match.params.notebook_id
-  
+  const [ notebookName, setNotebookName ] = useState()
   const [ isLoading, setLoadingStatus ] = useState(true)
+  
   const { searchQuery } = useContext(AppContext)
   const location = useLocation()
 
   const _isMounted = useRef(false)
 
   const signal = axios.CancelToken.source()
-
-  function displayNoteCount(): string {
-    if (searchQuery && filteredNotes) {
-      if (Object.keys(filteredNotes as Object).length === 1) return `1 result`;
-      return `${Object.keys(filteredNotes as Object).length} results`;
-    } else if (Object.keys(notes as Object).length === 1) return `1 note`;
-    return `${Object.keys(notes as Object).length} notes`;
-  }
   
-  async function generateTokens(note: NoteData): Promise<Set<string>> {
-    // Strip the HTML from a note's content and turn it
-    // into a collection of unique words that can be searched for
-    const strippedTitle = getTitlePreview(note)
-    const strippedContent = note['content'].replace(/(<([^>]+)>)/gi, '')
-    let wordList = strippedTitle.split(/\s+/).concat(strippedContent.split(/\s+/))
+  function generateTokens(note: NoteData): Set<string> {
+    const titleText = getTitlePreview(note)
+    const contentText = note['content']
+      .replace(/(<([^>]+)>)/g, '')
+      .replace(/[!,\.\?]/g, '')
+      .replace('&#39;', '\'')
+    
+    let wordList = titleText.split(/\s+/).concat(contentText.split(/\s+/))
     wordList = wordList.map(word => word.trim().toLowerCase())
+
+    console.log(wordList)
+    
     return new Set(wordList);
   }
   
   async function getAllNotes(): Promise<Array<NoteData> | undefined> {
     try {
-      let noteData: Array<NoteData> = []
-      
-      const response = await axiosInstance.get(
-        `/api/notes/`, {
+      const { data } = await axiosInstance.get(`/api/notes/`, {
           cancelToken: signal.token,
         }
       )
 
-      for (const note of response.data) {
-        const noteObject = await axiosInstance.get(
-          `/api/notes/${note.note_id}`, {
-            cancelToken: signal.token,
-          }
-        )
-        noteData.push(noteObject.data)
-      }
-
-      return noteData;
-    } catch (err) {
+      return data.map((note: NoteData) => {
+        return {
+          ...note,
+          title: JSON.parse(note.title as string),
+        };
+      });
+    }
+    
+    catch (err) {
       if (axios.isCancel(err)) {
         console.log(`Error: ${err.message}`)
       }
@@ -83,25 +74,25 @@ function NotePreview(props: RouteComponentProps<{ notebook_id?: string, note_id?
       let noteData: Array<NoteData> = []
 
       const response = await axiosInstance.get(
-        `/api/notebooks/${notebookID}/`, {
+        `/api/notebooks/${props.match.params.notebook_id}/`, {
           cancelToken: signal.token,
         }
       )
       
-      if (_isMounted.current) setNotebookName(response.data.name)
-        
-      const noteIDs = response.data.notes
-      for (let noteID of noteIDs) {
-        const noteObject = await axiosInstance.get(
-          `/api/notes/${noteID}/`, {
+      for (let noteID of response.data.notes) {
+        const { data } = await axiosInstance.get(`/api/notes/${noteID}/`, {
             cancelToken: signal.token,
           }
         )
-        noteData.push(noteObject.data)
+        noteData.push(data)
       }
 
+      if (_isMounted.current) setNotebookName(response.data.name)
+
       return noteData;
-    } catch (err) {
+    }
+    
+    catch (err) {
       if (axios.isCancel(err)) {
         console.log(`Error: ${err.message}`)
       }
@@ -115,7 +106,7 @@ function NotePreview(props: RouteComponentProps<{ notebook_id?: string, note_id?
 
     let processedNotes: NotePreviewData = {}
     for (const note of noteData!) {
-      const tokens = await generateTokens(note)
+      const tokens = generateTokens(note)
       const noteTrie = new Trie().addWords(tokens)
       processedNotes[note.note_id] = {
         note,
@@ -139,7 +130,7 @@ function NotePreview(props: RouteComponentProps<{ notebook_id?: string, note_id?
   }, [ location.pathname, JSON.stringify(notes) ])
 
   useEffect(() => {
-    // If the user has input a search query, create a filtered group of
+    // If the user types in a search query, create a filtered group of
     // notes such that only notes that include possible matches will be included
     if (_isMounted.current && searchQuery && !isLoading) setFilteredNotes(Object.fromEntries(
       Object.entries(notes as Object).filter(item => {
@@ -160,7 +151,21 @@ function NotePreview(props: RouteComponentProps<{ notebook_id?: string, note_id?
           !isLoading &&
           <p className={styles['note-count']}>
             {
-              displayNoteCount()
+              (
+                function displayNoteCount() {
+                  if (searchQuery && filteredNotes) {
+                    if (Object.keys(filteredNotes as Object).length === 1)
+                      return `1 result`;
+                    
+                    return `${Object.keys(filteredNotes as Object).length} results`;
+                  }
+                  
+                  else if (Object.keys(notes as Object).length === 1)
+                    return `1 note`;
+                  
+                  return `${Object.keys(notes as Object).length} notes`;
+                }
+              )()
             }
           </p>
         }

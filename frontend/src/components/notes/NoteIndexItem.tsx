@@ -1,25 +1,19 @@
 // @ts-nocheck
 
-import React, { Component } from 'react'
+import React from 'react'
 
-class NoteIndexItem extends Component {
-  constructor(props) {
-    super(props)
-  }
-
-  render() {
-    return (
-      <li>
-        <span>
-          {this.props.title}
-        </span>
-        <span>
-          {this.props.date_modified}
-          {this.props.date_created}
-        </span>
-      </li>
-    );
-  }
+function NoteIndexItem({ date_created, date_modified, title }) {
+  return (
+    <li>
+      <span>
+        {title}
+      </span>
+      <span>
+        {date_modified}
+        {date_created}
+      </span>
+    </li>
+  );
 }
 
 export default NoteIndexItem
