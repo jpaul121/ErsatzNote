@@ -5,12 +5,20 @@ import { Descendant, Node, Text } from 'slate'
 import React from 'react'
 import escapeHtml from 'escape-html'
 
-export interface NoteDataObject {
+export interface NoteData {
   note_id: string,
   title: Node[] | string,
   content: string,
   date_created?: string,
   date_modified: string,
+}
+
+export interface NotebookData {
+  notebook_id: string,
+  name: string,
+  notes: Array<string | null>,
+  date_modified: string,
+  date_created: string,
 }
 
 export function clearTitle(
@@ -39,13 +47,13 @@ export function clearContent(
   if (isMountedRef.current) setContent(emptyValue)
 }
 
-export function getTitlePreview(note: NoteDataObject): string {
+export function getTitlePreview(note: NoteData): string {
   const title = note.title[0].children[0]
 
   return title.text;
 }
 
-export function getContentPreview(note: NoteDataObject): string {
+export function getContentPreview(note: NoteData): string {
   const document = new DOMParser().parseFromString(note.content, 'text/html')
   const formattedContent = deserialize(document.body)
 

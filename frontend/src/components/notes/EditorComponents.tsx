@@ -1,10 +1,9 @@
 // @ts-nocheck
 
 import { Editor, Element as SlateElement, Transforms } from 'slate'
-import React, { PropsWithChildren, forwardRef, useEffect, useRef, useState } from 'react'
+import React, { PropsWithChildren, forwardRef } from 'react'
 import { css, cx } from '@emotion/css'
 
-import { ReactEditor } from 'slate-react'
 import { useSlate } from 'slate-react'
 
 const LIST_TYPES = [ 'numbered-list', 'bulleted-list' ]
@@ -263,43 +262,3 @@ export const Toolbar = forwardRef(({ className, ...props }, ref) => (
     )}
   />
 ))
-
-const initialValue = {}
-
-export function useLazyRef<T>(init: () => T): MutableRefObject<T> {
-	const ref = useRef<Editor | ReactEditor | typeof initialValue>(initialValue);
-
-	if (ref.current === initialValue) {
-		ref.current = init();
-	}
-
-	return ref as MutableRefObject<T>;
-}
-
-export interface NotebookData {
-  notebook_id: string,
-  name: string,
-  notes: Array<string | null>,
-  date_modified: string,
-  date_created: string,
-}
-
-export function useDetectOutsideClick(el, initialState) {
-  const [ isActive, setIsActive ] = useState(initialState)
-
-  useEffect(() => {
-    function onClick(e) {
-      if (el.current !== null && !el.current.contains(e.target)) {
-        setIsActive(!isActive)
-      }
-    }
-
-    if (isActive) window.addEventListener('click', onClick)
-
-    return () => {
-      window.removeEventListener('click', onClick)
-    }
-  }, [ isActive, el ])
-
-  return [ isActive, setIsActive ];
-}

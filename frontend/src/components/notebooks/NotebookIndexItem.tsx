@@ -1,11 +1,10 @@
 // @ts-nocheck
 
 import React, { useRef } from 'react'
-import { css, cx } from '@emotion/css'
 
 import { Link } from 'react-router-dom'
 import styles from '../../stylesheets/notebooks/NotebookIndex.module.css'
-import { useDetectOutsideClick } from '../notes/BaseComponents'
+import useDetectOutsideClick from '../../hooks/useDetectOutsideClick'
 
 function NotebookIndexItem({ notebookID, name, dateModified, dateCreated, toggleDeleteNotebookModal, toggleEditNotebookModal }) {  
   const dropdownRef = useRef(null)

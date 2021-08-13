@@ -5,6 +5,7 @@ import {
   Switch,
 } from 'react-router-dom'
 
+import AppContext from './components/other/AppContext'
 import Login from './components/pages/Login'
 import NewNoteContainer from './components/pages/NewNoteContainer'
 import NotebookIndexContainer from './components/pages/NotebookIndexContainer'
@@ -12,8 +13,7 @@ import NotebookViewContainer from './components/pages/NotebookViewContainer'
 import ProtectedRoute from './components/authentication/ProtectedRoute'
 import Signup from './components/pages/Signup'
 import Splash from './components/pages/Splash'
-import UserContext from './components/other/UserContext'
-import useGetUser from './components/other/useGetUser'
+import useGetUser from './hooks/useGetUser'
 
 function App() {
   const { user, setUser, isLoadingUser } = useGetUser()
@@ -21,7 +21,7 @@ function App() {
   
   return (
     <Router>
-      <UserContext.Provider value={{ isLoadingUser, searchQuery, setSearchQuery, user, setUser }}>
+      <AppContext.Provider value={{ isLoadingUser, searchQuery, setSearchQuery, user, setUser }}>
         <Switch>
           <Route exact path='/' component={Splash} />
           <ProtectedRoute path='/notebooks/:notebook_id/notes/:note_id' component={NotebookViewContainer} />
@@ -33,7 +33,7 @@ function App() {
           <Route path='/signup' component={Signup} />
           <Route path='/login' component={Login} />
         </Switch>
-      </UserContext.Provider>
+      </AppContext.Provider>
     </Router>
   );
 }

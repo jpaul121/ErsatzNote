@@ -1,20 +1,20 @@
 import 'regenerator-runtime/runtime.js'
 
 import { Link, useLocation } from 'react-router-dom'
-import { NoteDataObject, getContentPreview, getTitlePreview } from '../other/Serialization'
+import { NoteData, getContentPreview, getTitlePreview } from '../other/Serialization'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router'
 
+import AppContext from '../other/AppContext'
 import Note from '../notes/Note'
-import Trie from '../other/Trie'
-import UserContext from '../other/UserContext'
+import { Trie } from '../../types'
 import axios from 'axios'
 import { axiosInstance } from '../../axiosAPI'
 import styles from '../../stylesheets/notes/NotePreview.module.css'
 
 interface NotePreviewData {
   [ noteID: string ]: {
-    note: NoteDataObject,
+    note: NoteData,
     trie: Trie,
   },
 }
@@ -26,7 +26,7 @@ function NotePreview(props: RouteComponentProps<{ notebook_id?: string, note_id?
   const notebookID = props.match.params.notebook_id
   
   const [ isLoading, setLoadingStatus ] = useState(true)
-  const { searchQuery } = useContext(UserContext)
+  const { searchQuery } = useContext(AppContext)
   const location = useLocation()
 
   const _isMounted = useRef(false)
@@ -41,7 +41,7 @@ function NotePreview(props: RouteComponentProps<{ notebook_id?: string, note_id?
     return `${Object.keys(notes as Object).length} notes`;
   }
   
-  async function generateTokens(note: NoteDataObject): Promise<Set<string>> {
+  async function generateTokens(note: NoteData): Promise<Set<string>> {
     // Strip the HTML from a note's content and turn it
     // into a collection of unique words that can be searched for
     const strippedTitle = getTitlePreview(note)
@@ -51,9 +51,9 @@ function NotePreview(props: RouteComponentProps<{ notebook_id?: string, note_id?
     return new Set(wordList);
   }
   
-  async function getAllNotes(): Promise<Array<NoteDataObject> | undefined> {
+  async function getAllNotes(): Promise<Array<NoteData> | undefined> {
     try {
-      let noteData: Array<NoteDataObject> = []
+      let noteData: Array<NoteData> = []
       
       const response = await axiosInstance.get(
         `/api/notes/`, {
@@ -78,9 +78,9 @@ function NotePreview(props: RouteComponentProps<{ notebook_id?: string, note_id?
     }
   }
   
-  async function getNotesFromNotebook(): Promise<Array<NoteDataObject> | undefined> {
+  async function getNotesFromNotebook(): Promise<Array<NoteData> | undefined> {
     try {
-      let noteData: Array<NoteDataObject> = []
+      let noteData: Array<NoteData> = []
 
       const response = await axiosInstance.get(
         `/api/notebooks/${notebookID}/`, {

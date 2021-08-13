@@ -2,13 +2,13 @@ import '@fortawesome/fontawesome-free/js/all.js'
 
 import React, { useContext } from 'react'
 import { useHistory, withRouter } from 'react-router'
+
+import AppContext from '../other/AppContext'
+import styles from '../../stylesheets/sidebar/SearchBar.module.css'
 import { useLocation } from 'react-router-dom'
 
-import UserContext from '../other/UserContext'
-import styles from '../../stylesheets/sidebar/SearchBar.module.css'
-
 function SearchBar() {
-  const { searchQuery, setSearchQuery } = useContext(UserContext)
+  const { searchQuery, setSearchQuery } = useContext(AppContext)
   const location = useLocation()
   const history = useHistory()
   

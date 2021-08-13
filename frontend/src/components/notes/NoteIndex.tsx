@@ -1,4 +1,4 @@
-import { NoteDataObject, deserialize } from '../other/Serialization'
+import { NoteData, deserialize } from '../other/Serialization'
 import React, { useEffect, useRef, useState } from 'react'
 
 import NoteIndexItem from './NoteIndexItem'
@@ -7,7 +7,7 @@ import { axiosInstance } from '../../axiosAPI'
 
 function NoteIndex() {
   const [ isLoading, setLoading ] = useState(true)
-  const [ notes, setNotes ] = useState<Array<NoteDataObject>>()
+  const [ notes, setNotes ] = useState<Array<NoteData>>()
   const [ noteIDs, setNoteIDs ] = useState([])
 
   const _isMounted = useRef(false)
@@ -24,7 +24,7 @@ function NoteIndex() {
       
       setNoteIDs(response.data.notes)
 
-      let noteData: NoteDataObject[] = []
+      let noteData: Array<NoteData> = []
       for (const noteID of noteIDs) {
         axiosInstance
           .get(`/api/notes/${noteID}/`)

@@ -1,11 +1,11 @@
 import React, { useContext } from 'react'
 import { Redirect, Route } from 'react-router-dom'
 
+import AppContext from '../other/AppContext'
 import Loading from '../other/Loading'
-import UserContext from '../other/UserContext'
 
 function ProtectedRoute(props: any) {
-  const { user, isLoadingUser } = useContext(UserContext)
+  const { user, isLoadingUser } = useContext(AppContext)
   const { component: Component, ...other } = props
 
   if (isLoadingUser) {

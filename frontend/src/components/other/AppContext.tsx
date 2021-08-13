@@ -8,7 +8,7 @@ interface ErsatzNoteContext {
   user: string | null,
 }
 
-const initialValue: ErsatzNoteContext = {
+const initialContextValue: ErsatzNoteContext = {
   user: null,
   searchQuery: '',
   setSearchQuery: () => {},
@@ -16,6 +16,6 @@ const initialValue: ErsatzNoteContext = {
   isLoadingUser: false,
 }
 
-const UserContext = createContext<ErsatzNoteContext>(initialValue)
+const AppContext = createContext<ErsatzNoteContext>(initialContextValue)
 
-export default UserContext
+export default AppContext

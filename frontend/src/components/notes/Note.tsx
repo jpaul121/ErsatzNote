@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-import { NoteDataObject } from '../other/Serialization'
+import { NoteData } from '../other/Serialization'
 
-function Note({ content, date_modified, title }: NoteDataObject) {
+function Note({ content, date_modified, title }: NoteData) {
   return (
     <li>
       <h3>{title}</h3>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import jwt, { JwtPayload } from 'jwt-decode'
 
 import { Redirect } from 'react-router-dom'
-import { axiosInstance } from '../../axiosAPI'
+import { axiosInstance } from '../axiosAPI'
 
 interface ErsatzNoteToken extends JwtPayload {
   user: string,

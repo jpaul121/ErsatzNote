@@ -1,6 +1,6 @@
 import 'regenerator-runtime/runtime.js'
 
-import { BlockButton, DeleteButton, Element, Leaf, MarkButton, SaveButton, Toolbar, useLazyRef } from './BaseComponents'
+import { BlockButton, DeleteButton, Element, Leaf, MarkButton, SaveButton, Toolbar } from './EditorComponents'
 import { Descendant, Node } from 'slate'
 import { Editable, ReactEditor, Slate, withReact } from 'slate-react'
 import { Editor, createEditor } from 'slate'
@@ -9,10 +9,11 @@ import { RouteComponentProps, withRouter } from 'react-router'
 import { clearContent, clearTitle, deserialize, serialize } from '../other/Serialization'
 import { useHistory, useLocation } from 'react-router-dom'
 
+import AppContext from '../other/AppContext'
 import ChangeNotebook from './ChangeNotebook'
-import UserContext from '../other/UserContext'
 import axios from 'axios'
 import { axiosInstance } from '../../axiosAPI'
+import useLazyRef from '../../hooks/useLazyRef'
 import { withHistory } from 'slate-history'
 
 export interface MatchProps {
@@ -35,7 +36,7 @@ export interface NotebookOption {
 
 function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: NoteEditorProps & RouteComponentProps<MatchProps>) {
   const [ currentNotebook, setCurrentNotebook ] = useState<NotebookOption | null>(null)
-  const { user } = useContext(UserContext)
+  const { user } = useContext(AppContext)
   
   const renderElement = useCallback(props => <Element {...props} />, [])
   const renderLeaf = useCallback(props => <Leaf {...props} />, [])
@@ -91,7 +92,7 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
   }
 
   // Convenience function since I can't pass default arguments defined in functional components 
-  // to functions imported from another file (where they're needed since I need them in this component's parent too)
+  // to functions imported from another file (where they're needed since I need them in this component's parent too),
   // and it looks ugly having to use these two together in the exact same way over and over in this one specific file
   function nukeEditor() {
     clearTitle(_isMounted, titleBar, setTitle)
