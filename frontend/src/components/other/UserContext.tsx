@@ -1,6 +1,15 @@
 import React, { createContext } from 'react'
 
+export enum EditorContext {
+  NewNote,
+  NewNoteInNotebook,
+  NoteInAllNotes,
+  NoteInNotebook,
+  NoEditor,
+}
+
 interface ErsatzNoteContext {
+  editorContext?: EditorContext,
   isLoadingUser: boolean,
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>,
   setUser: React.Dispatch<React.SetStateAction<string | null>> | null,
