@@ -24,22 +24,26 @@ function NoteEditorContainer({ match }: RouteComponentProps<MatchProps>) {
 
   async function getTitle() {
     if (match.params.note_id) {
-      const response = await axiosInstance.get(
-        `/api/notes/${match.params.note_id}/`,
-      )
-      
-      if (_isMounted.current) setTitle(response.data.title)
-    } else clearTitle(_isMounted, titleBar, setTitle)
+      axiosInstance.get(`/api/notes/${match.params.note_id}/`)
+        .then(response => {
+          if (_isMounted.current) setTitle(response.data.title)
+        })
+    }
+    
+    else {
+      clearTitle(_isMounted, titleBar, setTitle)
+    }
   }
   
   useEffect(() => {
     _isMounted.current = true
+    
     getTitle()
 
     return () => {
       _isMounted.current = false
     };
-  }, [ match ])
+  }, [ match.params.note_id, match.params.notebook_id ])
 
   return (
     <div className={styles['note-editor-container']}>

@@ -1,13 +1,15 @@
 import '@fortawesome/fontawesome-free/js/all.js'
 
+import { Link, useHistory } from 'react-router-dom'
 import { RouteComponentProps, withRouter } from 'react-router'
 
-import { Link } from 'react-router-dom'
 import React from 'react'
 import SearchBar from './SearchBar'
 import styles from '../../stylesheets/sidebar/Sidebar.module.css'
 
 function Sidebar({ match }: RouteComponentProps<{ notebook_id: string }>) {
+  const history = useHistory()
+  
   return (
     <div className={styles['sidebar']}>
       <h1 className={styles['user']}>
@@ -17,7 +19,14 @@ function Sidebar({ match }: RouteComponentProps<{ notebook_id: string }>) {
       </h1>
       <SearchBar />
       <div className={styles['new-note-container']}>
-        <button className={styles['new-note-button']}>
+        <button
+         className={styles['new-note-button']}
+         onClick={() => history.push(
+           match.params.notebook_id
+           ? `/notebooks/${match.params.notebook_id}`
+           : `/new-note`
+         )}
+        >
           <Link to={
             match.params.notebook_id
             ? `/notebooks/${match.params.notebook_id}`
@@ -30,7 +39,10 @@ function Sidebar({ match }: RouteComponentProps<{ notebook_id: string }>) {
         </button>
       </div>
       <div className={styles['navigation']}>
-      <div className={styles['nav-button']}>
+      <div
+         className={styles['nav-button']}
+         onClick={() => history.push(`/all-notes`)}
+      >
           <Link to={`/all-notes`}>
             <i className={'fas fa-file-alt'}></i>
             <h3>
@@ -39,7 +51,11 @@ function Sidebar({ match }: RouteComponentProps<{ notebook_id: string }>) {
             </h3>
           </Link>
         </div>
-        <div className={styles['nav-button']} style={{ marginTop: '1.1111vh' }}>
+        <div
+           className={styles['nav-button']}
+           onClick={() => history.push(`/notebooks`)}
+           style={{ marginTop: '1.1111vh' }}
+        >
           <Link to={`/notebooks`}>
             <i className={'fas fa-book'}></i>
             <h3>

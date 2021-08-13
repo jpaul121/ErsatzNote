@@ -1,19 +1,18 @@
 import 'regenerator-runtime/runtime.js'
 
-import { BlockButton, DeleteButton, Element, Leaf, MarkButton, NotebookData, SaveButton, Toolbar, useLazyRef } from './BaseComponents'
+import { BlockButton, DeleteButton, Element, Leaf, MarkButton, SaveButton, Toolbar, useLazyRef } from './BaseComponents'
 import { Descendant, Node } from 'slate'
 import { Editable, ReactEditor, Slate, withReact } from 'slate-react'
 import { Editor, createEditor } from 'slate'
-import { NoteDataObject, clearContent, clearTitle, deserialize, serialize } from '../other/Serialization'
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router'
+import { clearContent, clearTitle, deserialize, serialize } from '../other/Serialization'
 import { useHistory, useLocation } from 'react-router-dom'
 
 import ChangeNotebook from './ChangeNotebook'
 import UserContext from '../other/UserContext'
 import axios from 'axios'
 import { axiosInstance } from '../../axiosAPI'
-import { match } from 'react-router-dom'
 import { withHistory } from 'slate-history'
 
 export interface MatchProps {
@@ -35,7 +34,6 @@ export interface NotebookOption {
 }
 
 function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: NoteEditorProps & RouteComponentProps<MatchProps>) {
-  const [ notebookData, setNotebookData ] = useState<NoteDataObject[] | null>(null)
   const [ currentNotebook, setCurrentNotebook ] = useState<NotebookOption | null>(null)
   const { user } = useContext(UserContext)
   
@@ -51,70 +49,53 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
   const location = useLocation()
   
   const deleteNote = useCallback(() => {
-    // If called from an editor that has an existing note, delete
-    // the note and move on to another one in the current notebook. 
-    // If there aren't any more, edit an empty note in the current notebook.
     if (match.params.note_id) {
       axiosInstance.delete(
         `/api/notes/${match.params.note_id}/`
       )
-      clearTitle(_isMounted, titleBar, setTitle)
-      clearContent(_isMounted, editor, setContent)
-      if (notebookData && notebookData.length > 0) history.push(`/notebooks/${match.params.notebook_id}/`)
-      // else...
-    } else {
-      clearTitle(_isMounted, titleBar, setTitle)
-      clearContent(_isMounted, editor, setContent)
+      
+      nukeEditor()
+      
+      history.push(`/notebooks/${match.params.notebook_id}/`)
+    } 
+    
+    else {
+      nukeEditor()
     }
-  }, [ match, title, content, currentNotebook ])
+  }, [ match.params.note_id, match.params.notebook_id, content, currentNotebook, title ])
   
   async function getNote() {
     if (match.params.note_id) {
       try {
-        const response = await axiosInstance.get(
-          `/api/notes/${match.params.note_id}/`, {
+        axiosInstance.get(`/api/notes/${match.params.note_id}/`, {
             cancelToken: signal.token,
           }
         )
-        
-        const document = new DOMParser().parseFromString(response.data.content, 'text/html')
-        
-        if (_isMounted.current) setContent(deserialize(document.body))
-      } catch (err) {
+        .then(response => {
+          if (_isMounted.current) setContent(deserialize(
+            new DOMParser().parseFromString(response.data.content, 'text/html').body
+          ))
+        })
+      } 
+      
+      catch (err) {
         if (axios.isCancel(err)) {
           console.log(`Error: ${err.message}`)
         }
       }
-    } else clearContent(_isMounted, editor, setContent)
+    } 
+    
+    else {
+      nukeEditor()
+    }
   }
 
-  async function getCurrentNotebook(): Promise<void> {
-    try {
-      const response = await axiosInstance.get(
-        `/api/notebooks/${match.params.notebook_id}/`, {
-          cancelToken: signal.token,
-        }
-      )
-      
-      let noteData = []
-      for (let noteID of response.data.notes) {
-        const noteObject = await axiosInstance.get(
-          `/api/notes/${noteID}/`, {
-            cancelToken: signal.token,
-          }
-        )
-        noteData.push(noteObject.data)
-      }
-      
-      setNotebookData(noteData)
-      setCurrentNotebook(
-        noteData.filter(notebook => notebook.value === match.params.notebook_id)[0]
-      )
-    } catch (err) {
-      if (axios.isCancel(err)) {
-        console.log(`Error: ${err.message}`)
-      }
-    }
+  // Convenience function since I can't pass default arguments defined in functional components 
+  // to functions imported from another file (where they're needed since I need them in this component's parent too)
+  // and it looks ugly having to use these two together in the exact same way over and over in this one specific file
+  function nukeEditor() {
+    clearTitle(_isMounted, titleBar, setTitle)
+    clearContent(_isMounted, editor, setContent)
   }
 
   const saveNote = useCallback(async () => {
@@ -122,9 +103,7 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
     const destinationNotebook = currentNotebook ? currentNotebook.value : match.params.notebook_id
     
     if (match.params.note_id) {
-      axiosInstance.put(
-        `/api/notes/${match.params.note_id}/`,
-        {
+      axiosInstance.put(`/api/notes/${match.params.note_id}/`, {
           note_id: match.params.note_id,
           notebook: destinationNotebook,
           title,
@@ -132,44 +111,50 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
           user,
         }
       )
-    } else if (match.params.notebook_id) {
-      axiosInstance.post(
-        `/api/notes/`,
-        {
-          title,
-          content: serialize(editorContent),
-          notebook: destinationNotebook,
-          user,
-        }
-      ).then(response => {
-        history.push(`/notebooks/${destinationNotebook}/notes/${response.data.note_id}`)
-      })
-    } else {
-      const response = await axiosInstance.post(
-        `/api/notes/`,
-        {
+    } 
+    
+    else if (match.params.notebook_id) {
+      axiosInstance.post(`/api/notes/`, {
           title,
           content: serialize(editorContent),
           notebook: destinationNotebook,
           user,
         }
       )
-
-      if (currentNotebook && location.pathname !== '/all-notes') history.push(`/notebooks/${currentNotebook.value}`)
-      if (location.pathname === '/all-notes') history.push(`/all-notes/${response.data.note_id}`)
+      .then(response => {
+        history.push(`/notebooks/${destinationNotebook}/notes/${response.data.note_id}`)
+      })
     }
-  }, [ match, title, content, currentNotebook ])
+    
+    else {
+      axiosInstance.post(`/api/notes/`, {
+          title,
+          content: serialize(editorContent),
+          notebook: destinationNotebook,
+          user,
+        }
+      )
+      .then(response => {
+        // If the user creates a note from the 'All Notes' page, show them the note in that same page
+        if (location.pathname === '/all-notes') history.push(`/all-notes/${response.data.note_id}`)
+
+        // If the user creates a note from the 'New Note' or 'Notebook View' pages, and they
+        // choose a notebook for it, then show them that note in the corresponding 'Notebook View'
+        if (currentNotebook && location.pathname !== '/all-notes') history.push(`/notebooks/${currentNotebook.value}`)
+      })
+    }
+  }, [ match.params.note_id, match.params.notebook_id, title, content, currentNotebook ])
   
   useEffect(() => {
     _isMounted.current = true
+    
     getNote()
-    if (match.params.notebook_id) getCurrentNotebook()
 
     return () => {
       _isMounted.current = false
       signal.cancel('Request is being cancelled.')
     }
-  }, [ match ])
+  }, [ match.params.note_id, match.params.notebook_id ])
 
   return (
     <Slate
