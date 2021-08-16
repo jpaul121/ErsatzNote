@@ -19,9 +19,6 @@ class Note(models.Model):
   def save(self, *args, **kwargs):
     if not self.id:
       self.id = generate_slug(self, settings.MAX_SLUG_LENGTH)
-    # Temporary expedients for the sake of development
-    if not self.notebook:
-      self.notebook = Notebook.objects.get(id='YyOzNhMFMPtN8HM')
     super(Note, self).save(*args, **kwargs)
   
   def __str__(self):

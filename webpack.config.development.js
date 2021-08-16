@@ -60,7 +60,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'frontend/src/index.html',
-      favicon: 'frontend/src/favicon.ico'
+      favicon: 'frontend/src/assets/favicon.ico'
     }),
     new webpack.ProvidePlugin({
       process: 'process/browser',

@@ -2,7 +2,7 @@ body, html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-image: url('../../background-img.png') !important;
+  background-image: url('../../assets/background-img.png') !important;
   background-color: #04a82e !important;
   height: 100vh;
 }
@@ -191,7 +191,7 @@ button {
 
 .footer-container a {
   text-decoration: none;
-  padding: 8px 36px 0px;
+  padding: 8px 45px 0px;
   font-size: 14px;
   border-radius: 3px;
   font-weight: bold;

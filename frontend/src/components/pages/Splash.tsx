@@ -3,8 +3,9 @@ import '@fortawesome/fontawesome-free/js/all.js'
 import { css, cx } from '@emotion/css'
 
 import React from 'react'
+import axios from 'axios'
 import { axiosInstance } from '../../axiosAPI'
-import preview from '../../../src/preview.png'
+import preview from '../../../src/assets/preview.png'
 import styles from '../../stylesheets/pages/Splash.module.css'
 import { useHistory } from 'react-router-dom'
 
@@ -17,21 +18,26 @@ function Splash() {
 
   async function loginAnonymousUser() {
     try {
-      const response = await axiosInstance.post(
+      axiosInstance.post(
         '/auth/token/obtain/', {
           email: GUEST_USER_CREDENTIALS['EMAIL'],
           password: GUEST_USER_CREDENTIALS['PASSWORD'],
         }
       )
+      .then(response => {
+        axiosInstance.defaults.headers['Authorization'] = `JWT ${response.data.access}`
+        localStorage.setItem('access_token', response.data.access)
+        localStorage.setItem('refresh_token', response.data.refresh)
 
-      axiosInstance.defaults.headers['Authorization'] = `JWT ${response.data.access}`
-      localStorage.setItem('access_token', response.data.access)
-      localStorage.setItem('refresh_token', response.data.refresh)
-    } catch(err) {
-      console.log(err)
+        history.push('/notebooks')
+      })
     }
-
-    history.push('/notebooks/')
+    
+    catch(err) {
+      if (axios.isCancel(err)) {
+        console.log('Error: ', err.message)
+      }
+    }
   }
   
   return (

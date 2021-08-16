@@ -1,7 +1,7 @@
 import { css, cx } from '@emotion/css'
 
 import React from 'react'
-import loading from '../../../src/loading.gif'
+import loading from '../../../src/assets/loading.gif'
 
 function Loading() {
   return (
