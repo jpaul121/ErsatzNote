@@ -41,8 +41,6 @@ function NotePreview(props: RouteComponentProps<{ notebook_id?: string, note_id?
     
     let wordList = titleText.split(/\s+/).concat(contentText.split(/\s+/))
     wordList = wordList.map(word => word.trim().toLowerCase())
-
-    console.log(wordList)
     
     return new Set(wordList);
   }
