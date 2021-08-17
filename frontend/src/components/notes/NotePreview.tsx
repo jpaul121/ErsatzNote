@@ -41,8 +41,6 @@ function NotePreview(props: RouteComponentProps<{ notebook_id?: string, note_id?
     
     let wordList = titleText.split(/\s+/).concat(contentText.split(/\s+/))
     wordList = wordList.map(word => word.trim().toLowerCase())
-
-    console.log(wordList)
     
     return new Set(wordList);
   }
@@ -99,7 +97,7 @@ function NotePreview(props: RouteComponentProps<{ notebook_id?: string, note_id?
     }
   }
   
-  async function getNoteData(): Promise<void> {
+  async function processNotes() {
     const noteData = props.match.params.notebook_id
       ? await getNotesFromNotebook()
       : await getAllNotes()
@@ -120,8 +118,9 @@ function NotePreview(props: RouteComponentProps<{ notebook_id?: string, note_id?
   
   useEffect(() => {
     _isMounted.current = true
+    
     if (location.pathname === '/all-notes') setNotebookName(undefined)
-    getNoteData()
+    processNotes()
 
     return () => {
       _isMounted.current = false
@@ -132,13 +131,14 @@ function NotePreview(props: RouteComponentProps<{ notebook_id?: string, note_id?
   useEffect(() => {
     // If the user types in a search query, create a filtered group of
     // notes such that only notes that include possible matches will be included
-    if (_isMounted.current && searchQuery && !isLoading) setFilteredNotes(Object.fromEntries(
-      Object.entries(notes as Object).filter(item => {
-        return searchQuery.toLowerCase().split(/\s+/).every(token => {
-          return item[1].trie.includesPossibleMatch(token);
-        });
-      })
-    ))
+    if (_isMounted.current && !isLoading && searchQuery) 
+      setFilteredNotes(Object.fromEntries(
+        Object.entries(notes as Object).filter(item => {
+          return searchQuery.toLowerCase().split(/\s+/).every(token => {
+            return item[1].trie.includesPossibleMatch(token);
+          });
+        })
+      ))
   }, [ searchQuery ])
 
   return (
