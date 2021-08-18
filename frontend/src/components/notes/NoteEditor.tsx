@@ -111,7 +111,9 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
           content: serialize(editorContent),
           user,
         }
-      )
+      ).then(() => {
+        history.push(`/notebooks/${destinationNotebook}`)
+      })
     } 
     
     else if (match.params.notebook_id) {
@@ -182,7 +184,12 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
       </Toolbar>
       <Editable
         placeholder='Write something...'
-        style={{ minHeight: '75vh' }}
+        style={{
+          minHeight: '77vh',
+          maxHeight: '77vh',
+          overflowY: 'scroll',
+          overflowX: 'hidden',
+        }}
         renderElement={renderElement}
         renderLeaf={renderLeaf}
         spellCheck

@@ -36,7 +36,7 @@ function NotePreview(props: RouteComponentProps<{ notebook_id?: string, note_id?
     const titleText = getTitlePreview(note)
     const contentText = note['content']
       .replace(/(<([^>]+)>)/g, '')
-      .replace(/[!,\.\?]/g, '')
+      .replace(/(?!['])[\W]+/g, '')
       .replace('&#39;', '\'')
     
     let wordList = titleText.split(/\s+/).concat(contentText.split(/\s+/))

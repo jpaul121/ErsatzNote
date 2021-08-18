@@ -131,7 +131,7 @@ When the user first logs into ErsatzNote, all their notes are available via the 
 ...
 ```
 
-Once a given user's note data is fetched from the URL, all text from each individual note is gathered and fed into a `Set` of unique words, which is then fed into a `Trie` that enables the user to search for a given note based on the words in its title or content, as demonstrated above. Once the text content of a note is received, regular expressions are used to strip HTML tags (which the note editor uses to render rich text) and punctuation from words:
+Once a given user's note data is fetched from the URL, all text from each individual note is gathered and fed into a `Set` of unique words, which is then fed into a `Trie` that enables the user to search for a given note based on the words in its title or content, as demonstrated above. Once the text content of a note is received, regular expressions are used to strip HTML tags (which the note editor uses to render rich text) and punctuation from words (except for apostrophes, so words like `won't` will still be recognizable):
 
 `frontend/src/components/notes/NotePreview.tsx`
 
@@ -143,7 +143,7 @@ Once a given user's note data is fetched from the URL, all text from each indivi
     const titleText = getTitlePreview(note)
     const contentText = note['content']
       .replace(/(<([^>]+)>)/g, '')
-      .replace(/[!,\.\?]/g, '')
+      .replace(/(?!['])[\W]+/g, '')
       .replace('&#39;', '\'')
 		
     let wordList = titleText.split(/\s+/).concat(contentText.split(/\s+/))

@@ -99,6 +99,7 @@
   font-size: 14px;
   line-height: 24px;
   font-weight: 500;
+  min-height: 24px !important;
 }
 
 .note-list li p {
