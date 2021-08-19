@@ -46,6 +46,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   box-sizing: border-box;
+  max-width: 15vw;
 }
 
 .note-count {

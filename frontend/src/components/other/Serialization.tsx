@@ -66,6 +66,9 @@ export function getContentPreview(note: NoteData): string {
     } else preview += `${Node.string(node)}\n`
   }
 
+  if (preview.startsWith('\n'))
+    preview = preview.substring(1)
+  
   return preview;
 }
 

@@ -189,6 +189,7 @@ function NoteEditor({ match, content, setContent, setTitle, title, titleBar }: N
           maxHeight: '77vh',
           overflowY: 'scroll',
           overflowX: 'hidden',
+          maxWidth: '52vw',
         }}
         renderElement={renderElement}
         renderLeaf={renderLeaf}
