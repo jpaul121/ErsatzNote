@@ -3,7 +3,7 @@ import axios from 'axios'
 const COMPILE_TIME_SETTING = JSON.parse(document.getElementById('compileTimeSetting')!.textContent!)['NODE_ENV']
 const PORT = Number(document.getElementById('port')!.textContent!)
 
-const BASE_URL = COMPILE_TIME_SETTING === 'production' ? 'https://ersatznote.herokuapp.com' : 'http://localhost:8000'
+const BASE_URL = COMPILE_TIME_SETTING === 'production' ? 'https://aa-twonote.herokuapp.com' : 'http://localhost:8000'
 const DEFAULT_HTTPS_PORT = 443
 
 export const axiosInstance = axios.create({

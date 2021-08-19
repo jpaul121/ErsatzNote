@@ -1,10 +1,10 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from .models import ErsatzNoteUser
+from .models import AppUser
 from notebooks.models import Notebook
 
-@receiver(post_save, sender=ErsatzNoteUser)
+@receiver(post_save, sender=AppUser)
 def create_default_notebook(sender, instance, created, **kwargs):
   if created:
     Notebook.objects.create(
@@ -12,4 +12,4 @@ def create_default_notebook(sender, instance, created, **kwargs):
       name='General Notes'
     )
 
-post_save.connect(create_default_notebook, sender=ErsatzNoteUser)
+post_save.connect(create_default_notebook, sender=AppUser)

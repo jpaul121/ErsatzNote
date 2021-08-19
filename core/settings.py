@@ -64,24 +64,20 @@ DEBUG = True
 if os.environ.get('NODE_ENV') == 'production':
     DEBUG = False
 
-    REACT_APP_API_ENDPOINT = 'https://ersatznote.com/'
+    REACT_APP_API_ENDPOINT = 'https://aa-twonote.herokuapp.com/'
 
-    ALLOWED_HOSTS = [ 'ersatznote.herokuapp.com', 'ersatznote.com' ]
+    ALLOWED_HOSTS = [ 'aa-twonote.herokuapp.com' ]
 
     CORS_ORIGIN_WHITELIST = [
-        'https://ersatznote.com',
-        'https://ersatznote.herokuapp.com',
-        'https://*.herokuapp.com',
+        'https://aa-twonote.herokuapp.com',
     ]
 
     CSRF_TRUSTED_ORIGINS = [
-        'https://ersatznote.com',
-        'https://ersatznote.herokuapp.com',
-        'https://*.herokuapp.com',
+        'https://aa-twonote.herokuapp.com',
     ]
 
     ACCESS_CONTROL_RESPONSE_HEADERS = {
-        'Access-Control-Allow-Origin': 'https://ersatznote.herokuapp.com',
+        'Access-Control-Allow-Origin': 'https://aa-twonote.herokuapp.com',
         'Access-Control-Allow-Methods': 'GET, PUT, PATCH, DELETE, POST',
         'Vary': 'Origin',
     }
@@ -156,7 +152,7 @@ if os.environ.get('NODE_ENV') == 'production':
     credentials = subprocess.check_output([
         '/bin/bash',
         '-c',
-        'heroku config:get DATABASE_URL -a ersatznote',
+        'heroku config:get DATABASE_URL -a aa-twonote',
     ], shell=True).decode('utf-8')
 
     DATABASES['default'] = dj_database_url.config(default=credentials, conn_max_age=600)
@@ -204,7 +200,7 @@ MAX_SLUG_LENGTH = 15
 
 APPEND_SLASH = True
 
-AUTH_USER_MODEL = 'authentication.ErsatzNoteUser'
+AUTH_USER_MODEL = 'authentication.AppUser'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (

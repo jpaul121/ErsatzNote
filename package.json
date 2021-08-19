@@ -1,5 +1,5 @@
 {
-  "name": "ersatznote",
+  "name": "twonote",
   "version": "1.0.0",
   "description": "",
   "main": "staticfiles/index.js",
@@ -19,15 +19,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jpaul121/ErsatzNote.git"
+    "url": "git+https://github.com/jpaul121/TwoNote.git"
   },
   "keywords": [],
-  "author": "Jean-Paul Valencia",
+  "author": "Jean Valencia",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jpaul121/ErsatzNote/issues"
+    "url": "https://github.com/jpaul121/TwoNote/issues"
   },
-  "homepage": "https://github.com/jpaul121/ErsatzNote#readme",
+  "homepage": "https://github.com/jpaul121/TwoNote#readme",
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",

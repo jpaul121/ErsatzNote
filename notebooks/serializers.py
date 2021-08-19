@@ -2,7 +2,7 @@ import json
 
 from rest_framework import serializers
 
-from authentication.models import ErsatzNoteUser
+from authentication.models import AppUser
 from .models import Note, Notebook
 
 class NoteSerializer(serializers.ModelSerializer):
@@ -27,7 +27,7 @@ class NoteSerializer(serializers.ModelSerializer):
       'title': title,
       'content': content,
       'notebook': Notebook.objects.get(id=self.context['request'].data['notebook']),
-      'user': ErsatzNoteUser.objects.get(email=self.context['request'].data['user']),
+      'user': AppUser.objects.get(email=self.context['request'].data['user']),
     }
 
     return Note.objects.create(**response_data)
@@ -58,7 +58,7 @@ class NotebookSerializer(serializers.ModelSerializer):
 
   def create(self, validated_data):
     return Notebook.objects.create(
-      user=ErsatzNoteUser.objects.get(email=self.context['request'].data['user']),
+      user=AppUser.objects.get(email=self.context['request'].data['user']),
       **validated_data
     )
   

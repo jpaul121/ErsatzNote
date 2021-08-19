@@ -6,19 +6,19 @@ from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework_simplejwt.views import TokenViewBase
 from django.conf import settings
 
-from .serializers import ErsatzNoteUserSerializer, ErsatzNoteTokenObtainPairSerializer
+from .serializers import AppUserSerializer, AppTokenObtainPairSerializer
 
 class InvalidUser(AuthenticationFailed):
   status_code = status.HTTP_406_NOT_ACCEPTABLE
   default_detail = ('User credentials are invalid or expired.')
   default_code = 'user_credentials_not_valid'
 
-class ErsatzNoteUserCreate(APIView):
+class AppUserCreate(APIView):
   authentication_classes = []
   permission_classes = (permissions.AllowAny,)
 
   def post(self, request, format='json'):
-    serializer = ErsatzNoteUserSerializer(data=request.data)
+    serializer = AppUserSerializer(data=request.data)
 
     if serializer.is_valid():
       user = serializer.save()
@@ -37,7 +37,7 @@ class ErsatzNoteUserCreate(APIView):
 class ObtainRefreshToken(TokenViewBase):
   authentication_classes = []
   permission_classes = (permissions.AllowAny,)
-  serializer_class = ErsatzNoteTokenObtainPairSerializer
+  serializer_class = AppTokenObtainPairSerializer
 
   def post(self, request, *args, **kwargs):
     serializer = self.get_serializer(data=request.data)

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from authentication.models import ErsatzNoteUser
+from authentication.models import AppUser
 from .models import Note, Notebook
 
 @admin.register(Note)

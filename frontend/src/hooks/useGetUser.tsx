@@ -4,7 +4,7 @@ import jwt, { JwtPayload } from 'jwt-decode'
 import { Redirect } from 'react-router-dom'
 import { axiosInstance } from '../axiosAPI'
 
-interface ErsatzNoteToken extends JwtPayload {
+interface TwoNoteToken extends JwtPayload {
   user: string,
 }
 
@@ -29,7 +29,7 @@ function useGetUser() {
       })
       
       if (localStorage.getItem('access_token')) {
-        const tokenObj = jwt<ErsatzNoteToken>(localStorage.getItem('access_token')!)
+        const tokenObj = jwt<TwoNoteToken>(localStorage.getItem('access_token')!)
 
         setUser(tokenObj.user)
         setIsLoadingUser(false)

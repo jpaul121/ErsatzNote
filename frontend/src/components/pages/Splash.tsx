@@ -97,7 +97,7 @@ function Splash() {
                       </i>
                     </div>
                     <div>
-                      <span className={cx(css`font-size: 2em;`)}>ErsatzNote</span>
+                      <span className={cx(css`font-size: 2em;`)}>TwoNote</span>
                     </div>
                   </div>
                 </div>
@@ -166,7 +166,7 @@ function Splash() {
               </li>
               <li>
                 <p>
-                  Take notes anywhere. Find information faster. Share notes with anyone. Meeting notes, web pages, projects, to-do lists—with ErsatzNote as your productivity app, you can keep track of it all.
+                  Take notes anywhere. Find information faster. Share notes with anyone. Meeting notes, web pages, projects, to-do lists—with TwoNote as your productivity app, you can keep track of it all.
                 </p>
               </li>
               <button className={styles['center-button']}>

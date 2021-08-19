@@ -1,10 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import ErsatzNoteUser
+from .models import AppUser
 
-class ErsatzNoteUserAdmin(UserAdmin):
-  model = ErsatzNoteUser
+class AppUserAdmin(UserAdmin):
+  model = AppUser
   ordering = ('email',)
 
-admin.site.register(ErsatzNoteUser, ErsatzNoteUserAdmin)
+admin.site.register(AppUser, AppUserAdmin)

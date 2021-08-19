@@ -1,13 +1,13 @@
 
-# [ErsatzNote](https://ersatznote.herokuapp.com/)
+# [TwoNote](https://aa-twonote.herokuapp.com/)
 
-![Splash Page](https://github.com/jpaul121/ErsatzNote/blob/main/frontend/src/assets/SplashPage.png)
+![Splash Page](https://github.com/jpaul121/TwoNote/blob/main/frontend/src/assets/SplashPage.png)
 
-ErsatzNote is a full-stack web application built with React, Django, Webpack, and TypeScript. Inspired by EverNote, it allows users to create notebooks and populate them with notes written in rich text, everything from to-do lists to workout plans and lecture notes. With its current deployment on Heroku, you can make an account and get to creating and saving notes that will always be accessible in the cloud, or try it out as a guest user without needing to sign up. 
+TwoNote is a full-stack web application built with React, Django, Webpack, and TypeScript. Inspired by EverNote, it allows users to create notebooks and populate them with notes written in rich text, everything from to-do lists to workout plans and lecture notes. With its current deployment on Heroku, you can make an account and get to creating and saving notes that will always be accessible in the cloud, or try it out as a guest user without needing to sign up. 
 
 ## Features
 
-ErsatzNote currently has the following features:
+TwoNote currently has the following features:
 
 * #### Secure user authentication using locally stored JWT tokens
 * #### Create notebooks, change their titles, and delete them at the touch of a button
@@ -17,7 +17,7 @@ ErsatzNote currently has the following features:
 
 ## Some frontend highlights
 
-ErsatzNote's frontend was built using React and TypeScript. TypeScript allows for a development experience that's unmatched by vanilla JavaScript, facilitating the creation of code with an expressiveness and robustness that's difficult to get without it. 
+TwoNote's frontend was built using React and TypeScript. TypeScript allows for a development experience that's unmatched by vanilla JavaScript, facilitating the creation of code with an expressiveness and robustness that's difficult to get without it. 
 
 ### API requests
 
@@ -31,7 +31,7 @@ import axios from 'axios'
 const COMPILE_TIME_SETTING = JSON.parse(document.getElementById('compileTimeSetting')!.textContent!)['NODE_ENV']
 const PORT = Number(document.getElementById('port')!.textContent!)
 
-const BASE_URL = COMPILE_TIME_SETTING === 'production' ? 'https://ersatznote.herokuapp.com' : 'http://localhost:8000'
+const BASE_URL = COMPILE_TIME_SETTING === 'production' ? 'https://aa-twonote.herokuapp.com' : 'http://localhost:8000'
 const DEFAULT_HTTPS_PORT = 443
 
 export const axiosInstance = axios.create({
@@ -82,7 +82,7 @@ def index(request, *args, **kwargs):
   <meta charset='utf-8'>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
   <link rel='icon' href='{% static "frontend/favicon.ico" %}' type='image/x-icon' />
-  <title>ErsatzNote</title>
+  <title>TwoNote</title>
 </head>
 <body>
 <div id='root'>
@@ -100,7 +100,7 @@ The `compileTimeSetting` and `guestUserCredentials` variables are then rendered 
 
 ### Search
 
-When the user first logs into ErsatzNote, all their notes are available via the `NotePreview` component rendered as part of all user flows in which the notes themselves are accessed. The complete logic for fetching notes and processing them to enable search is handled by the `processNotes()` function shown below. The `getNotesFromNotebook()` and `getAllNotes()` functions abstract away the logic for API requests, which differs based on whether or not the user is trying to access all notes or notes from a particular notebook, which the app can figure out based on the presence of the 'notebook_id' variable in the URL:
+When the user first logs into TwoNote, all their notes are available via the `NotePreview` component rendered as part of all user flows in which the notes themselves are accessed. The complete logic for fetching notes and processing them to enable search is handled by the `processNotes()` function shown below. The `getNotesFromNotebook()` and `getAllNotes()` functions abstract away the logic for API requests, which differs based on whether or not the user is trying to access all notes or notes from a particular notebook, which the app can figure out based on the presence of the 'notebook_id' variable in the URL:
 
 `frontend/src/components/notes/NotePreview.tsx`
 
@@ -250,11 +250,11 @@ Finally, depending on whether or not the user has input search terms into the se
 
 ## Some backend highlights
 
-ErsatzNote was built using React, and is served via a Django backend that provides a single-page app and an API that the former makes requests to. Backend-frontend integration is achieved through API requests that are secured using strict CORS policies and the HTTPS protocol. The backend doesn't just pass information to the frontend via HTTPS requests; it also securely passes environmental variables to it from the server, allowing the frontend to adjust the URL it sends requests to at compile time, among other things. PostgreSQL is used to manage the database. 
+TwoNote was built using React, and is served via a Django backend that provides a single-page app and an API that the former makes requests to. Backend-frontend integration is achieved through API requests that are secured using strict CORS policies and the HTTPS protocol. The backend doesn't just pass information to the frontend via HTTPS requests; it also securely passes environmental variables to it from the server, allowing the frontend to adjust the URL it sends requests to at compile time, among other things. PostgreSQL is used to manage the database. 
 
 ### User Authentication and Session Management
 
-Creating an account on ErsatzNote is quick and painless; just put sign up using an email and password, or if you'd like, start using it without the need to sign up by clicking the **"CHECK IT OUT"** button on the splash page. 
+Creating an account on TwoNote is quick and painless; just put sign up using an email and password, or if you'd like, start using it without the need to sign up by clicking the **"CHECK IT OUT"** button on the splash page. 
 
 Here's a snippet from `authentication/views.py`, where you can get the gist of how the app's authentication features are handled:
 
@@ -264,12 +264,12 @@ class InvalidUser(AuthenticationFailed):
   default_detail = ('User credentials are invalid or expired.')
   default_code =  'user_credentials_not_valid'
 
-class ErsatzNoteUserCreate(APIView):
+class AppUserCreate(APIView):
   authentication_classes = []
   permission_classes = (permissions.AllowAny,)
 	
   def post(self, request, format='json'):
-    serializer = ErsatzNoteUserSerializer(data=request.data)
+    serializer = AppUserSerializer(data=request.data)
 		
     if serializer.is_valid():
       user = serializer.save()
@@ -288,7 +288,7 @@ class ErsatzNoteUserCreate(APIView):
 class ObtainRefreshToken(TokenViewBase):
   authentication_classes = []
   permission_classes = (permissions.AllowAny,)
-  serializer_class = ErsatzNoteTokenObtainPairSerializer
+  serializer_class = AppTokenObtainPairSerializer
 
   def post(self, request, *args, **kwargs):
     serializer =  self.get_serializer(data=request.data)

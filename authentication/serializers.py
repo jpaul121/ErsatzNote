@@ -1,14 +1,14 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 
-from .models import ErsatzNoteUser
+from .models import AppUser
 
-class ErsatzNoteUserSerializer(serializers.ModelSerializer):
+class AppUserSerializer(serializers.ModelSerializer):
   email = serializers.EmailField(required=True)
   password = serializers.CharField(min_length=8, write_only=True)
 
   class Meta:
-    model = ErsatzNoteUser
+    model = AppUser
     extra_kwargs = { 'password': { 'write_only': True } }
     fields = [ 'email', 'password' ]
   
@@ -23,7 +23,7 @@ class ErsatzNoteUserSerializer(serializers.ModelSerializer):
     
     return instance
 
-class ErsatzNoteTokenObtainPairSerializer(TokenObtainPairSerializer):
+class AppTokenObtainPairSerializer(TokenObtainPairSerializer):
 
   @classmethod
   def get_token(cls, user):
